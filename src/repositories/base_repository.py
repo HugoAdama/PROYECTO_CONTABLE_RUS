@@ -1,98 +1,57 @@
 # src/repositories/base_repository.py
-"""
-📁 REPOSITORIO BASE
-Define las operaciones CRUD genéricas para todas las entidades
-"""
-
-from abc import ABC, abstractmethod
-from typing import List, Optional, TypeVar, Generic, Type
+from typing import List, Optional, Any
 from sqlalchemy.orm import Session
-from src.database.conexion import SessionLocal
+from datetime import datetime
+from src.database.conexion import get_db
 
-T = TypeVar('T')  # Tipo genérico para las entidades
-
-class BaseRepository(ABC, Generic[T]):
-    """
-    Repositorio base con operaciones CRUD genéricas.
-    Todas las entidades heredan de esta clase.
-    """
-    
-    def __init__(self, model_class: Type[T]):
+class BaseRepository:
+    def __init__(self, model_class, session: Session = None):
         self.model_class = model_class
-        self.db = SessionLocal()
-    
-    def guardar(self, datos: dict) -> T:
-        """
-        Guarda una nueva entidad en la base de datos.
-        """
+        self.session = session or get_db()
+
+    def crear(self, **kwargs) -> Any:
         try:
-            entidad = self.model_class(**datos)
-            self.db.add(entidad)
-            self.db.commit()
-            self.db.refresh(entidad)
-            return entidad
+            if 'fecha_emision' in kwargs and 'mes' not in kwargs:
+                fecha = kwargs['fecha_emision']
+                kwargs['mes'] = fecha.month
+                kwargs['anio'] = fecha.year
+            instancia = self.model_class(**kwargs)
+            self.session.add(instancia)
+            self.session.commit()
+            return instancia
         except Exception as e:
-            self.db.rollback()
+            self.session.rollback()
             raise e
-    
-    def obtener_por_id(self, id: int) -> Optional[T]:
-        """
-        Obtiene una entidad por su ID.
-        """
-        return self.db.query(self.model_class).filter(
-            self.model_class.id == id
-        ).first()
-    
-    def obtener_todos(self) -> List[T]:
-        """
-        Obtiene todas las entidades.
-        """
-        return self.db.query(self.model_class).all()
-    
-    def actualizar(self, id: int, datos: dict) -> Optional[T]:
-        """
-        Actualiza una entidad existente.
-        """
-        try:
-            entidad = self.obtener_por_id(id)
-            if not entidad:
-                return None
-            
-            for clave, valor in datos.items():
-                if hasattr(entidad, clave):
-                    setattr(entidad, clave, valor)
-            
-            self.db.commit()
-            self.db.refresh(entidad)
-            return entidad
-        except Exception as e:
-            self.db.rollback()
-            raise e
-    
+
+    def obtener_por_id(self, id: int) -> Optional[Any]:
+        return self.session.query(self.model_class).filter_by(id=id).first()
+
+    def obtener_todos(self) -> List[Any]:
+        return self.session.query(self.model_class).all()
+
+    def obtener_por_mes_anio(self, mes: int, anio: int) -> List[Any]:
+        return self.session.query(self.model_class).filter_by(mes=mes, anio=anio).all()
+
+    def actualizar(self, id: int, **kwargs) -> Optional[Any]:
+        instancia = self.obtener_por_id(id)
+        if instancia:
+            for key, value in kwargs.items():
+                if hasattr(instancia, key):
+                    setattr(instancia, key, value)
+            self.session.commit()
+        return instancia
+
     def eliminar(self, id: int) -> bool:
-        """
-        Elimina una entidad por su ID.
-        """
-        try:
-            entidad = self.obtener_por_id(id)
-            if not entidad:
-                return False
-            
-            self.db.delete(entidad)
-            self.db.commit()
+        instancia = self.obtener_por_id(id)
+        if instancia:
+            self.session.delete(instancia)
+            self.session.commit()
             return True
-        except Exception as e:
-            self.db.rollback()
-            raise e
-    
+        return False
+
     def contar(self) -> int:
-        """
-        Cuenta el número total de entidades.
-        """
-        return self.db.query(self.model_class).count()
-    
+        return self.session.query(self.model_class).count()
+
     def close(self):
-        """
-        Cierra la sesión de la base de datos.
-        """
-        self.db.close()
+        if self.session:
+            self.session.close()

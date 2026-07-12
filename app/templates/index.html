@@ -1,170 +1,131 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema Contable RUS{% endblock %}</title>
 
-{% block title %}Inicio - Sistema Contable{% endblock %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
 
-{% block content %}
-<div class="main-container">
-    <!-- Encabezado -->
-    <div class="page-header">
-        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🏠</div>
-        <div>
-            <h1 class="page-title">Inicio</h1>
-            <p class="page-subtitle">Resumen financiero y estado de tu negocio</p>
-        </div>
-    </div>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
 
-    <!-- Métricas -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="glass-card glass-primary text-center">
-                <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">💰 Ventas</div>
-                <div style="color: #4facfe; font-size: 1.8rem; font-weight: 700;">S/ 560.00</div>
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">3 boletas</div>
-                <span class="badge-glass badge-success" style="margin-top: 4px;">📈 Creciendo</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card glass-pink text-center">
-                <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">📦 Compras</div>
-                <div style="color: #f093fb; font-size: 1.8rem; font-weight: 700;">S/ 481.66</div>
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">1 factura</div>
-                <span class="badge-glass badge-warning" style="margin-top: 4px;">🔍 Revisar</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card glass-success text-center">
-                <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">📊 Utilidad</div>
-                <div style="color: #43e97b; font-size: 1.8rem; font-weight: 700;">S/ 78.34</div>
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">14.0% margen</div>
-                <span class="badge-glass badge-success" style="margin-top: 4px;">✅ Ganancia</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card glass-gold text-center">
-                <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">💸 Impuesto</div>
-                <div style="color: #ffd700; font-size: 1.8rem; font-weight: 700;">S/ 20.00</div>
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">Ahorro S/ 18.06</div>
-                <span class="badge-glass badge-success" style="margin-top: 4px;">💡 Ahorrando</span>
-            </div>
-        </div>
-    </div>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menu">
+        <i class="bi bi-list"></i>
+    </button>
 
-    <!-- Estado RUS -->
-    <div class="glass-card mb-4">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <div style="color: rgba(255,255,255,0.3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">🎯 Estado RUS</div>
-                <div style="color: #ffffff; font-size: 1.3rem; font-weight: 700;">Límite: S/ 8,000</div>
-                <div class="mt-2"><span style="color: #43e97b; font-weight: 600;">✅ Bien, estás al 7.0% del límite</span></div>
-            </div>
-            <div class="col-md-6">
-                <div class="progress-glass"><div class="progress-bar success" style="width: 7%;"></div></div>
-                <div class="mt-2 d-flex justify-content-between" style="color: rgba(255,255,255,0.2); font-size: 0.65rem;">
-                    <span>0%</span><span style="color: #ffd700;">⚠️ S/ 7,800</span><span>S/ 8,000</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Alertas -->
-    <div class="glass-card mb-4" style="background: rgba(255, 215, 0, 0.02); border-color: rgba(255, 215, 0, 0.04);">
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 1.2rem;">🔔</span>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">📊</div>
             <div>
-                <div style="color: rgba(255,255,255,0.3); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">Alertas del Mes</div>
-                <div style="color: #43e97b; font-weight: 500;">✅ No hay alertas pendientes. ¡Todo en orden!</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Desglose de Impuestos -->
-    <div class="glass-card mb-4">
-        <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin-bottom: 16px;">💰 Desglose de Impuestos RUS</h6>
-        <div class="row g-3">
-            <div class="col-md-4"><div class="glass-card glass-primary" style="padding:12px;"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Ventas</div><div style="color:#4facfe;font-size:1.3rem;font-weight:700;">S/ 560.00</div></div></div>
-            <div class="col-md-4"><div class="glass-card glass-gold" style="padding:12px;"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Impuesto</div><div style="color:#ffd700;font-size:1.3rem;font-weight:700;">S/ 20.00</div><div style="color:rgba(255,255,255,0.15);font-size:0.7rem;">(Menos de S/ 5,000)</div></div></div>
-            <div class="col-md-4"><div class="glass-card glass-success" style="padding:12px;"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Ahorro</div><div style="color:#43e97b;font-size:1.3rem;font-weight:700;">S/ 18.06</div><div style="color:rgba(255,255,255,0.15);font-size:0.7rem;">vs régimen general</div></div></div>
-        </div>
-        <!-- Collapse -->
-        <div class="mt-3">
-            <div id="btnExplicacion" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;">
-                <div style="color:rgba(255,255,255,0.3);font-size:0.75rem;display:flex;align-items:center;gap:8px;">
-                    <span>💡</span><span style="font-weight:500;">¿Cómo se calcula el impuesto RUS?</span>
-                </div>
-                <span id="iconoExplicacion" style="color:rgba(255,255,255,0.2);font-size:0.8rem;">▼</span>
-            </div>
-            <div id="contenidoExplicacion" style="display:none;padding:16px 16px 8px 16px;">
-                <ul style="margin:0;padding-left:20px;color:rgba(255,255,255,0.5);font-size:0.8rem;line-height:2;">
-                    <li>✅ Ventas menores a <strong style="color:#ffd700;">S/ 5,000</strong> → Pagas <strong style="color:#ffd700;">S/ 20</strong></li>
-                    <li>⚠️ Ventas de <strong style="color:#ffd700;">S/ 5,000</strong> a <strong style="color:#ffd700;">S/ 8,000</strong> → Pagas <strong style="color:#ffd700;">S/ 50</strong></li>
-                    <li>🚨 Ventas mayores a <strong style="color:#ff4d4d;">S/ 8,000</strong> → <strong style="color:#ff4d4d;">Cambio de régimen obligatorio</strong></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Detalle de Transacciones con Tabs -->
-    <div class="glass-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-            <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin:0;">📋 Detalle de Transacciones</h6>
-            <div class="tabs-container">
-                <button onclick="mostrarTab('boletas')" id="tab-boletas" class="tab-btn active">📄 Boletas <span class="tab-count">3</span></button>
-                <button onclick="mostrarTab('facturas')" id="tab-facturas" class="tab-btn">📦 Facturas <span class="tab-count">1</span></button>
-                <button onclick="mostrarTab('percepciones')" id="tab-percepciones" class="tab-btn">💰 Percepciones <span class="tab-count">1</span></button>
+                <div class="logo-name">Mi Negocio</div>
+                <div class="logo-sub">CONTROL FINANCIERO</div>
             </div>
         </div>
 
-        <!-- Boletas -->
-        <div id="contenido-boletas" class="tab-content active">
-            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(79,172,254,0.08);">📄</div><div><div class="timeline-title">EB01-302 · KAROLAY CHAVEZ</div><div class="timeline-date">31/05/2026</div></div><div style="margin-left:auto;color:#4facfe;font-weight:600;">S/ 200.00</div></div>
-            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(79,172,254,0.08);">📄</div><div><div class="timeline-title">EB01-303 · INACIA CHU</div><div class="timeline-date">31/05/2026</div></div><div style="margin-left:auto;color:#4facfe;font-weight:600;">S/ 220.00</div></div>
-            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(79,172,254,0.08);">📄</div><div><div class="timeline-title">EB01-304 · BEICY VAR</div><div class="timeline-date">31/05/2026</div></div><div style="margin-left:auto;color:#4facfe;font-weight:600;">S/ 140.00</div></div>
-            <div style="display:flex;justify-content:space-between;padding:12px 16px 4px;border-top:1px solid rgba(255,255,255,0.04);margin-top:8px;">
-                <span style="color:rgba(255,255,255,0.3);">Total: 3 boletas</span>
-                <span style="color:#ffd700;font-weight:700;">S/ 560.00</span>
+        <ul class="nav-menu">
+            <li class="nav-item {% if request.endpoint == 'main.index' %}active{% endif %}">
+                <a href="{{ url_for('main.index') }}" class="nav-link">
+                    <span class="nav-icon">🏠</span> Inicio
+                </a>
+            </li>
+            <li class="nav-item {% if request.endpoint == 'main.subir' %}active{% endif %}">
+                <a href="{{ url_for('main.subir') }}" class="nav-link">
+                    <span class="nav-icon">📤</span> Subir Archivos
+                </a>
+            </li>
+            <li class="nav-item {% if request.endpoint == 'main.ver_datos' %}active{% endif %}">
+                <a href="{{ url_for('main.ver_datos') }}" class="nav-link">
+                    <span class="nav-icon">📋</span> Ver Datos
+                </a>
+            </li>
+            <li class="nav-item {% if request.endpoint == 'main.reportes' %}active{% endif %}">
+                <a href="{{ url_for('main.reportes') }}" class="nav-link">
+                    <span class="nav-icon">📊</span> Reportes
+                </a>
+            </li>
+            <li class="nav-item {% if request.endpoint == 'main.carpetas' %}active{% endif %}">
+                <a href="{{ url_for('main.carpetas') }}" class="nav-link">
+                    <span class="nav-icon">📁</span> Gestion Carpetas
+                </a>
+            </li>
+            <li class="nav-item {% if request.endpoint == 'main.backup' %}active{% endif %}">
+                <a href="{{ url_for('main.backup') }}" class="nav-link">
+                    <span class="nav-icon">💾</span> Backup
+                </a>
+            </li>
+            <li class="nav-item {% if request.endpoint == 'main.historial' %}active{% endif %}">
+                <a href="{{ url_for('main.historial') }}" class="nav-link">
+                    <span class="nav-icon">📜</span> Historial
+                </a>
+            </li>
+            <li class="nav-item {% if request.endpoint == 'main.configuracion' %}active{% endif %}">
+                <a href="{{ url_for('main.configuracion') }}" class="nav-link">
+                    <span class="nav-icon">⚙️</span> Configuracion
+                </a>
+            </li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.03);">
+            <div style="color: rgba(255,255,255,0.15); font-size: 0.6rem; text-align: center; letter-spacing: 0.5px;">
+                v3.2 · Flask
             </div>
         </div>
+    </nav>
 
-        <!-- Facturas -->
-        <div id="contenido-facturas" class="tab-content">
-            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(240,147,251,0.08);">📦</div><div><div class="timeline-title">F033-00334797 · NATURA COSMETICOS S.A.</div><div class="timeline-date">28/05/2026</div></div><div style="margin-left:auto;color:#f093fb;font-weight:600;">S/ 481.66</div></div>
-            <div style="display:flex;justify-content:space-between;padding:12px 16px 4px;border-top:1px solid rgba(255,255,255,0.04);margin-top:8px;">
-                <span style="color:rgba(255,255,255,0.3);">Total: 1 factura</span>
-                <span style="color:#ffd700;font-weight:700;">S/ 481.66</span>
-            </div>
-        </div>
+    <main class="main-content" id="mainContent">
+        <div style="height: 10px;"></div>
+        {% block content %}{% endblock %}
+    </main>
 
-        <!-- Percepciones -->
-        <div id="contenido-percepciones" class="tab-content">
-            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(255,215,0,0.08);">💰</div><div><div class="timeline-title">P003-00602821 · NATURA COSMETICOS S.A.</div><div class="timeline-date">28/05/2026</div></div><div style="margin-left:auto;color:#ffd700;font-weight:600;">S/ 8.83</div></div>
-            <div style="display:flex;justify-content:space-between;padding:12px 16px 4px;border-top:1px solid rgba(255,255,255,0.04);margin-top:8px;">
-                <span style="color:rgba(255,255,255,0.3);">Total: 1 percepción</span>
-                <span style="color:#ffd700;font-weight:700;">S/ 8.83</span>
-            </div>
-        </div>
-    </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    // Collapse
-    document.getElementById('btnExplicacion').addEventListener('click', function() {
-        var content = document.getElementById('contenidoExplicacion');
-        var icon = document.getElementById('iconoExplicacion');
-        if (content.style.display === 'none' || content.style.display === '') {
-            content.style.display = 'block';
-            icon.textContent = '▲';
-        } else {
-            content.style.display = 'none';
-            icon.textContent = '▼';
+    <script>
+        var mobileToggle = document.getElementById('mobileToggle');
+        var sidebar = document.getElementById('sidebar');
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('mobile-open');
+                var icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('bi-list');
+                    icon.classList.toggle('bi-x');
+                }
+            });
         }
-    });
 
-    // Tabs
-    function mostrarTab(tab) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById('contenido-' + tab).classList.add('active');
-        document.getElementById('tab-' + tab).classList.add('active');
-    }
-</script>
-{% endblock %}
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                var isClickInsideSidebar = sidebar.contains(event.target);
+                var isClickOnToggle = mobileToggle && mobileToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                    var icon = mobileToggle?.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('bi-x');
+                        icon.classList.add('bi-list');
+                    }
+                }
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+                var icon = mobileToggle?.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('bi-x');
+                    icon.classList.add('bi-list');
+                }
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

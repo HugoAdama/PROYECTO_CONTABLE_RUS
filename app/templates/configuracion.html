@@ -1,45 +1,46 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Configuración - Sistema Contable{% endblock %}
+{% block title %}Configuracion - Sistema Contable{% endblock %}
 
 {% block content %}
 <div class="main-container">
+    <!-- Encabezado -->
     <div class="page-header">
         <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">⚙️</div>
         <div>
-            <h1 class="page-title">Configuración</h1>
-            <p class="page-subtitle">Personaliza el sistema según tus necesidades</p>
+            <h1 class="page-title">Configuracion</h1>
+            <p class="page-subtitle">Personaliza el sistema segun tus necesidades</p>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-md-6">
             <div class="glass-card">
-                <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">🔧 Configuración General</h6>
+                <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">Configuracion General</h6>
                 <div class="mb-3">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">💼 Nombre del Negocio</label>
+                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">Nombre del Negocio</label>
                     <input type="text" class="glass-input" value="Mi Negocio">
                 </div>
                 <div class="mb-3">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">📧 Email de Notificaciones</label>
+                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">Email de Notificaciones</label>
                     <input type="email" class="glass-input" value="negocio@email.com">
                 </div>
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
                     <input type="checkbox" checked style="accent-color:#667eea;width:16px;height:16px;">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.8rem;">🔔 Activar Notificaciones</label>
+                    <label style="color:rgba(255,255,255,0.2);font-size:0.8rem;">Activar Notificaciones</label>
                 </div>
-                <button class="btn-primary-glass">💾 Guardar Cambios</button>
+                <button class="btn-primary-glass">Guardar Cambios</button>
             </div>
         </div>
         <div class="col-md-6">
             <div class="glass-card">
-                <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">🎨 Apariencia</h6>
+                <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">Apariencia</h6>
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
                     <input type="checkbox" checked style="accent-color:#667eea;width:16px;height:16px;">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.8rem;">🌙 Modo Oscuro</label>
+                    <label style="color:rgba(255,255,255,0.2);font-size:0.8rem;">Modo Oscuro</label>
                 </div>
                 <div class="mb-3">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">🎨 Color Primario</label>
+                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">Color Primario</label>
                     <div style="display:flex;gap:8px;margin-top:8px;">
                         <div style="width:32px;height:32px;border-radius:50%;background:#667eea;border:2px solid rgba(255,255,255,0.2);cursor:pointer;"></div>
                         <div style="width:32px;height:32px;border-radius:50%;background:#f093fb;border:2px solid transparent;cursor:pointer;"></div>
@@ -47,7 +48,7 @@
                         <div style="width:32px;height:32px;border-radius:50%;background:#ffd700;border:2px solid transparent;cursor:pointer;"></div>
                     </div>
                 </div>
-                <button class="btn-primary-glass">💾 Guardar Cambios</button>
+                <button class="btn-primary-glass">Guardar Cambios</button>
             </div>
         </div>
     </div>

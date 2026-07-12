@@ -1,28 +1,53 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Gestión Carpetas - Sistema Contable{% endblock %}
+{% block title %}Gestion Carpetas - Sistema Contable{% endblock %}
 
 {% block content %}
 <div class="main-container">
+    <!-- Encabezado -->
     <div class="page-header">
         <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📁</div>
         <div>
-            <h1 class="page-title">Gestión Carpetas</h1>
+            <h1 class="page-title">Gestion Carpetas</h1>
             <p class="page-subtitle">Organiza y administra tus documentos por mes y año</p>
         </div>
     </div>
 
-    <!-- Estadísticas -->
+    <!-- Estadisticas -->
     <div class="row g-4 mb-4">
-        <div class="col-md-3"><div class="glass-card text-center" style="background:rgba(255,255,255,0.02);"><div style="font-size:1.8rem;">📄</div><div style="color:#ffffff;font-size:1.2rem;font-weight:600;">24</div><div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Total PDFs</div></div></div>
-        <div class="col-md-3"><div class="glass-card text-center" style="background:rgba(255,255,255,0.02);"><div style="font-size:1.8rem;">📂</div><div style="color:#ffffff;font-size:1.2rem;font-weight:600;">6</div><div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Carpetas</div></div></div>
-        <div class="col-md-3"><div class="glass-card text-center" style="background:rgba(255,255,255,0.02);"><div style="font-size:1.8rem;">📅</div><div style="color:#ffffff;font-size:1.2rem;font-weight:600;">2026</div><div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Año actual</div></div></div>
-        <div class="col-md-3"><div class="glass-card text-center" style="background:rgba(255,215,0,0.02);border-color:rgba(255,215,0,0.04);"><div style="font-size:1.8rem;">💾</div><div style="color:#ffd700;font-size:1.2rem;font-weight:600;">15.2 MB</div><div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Espacio usado</div></div></div>
+        <div class="col-md-3">
+            <div class="glass-card text-center" style="background:rgba(255,255,255,0.02);">
+                <div style="font-size:1.8rem;">📄</div>
+                <div style="color:#ffffff;font-size:1.2rem;font-weight:600;">24</div>
+                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Total PDFs</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card text-center" style="background:rgba(255,255,255,0.02);">
+                <div style="font-size:1.8rem;">📂</div>
+                <div style="color:#ffffff;font-size:1.2rem;font-weight:600;">6</div>
+                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Carpetas</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card text-center" style="background:rgba(255,255,255,0.02);">
+                <div style="font-size:1.8rem;">📅</div>
+                <div style="color:#ffffff;font-size:1.2rem;font-weight:600;">2026</div>
+                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Año actual</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card text-center" style="background:rgba(255,215,0,0.02);border-color:rgba(255,215,0,0.04);">
+                <div style="font-size:1.8rem;">💾</div>
+                <div style="color:#ffd700;font-size:1.2rem;font-weight:600;">15.2 MB</div>
+                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Espacio usado</div>
+            </div>
+        </div>
     </div>
 
     <!-- Estructura -->
     <div class="glass-card">
-        <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">📂 Estructura de Carpetas</h6>
+        <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">Estructura de Carpetas</h6>
         <div style="color:rgba(255,255,255,0.5);">
             <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.02);">
                 <span style="color:#ffd700;">📁</span> data/
@@ -48,8 +73,8 @@
             </div>
         </div>
         <div class="mt-4" style="display:flex;gap:8px;">
-            <button class="btn-outline-glass">🔄 Organizar Automático</button>
-            <button class="btn-outline-success">📊 Ver Estadísticas</button>
+            <button class="btn-outline-glass">Organizar Automatico</button>
+            <button class="btn-outline-success">Ver Estadisticas</button>
         </div>
     </div>
 </div>

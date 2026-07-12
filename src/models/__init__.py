@@ -1,7 +1,6 @@
 # src/models/__init__.py
 """
-📁 MODELOS - PUNTO DE ENTRADA
-Exporta todos los modelos para facilitar su uso
+Modelos de la base de datos
 """
 
 from .factura_compra import FacturaCompra
