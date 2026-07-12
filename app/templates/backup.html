@@ -1,0 +1,22 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="main-title">💾 Backup</h1>
+    <div class="glass-card text-center">
+        <p style="color:rgba(255,255,255,0.5);">Crea y restaura copias de seguridad de tu base de datos.</p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value">{{ stats.total_backups|default(0) }}</div>
+                <div class="metric-label">Total Backups</div>
+            </div>
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value">{{ stats.tamaño_total|default('0 KB') }}</div>
+                <div class="metric-label">Tamaño Total</div>
+            </div>
+        </div>
+        <form method="POST">
+            <button type="submit" class="btn btn-primary mt-3">📀 Crear Backup</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

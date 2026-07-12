@@ -1,0 +1,24 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="main-title">📁 Gestión Carpetas</h1>
+    <div class="glass-card text-center">
+        <p style="color:rgba(255,255,255,0.5);">Organiza tus documentos por mes y año.</p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value" style="color:#74b9ff;">{{ resumen.facturas.total_documentos|default(0) }}</div>
+                <div class="metric-label">Facturas</div>
+            </div>
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value" style="color:#74b9ff;">{{ resumen.boletas.total_documentos|default(0) }}</div>
+                <div class="metric-label">Boletas</div>
+            </div>
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value" style="color:#74b9ff;">{{ resumen.percepciones.total_documentos|default(0) }}</div>
+                <div class="metric-label">Percepciones</div>
+            </div>
+        </div>
+        <button class="btn btn-primary mt-3" onclick="alert('Funcionalidad en desarrollo')">📁 Crear Carpeta</button>
+    </div>
+</div>
+{% endblock %}

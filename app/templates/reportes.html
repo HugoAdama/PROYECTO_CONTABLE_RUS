@@ -1,0 +1,24 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="main-title">📊 Reportes</h1>
+    <div class="glass-card text-center">
+        <p style="color:rgba(255,255,255,0.5);">Genera reportes financieros de tus transacciones.</p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value" style="color:#00b894;">S/ {{ resumen.total_ventas|default(0)|round(2) }}</div>
+                <div class="metric-label">Ventas</div>
+            </div>
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value" style="color:#ff6b6b;">S/ {{ resumen.total_compras|default(0)|round(2) }}</div>
+                <div class="metric-label">Compras</div>
+            </div>
+            <div class="metric-card" style="min-width:120px;">
+                <div class="metric-value" style="color:{% if resumen.utilidad|default(0) > 0 %}#00b894{% else %}#ff6b6b{% endif %};">S/ {{ resumen.utilidad|default(0)|round(2) }}</div>
+                <div class="metric-label">Utilidad</div>
+            </div>
+        </div>
+        <a href="{{ url_for('exportar_excel') }}" class="btn btn-success mt-3">📊 Exportar Excel</a>
+    </div>
+</div>
+{% endblock %}

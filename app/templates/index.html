@@ -1,0 +1,212 @@
+@'
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="main-title">💰 Control Financiero</h1>
+    
+    <!-- METRICAS -->
+    <div class="row g-3 mb-4">
+        <!-- Ventas -->
+        <div class="col-md-2">
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-value" style="color: #00b894;">S/ {{ resumen.total_ventas|default(0)|round(2) }}</div>
+                <div class="metric-label">Ventas</div>
+                <div class="metric-detail">📄 {{ resumen.num_boletas|default(0) }} boletas</div>
+                <div class="metric-badge">📈 Creciendo</div>
+            </div>
+        </div>
+        
+        <!-- Compras -->
+        <div class="col-md-2">
+            <div class="metric-card">
+                <div class="metric-icon">📦</div>
+                <div class="metric-value" style="color: #ff6b6b;">S/ {{ resumen.total_compras|default(0)|round(2) }}</div>
+                <div class="metric-label">Compras</div>
+                <div class="metric-detail">📄 {{ resumen.num_facturas|default(0) }} facturas</div>
+                <div class="metric-badge danger">⚠️ Revisar</div>
+            </div>
+        </div>
+        
+        <!-- Utilidad -->
+        <div class="col-md-2">
+            <div class="metric-card">
+                <div class="metric-icon">💵</div>
+                <div class="metric-value" style="color: {% if resumen.utilidad|default(0) > 0 %}#00b894{% else %}#ff6b6b{% endif %};">
+                    S/ {{ resumen.utilidad|default(0)|round(2) }}
+                </div>
+                <div class="metric-label">Utilidad</div>
+                <div class="metric-detail">{{ resumen.margen|default(0)|round(1) }}% margen</div>
+                <div class="metric-badge {% if resumen.utilidad|default(0) > 0 %}success{% else %}danger{% endif %}">
+                    {% if resumen.utilidad|default(0) > 0 %}💵 Ganancia{% else %}💸 Perdida{% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Impuesto -->
+        <div class="col-md-2">
+            <div class="metric-card">
+                <div class="metric-icon">💸</div>
+                <div class="metric-value">S/ {{ impuesto|default(0)|round(2) }}</div>
+                <div class="metric-label">Impuesto</div>
+                <div class="metric-detail">🎯 Ahorro S/ {{ resultado.ahorro|default(0)|round(2) }}</div>
+                <div class="metric-badge">✅ Pagando</div>
+            </div>
+        </div>
+        
+        <!-- PERCEPCIONES -->
+        <div class="col-md-2">
+            <div class="metric-card">
+                <div class="metric-icon">⭐</div>
+                <div class="metric-value" style="color: {% if total_percepciones|default(0) > 0 %}#00b894{% else %}#74b9ff{% endif %};">
+                    S/ {{ total_percepciones|default(0)|round(2) }}
+                </div>
+                <div class="metric-label">Percepciones</div>
+                <div class="metric-detail">2% de descuento</div>
+                <div class="metric-badge {% if total_percepciones|default(0) > 0 %}success{% else %}info{% endif %}">
+                    {% if total_percepciones|default(0) > 0 %}⭐ Ahorrando{% else %}ℹ️ Sin percepciones{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Estado RUS -->
+    <div class="rus-card">
+        <div class="rus-header">
+            <span class="rus-title">🎯 Estado RUS</span>
+            <span class="rus-limit">Limite: S/ 8,000</span>
+        </div>
+        {% set porcentaje = (resumen.total_ventas / 8000 * 100)|round(1) if resumen.total_ventas else 0 %}
+        {% if porcentaje > 100 %}
+            {% set color = '#ef5350' %}
+            {% set texto = '🚨 EXCEDISTE EL LIMITE!' %}
+        {% elif porcentaje > 90 %}
+            {% set color = '#ffa726' %}
+            {% set texto = '⚠️ Cuidado! Estas al ' ~ porcentaje|round(0) ~ '%' %}
+        {% elif porcentaje > 70 %}
+            {% set color = '#42a5f5' %}
+            {% set texto = '📊 Estas al ' ~ porcentaje|round(0) ~ '% del limite' %}
+        {% else %}
+            {% set color = '#66bb6a' %}
+            {% set texto = '✅ Bien, estas al ' ~ porcentaje|round(0) ~ '% del limite' %}
+        {% endif %}
+        
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ porcentaje if porcentaje < 100 else 100 }}%; background: {{ color }};"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:0.3rem;">
+            <span style="color:{{ color }}; font-size:0.85rem;">{{ texto }}</span>
+            <span style="color:rgba(255,255,255,0.3); font-size:0.75rem;">S/ {{ resumen.total_ventas|default(0)|round(2) }}</span>
+        </div>
+    </div>
+    
+    <!-- Alertas -->
+    <h3 class="section-title">🔔 Alertas del Mes</h3>
+    {% if alertas %}
+        {% for alerta in alertas %}
+            <div class="alert-card {% if alerta.nivel == 'CRITICAL' %}danger{% elif alerta.nivel == 'WARNING' %}warning{% else %}success{% endif %}">
+                <span class="alert-icon">
+                    {% if alerta.nivel == 'CRITICAL' %}🚨{% elif alerta.nivel == 'WARNING' %}⚠️{% else %}✅{% endif %}
+                </span>
+                <span class="alert-text">{{ alerta.mensaje }}</span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert-card success">
+            <span class="alert-icon">✅</span>
+            <span class="alert-text">No hay alertas pendientes. ¡Todo en orden!</span>
+        </div>
+    {% endif %}
+    
+    <!-- Tablas -->
+    <h3 class="section-title">📋 Detalle de Transacciones</h3>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#boletas">📄 Boletas</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#facturas">📄 Facturas</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#percepciones">📄 Percepciones</button>
+        </li>
+    </ul>
+    
+    <div class="tab-content">
+        <!-- Boletas -->
+        <div class="tab-pane active" id="boletas">
+            {% if resumen.boletas %}
+                <table class="table">
+                    <thead><tr><th>Numero</th><th>Fecha</th><th>Cliente</th><th>Monto</th></tr></thead>
+                    <tbody>
+                        {% for b in resumen.boletas %}
+                            <tr><td>{{ b.numero }}</td><td>{{ b.fecha_emision_str }}</td><td>{{ b.nombre_cliente }}</td><td><strong>S/ {{ b.monto_total|round(2) }}</strong></td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
+                    📊 Total: {{ resumen.boletas|length }} boletas · S/ {{ resumen.total_ventas|default(0)|round(2) }}
+                </p>
+            {% else %}
+                <p class="text-muted text-center">📭 No hay boletas guardadas</p>
+            {% endif %}
+        </div>
+        
+        <!-- Facturas -->
+        <div class="tab-pane" id="facturas">
+            {% if resumen.facturas %}
+                <table class="table">
+                    <thead><tr><th>Numero</th><th>Fecha</th><th>Proveedor</th><th>Sub Total</th><th>IGV</th><th>Total</th><th>Percepcion</th></tr></thead>
+                    <tbody>
+                        {% for f in resumen.facturas %}
+                            <tr>
+                                <td>{{ f.numero }}</td>
+                                <td>{{ f.fecha_emision_str|default('N/A') }}</td>
+                                <td>{{ f.proveedor }}</td>
+                                <td>S/ {{ f.sub_total|round(2) }}</td>
+                                <td>S/ {{ f.igv|round(2) }}</td>
+                                <td><strong>S/ {{ f.total_pagar|round(2) }}</strong></td>
+                                <td>S/ {{ f.percepcion|default(0)|round(2) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
+                    📊 Total: {{ resumen.facturas|length }} facturas · S/ {{ resumen.total_compras|default(0)|round(2) }}
+                </p>
+            {% else %}
+                <p class="text-muted text-center">📭 No hay facturas guardadas</p>
+            {% endif %}
+        </div>
+        
+        <!-- Percepciones -->
+        <div class="tab-pane" id="percepciones">
+            {% if resumen.percepciones %}
+                <table class="table">
+                    <thead><tr><th>Numero</th><th>Fecha</th><th>Proveedor</th><th>Factura Asociada</th><th>Monto</th></tr></thead>
+                    <tbody>
+                        {% for p in resumen.percepciones %}
+                            <tr>
+                                <td>{{ p.numero }}</td>
+                                <td>{{ p.fecha_emision_str|default('N/A') }}</td>
+                                <td>{{ p.proveedor }}</td>
+                                <td>{{ p.factura_asociada }}</td>
+                                <td><strong>S/ {{ p.monto|round(2) }}</strong></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
+                    📊 Total: {{ resumen.percepciones|length }} percepciones · S/ {{ resumen.total_percepciones|default(0)|round(2) }}
+                </p>
+            {% else %}
+                <p class="text-muted text-center">📭 No hay percepciones guardadas</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+'@ | Out-File -FilePath app\templates\index.html -Encoding UTF8
+
+Write-Host "✅ index.html actualizado" -ForegroundColor Green

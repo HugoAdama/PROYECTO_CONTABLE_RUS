@@ -1,0 +1,18 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="main-title">📈 Historial</h1>
+    <div class="glass-card text-center">
+        <p style="color:rgba(255,255,255,0.5);">Historial de tus transacciones mes a mes.</p>
+        <p style="color:rgba(255,255,255,0.3); font-size:0.8rem;">Año: {{ año|default(2026) }}</p>
+        <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+            {% for d in datos_mensuales|default([]) %}
+                <div style="background:rgba(255,255,255,0.04); padding:0.5rem; border-radius:8px; min-width:60px; text-align:center;">
+                    <div style="font-size:0.7rem; color:rgba(255,255,255,0.3);">{{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][d.mes-1] }}</div>
+                    <div style="font-size:0.9rem; font-weight:600; color:{% if d.ventas > 0 %}#00b894{% else %}#ff6b6b{% endif %};">S/ {{ d.ventas|round(2) }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

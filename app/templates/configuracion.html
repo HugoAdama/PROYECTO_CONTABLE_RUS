@@ -1,0 +1,20 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="main-title">⚙️ Configuración</h1>
+    <div class="glass-card text-center">
+        <p style="color:rgba(255,255,255,0.5);">Configura las notificaciones y ajustes del sistema.</p>
+        <form method="POST" style="max-width:400px; margin:0 auto;">
+            <div class="mb-3">
+                <label class="form-label text-light">📧 Email de origen</label>
+                <input type="email" name="email_origen" class="form-control" placeholder="tu_email@gmail.com">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-light">📧 Email de destino</label>
+                <input type="email" name="email_destino" class="form-control" placeholder="destinatario@gmail.com">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">💾 Guardar Configuración</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
