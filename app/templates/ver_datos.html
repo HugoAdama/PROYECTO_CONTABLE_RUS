@@ -3,98 +3,80 @@
 {% block title %}Ver Datos - Sistema Contable{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-4 py-4">
-    <!-- Encabezado -->
-    <div class="row mb-4">
-        <div class="col">
-            <div class="d-flex align-items-center gap-3">
-                <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    📋
-                </div>
-                <div>
-                    <h2 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.75rem;">Ver Datos</h2>
-                    <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 0.95rem;">Visualiza y filtra tus transacciones registradas</p>
-                </div>
-            </div>
+<div class="main-container">
+    <div class="page-header">
+        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📋</div>
+        <div>
+            <h1 class="page-title">Ver Datos</h1>
+            <p class="page-subtitle">Visualiza y filtra tus transacciones registradas</p>
         </div>
     </div>
 
     <!-- Filtros -->
-    <div class="glass-card p-4 mb-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+    <div class="glass-card mb-4">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
-                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📄 Tipo</label>
-                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
-                    <option value="todos" style="background: #1a1a2e;">Todos</option>
-                    <option value="facturas" style="background: #1a1a2e;">Facturas</option>
-                    <option value="boletas" selected style="background: #1a1a2e;">Boletas</option>
-                    <option value="percepciones" style="background: #1a1a2e;">Percepciones</option>
+                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">📄 Tipo</label>
+                <select class="glass-select">
+                    <option value="todos">Todos</option>
+                    <option value="facturas">Facturas</option>
+                    <option value="boletas" selected>Boletas</option>
+                    <option value="percepciones">Percepciones</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📅 Mes</label>
-                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
-                    <option value="5" selected style="background: #1a1a2e;">Mayo</option>
-                    <option value="1" style="background: #1a1a2e;">Enero</option>
-                    <option value="2" style="background: #1a1a2e;">Febrero</option>
-                    <option value="3" style="background: #1a1a2e;">Marzo</option>
-                    <option value="4" style="background: #1a1a2e;">Abril</option>
-                    <option value="6" style="background: #1a1a2e;">Junio</option>
-                    <option value="7" style="background: #1a1a2e;">Julio</option>
-                    <option value="8" style="background: #1a1a2e;">Agosto</option>
-                    <option value="9" style="background: #1a1a2e;">Septiembre</option>
-                    <option value="10" style="background: #1a1a2e;">Octubre</option>
-                    <option value="11" style="background: #1a1a2e;">Noviembre</option>
-                    <option value="12" style="background: #1a1a2e;">Diciembre</option>
+                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">📅 Mes</label>
+                <select class="glass-select">
+                    {% for i in range(1, 13) %}
+                    <option value="{{ i }}" {% if i == 5 %}selected{% endif %}>
+                        {{ ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][i-1] }}
+                    </option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="col-md-2">
-                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📆 Año</label>
-                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
-                    <option value="2026" selected style="background: #1a1a2e;">2026</option>
-                    <option value="2025" style="background: #1a1a2e;">2025</option>
-                    <option value="2024" style="background: #1a1a2e;">2024</option>
+                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">📆 Año</label>
+                <select class="glass-select">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026" selected>2026</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <button class="btn w-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; padding: 10px; color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    🔍 Filtrar
-                </button>
+                <button class="btn-primary-glass w-100">🔍 Filtrar</button>
             </div>
             <div class="col-md-3">
-                <div style="background: rgba(79, 172, 254, 0.04); border-radius: 12px; border: 1px solid rgba(79, 172, 254, 0.06); padding: 10px 16px; text-align: center;">
-                    <span style="color: #4facfe; font-weight: 700; font-size: 1.1rem;">1</span>
-                    <span style="color: rgba(255,255,255,0.2); font-size: 0.8rem;"> registro encontrado</span>
+                <div style="background:rgba(79,172,254,0.04);border-radius:12px;border:1px solid rgba(79,172,254,0.06);padding:10px 16px;text-align:center;">
+                    <span style="color:#4facfe;font-weight:700;font-size:1.1rem;">1</span>
+                    <span style="color:rgba(255,255,255,0.2);font-size:0.8rem;"> registro encontrado</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Lista de registros -->
-    <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin: 0;">📋 Registros</h6>
-            <span style="color: rgba(255,255,255,0.1); font-size: 0.7rem;">Mostrando 1 de 1</span>
+    <!-- Registros -->
+    <div class="glass-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin:0;">📋 Registros</h6>
+            <span style="color:rgba(255,255,255,0.1);font-size:0.7rem;">Mostrando 1 de 1</span>
         </div>
 
-        <!-- Percepción -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border-radius: 14px; margin-bottom: 8px; border-left: 3px solid #ffd700; transition: all 0.3s;">
-            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                <span style="background: rgba(255, 215, 0, 0.08); color: #ffd700; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">P003-00602821</span>
-                <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">28/05/2026</span>
-                <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">NATURA COSMETICOS S.A.</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:rgba(255,255,255,0.03);border-radius:14px;border-left:3px solid #ffd700;">
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                <span class="badge-glass badge-gold">P003-00602821</span>
+                <span style="color:rgba(255,255,255,0.3);font-size:0.8rem;">28/05/2026</span>
+                <span style="color:rgba(255,255,255,0.6);font-size:0.85rem;">NATURA COSMETICOS S.A.</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="color: #ffd700; font-weight: 600;">S/ 8.83</span>
-                <span style="color: rgba(255,255,255,0.1);">|</span>
-                <span style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">Factura: F033-00331167</span>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="color:#ffd700;font-weight:600;">S/ 8.83</span>
+                <span style="color:rgba(255,255,255,0.1);">|</span>
+                <span style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Factura: F033-00331167</span>
             </div>
         </div>
 
-        <!-- Total -->
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px 4px 18px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.04);">
-            <span style="color: rgba(255,255,255,0.2); font-size: 0.8rem;">Total: 1 percepción</span>
-            <span style="color: #ffd700; font-weight: 700;">S/ 18.06</span>
+        <div style="display:flex;justify-content:space-between;padding:12px 18px 4px;border-top:1px solid rgba(255,255,255,0.04);margin-top:8px;">
+            <span style="color:rgba(255,255,255,0.2);font-size:0.8rem;">Total: 1 percepción</span>
+            <span style="color:#ffd700;font-weight:700;">S/ 18.06</span>
         </div>
     </div>
 </div>

@@ -3,83 +3,71 @@
 {% block title %}Inicio - Sistema Contable{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-4 py-4">
-    <!-- ===== ENCABEZADO ===== -->
-    <div class="row mb-4">
-        <div class="col">
-            <div class="d-flex align-items-center gap-3">
-                <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    🏠
-                </div>
-                <div>
-                    <h2 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.75rem;">Inicio</h2>
-                    <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 0.95rem;">Resumen financiero y estado de tu negocio</p>
-                </div>
-            </div>
+<div class="main-container">
+    <!-- Encabezado -->
+    <div class="page-header">
+        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🏠</div>
+        <div>
+            <h1 class="page-title">Inicio</h1>
+            <p class="page-subtitle">Resumen financiero y estado de tu negocio</p>
         </div>
     </div>
 
-    <!-- ===== MÉTRICAS PRINCIPALES ===== -->
+    <!-- Métricas -->
     <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="border-left: 4px solid #4facfe; background: rgba(79, 172, 254, 0.04); border-color: rgba(79, 172, 254, 0.10);">
+            <div class="glass-card glass-primary text-center">
                 <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">💰 Ventas</div>
                 <div style="color: #4facfe; font-size: 1.8rem; font-weight: 700;">S/ 560.00</div>
                 <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">3 boletas</div>
-                <span class="badge" style="background: rgba(46, 213, 115, 0.15); color: #6bff8a; font-size: 0.65rem; margin-top: 4px;">📈 Creciendo</span>
+                <span class="badge-glass badge-success" style="margin-top: 4px;">📈 Creciendo</span>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="border-left: 4px solid #f093fb; background: rgba(240, 147, 251, 0.04); border-color: rgba(240, 147, 251, 0.10);">
+            <div class="glass-card glass-pink text-center">
                 <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">📦 Compras</div>
                 <div style="color: #f093fb; font-size: 1.8rem; font-weight: 700;">S/ 481.66</div>
                 <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">1 factura</div>
-                <span class="badge" style="background: rgba(255, 165, 0, 0.12); color: #ffa500; font-size: 0.65rem; margin-top: 4px;">🔍 Revisar</span>
+                <span class="badge-glass badge-warning" style="margin-top: 4px;">🔍 Revisar</span>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="border-left: 4px solid #43e97b; background: rgba(67, 233, 123, 0.04); border-color: rgba(67, 233, 123, 0.10);">
+            <div class="glass-card glass-success text-center">
                 <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">📊 Utilidad</div>
                 <div style="color: #43e97b; font-size: 1.8rem; font-weight: 700;">S/ 78.34</div>
                 <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">14.0% margen</div>
-                <span class="badge" style="background: rgba(46, 213, 115, 0.15); color: #6bff8a; font-size: 0.65rem; margin-top: 4px;">✅ Ganancia</span>
+                <span class="badge-glass badge-success" style="margin-top: 4px;">✅ Ganancia</span>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="border-left: 4px solid #ffd700; background: rgba(255, 215, 0, 0.04); border-color: rgba(255, 215, 0, 0.10);">
+            <div class="glass-card glass-gold text-center">
                 <div style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">💸 Impuesto</div>
                 <div style="color: #ffd700; font-size: 1.8rem; font-weight: 700;">S/ 20.00</div>
                 <div style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">Ahorro S/ 18.06</div>
-                <span class="badge" style="background: rgba(46, 213, 115, 0.15); color: #6bff8a; font-size: 0.65rem; margin-top: 4px;">💡 Ahorrando</span>
+                <span class="badge-glass badge-success" style="margin-top: 4px;">💡 Ahorrando</span>
             </div>
         </div>
     </div>
 
-    <!-- ===== ESTADO RUS ===== -->
-    <div class="glass-card p-4 mb-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+    <!-- Estado RUS -->
+    <div class="glass-card mb-4">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div style="color: rgba(255,255,255,0.3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">🎯 Estado RUS</div>
                 <div style="color: #ffffff; font-size: 1.3rem; font-weight: 700;">Límite: S/ 8,000</div>
-                <div class="mt-2">
-                    <span style="color: #43e97b; font-weight: 600;">✅ Bien, estás al 7.0% del límite</span>
-                </div>
+                <div class="mt-2"><span style="color: #43e97b; font-weight: 600;">✅ Bien, estás al 7.0% del límite</span></div>
             </div>
             <div class="col-md-6">
-                <div class="progress" style="height: 10px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden;">
-                    <div class="progress-bar" role="progressbar" style="width: 7%; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 10px; transition: width 1s;"></div>
-                </div>
+                <div class="progress-glass"><div class="progress-bar success" style="width: 7%;"></div></div>
                 <div class="mt-2 d-flex justify-content-between" style="color: rgba(255,255,255,0.2); font-size: 0.65rem;">
-                    <span>0%</span>
-                    <span style="color: #ffd700;">⚠️ S/ 7,800</span>
-                    <span>S/ 8,000</span>
+                    <span>0%</span><span style="color: #ffd700;">⚠️ S/ 7,800</span><span>S/ 8,000</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ===== ALERTAS ===== -->
-    <div class="glass-card p-4 mb-4" style="background: rgba(255, 215, 0, 0.03); backdrop-filter: blur(24px); border: 1px solid rgba(255, 215, 0, 0.06); border-radius: 16px;">
+    <!-- Alertas -->
+    <div class="glass-card mb-4" style="background: rgba(255, 215, 0, 0.02); border-color: rgba(255, 215, 0, 0.04);">
         <div style="display: flex; align-items: center; gap: 12px;">
             <span style="font-size: 1.2rem;">🔔</span>
             <div>
@@ -89,203 +77,94 @@
         </div>
     </div>
 
-    <!-- ===== DESGLOSE DE IMPUESTOS CON COLLAPSE ===== -->
-    <div class="glass-card p-4 mb-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
-        <h6 style="color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 16px;">💰 Desglose de Impuestos RUS</h6>
-        
+    <!-- Desglose de Impuestos -->
+    <div class="glass-card mb-4">
+        <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin-bottom: 16px;">💰 Desglose de Impuestos RUS</h6>
         <div class="row g-3">
-            <div class="col-md-4">
-                <div class="p-3" style="background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.04);">
-                    <div style="color: rgba(255,255,255,0.2); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">Ventas del Mes</div>
-                    <div style="color: #4facfe; font-size: 1.3rem; font-weight: 700;">S/ 560.00</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="p-3" style="background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.04);">
-                    <div style="color: rgba(255,255,255,0.2); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">Impuesto a Pagar</div>
-                    <div style="color: #ffd700; font-size: 1.3rem; font-weight: 700;">S/ 20.00</div>
-                    <div style="color: rgba(255,255,255,0.15); font-size: 0.7rem;">(Menos de S/ 5,000)</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="p-3" style="background: rgba(46, 213, 115, 0.04); border-radius: 12px; border: 1px solid rgba(46, 213, 115, 0.06);">
-                    <div style="color: rgba(255,255,255,0.2); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">Ahorro</div>
-                    <div style="color: #43e97b; font-size: 1.3rem; font-weight: 700;">S/ 18.06</div>
-                    <div style="color: rgba(255,255,255,0.15); font-size: 0.7rem;">vs régimen general</div>
-                </div>
-            </div>
+            <div class="col-md-4"><div class="glass-card glass-primary" style="padding:12px;"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Ventas</div><div style="color:#4facfe;font-size:1.3rem;font-weight:700;">S/ 560.00</div></div></div>
+            <div class="col-md-4"><div class="glass-card glass-gold" style="padding:12px;"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Impuesto</div><div style="color:#ffd700;font-size:1.3rem;font-weight:700;">S/ 20.00</div><div style="color:rgba(255,255,255,0.15);font-size:0.7rem;">(Menos de S/ 5,000)</div></div></div>
+            <div class="col-md-4"><div class="glass-card glass-success" style="padding:12px;"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Ahorro</div><div style="color:#43e97b;font-size:1.3rem;font-weight:700;">S/ 18.06</div><div style="color:rgba(255,255,255,0.15);font-size:0.7rem;">vs régimen general</div></div></div>
         </div>
-        
-        <!-- COLLAPSE - Explicación del impuesto -->
+        <!-- Collapse -->
         <div class="mt-3">
-            <!-- Botón del collapse (visible siempre) -->
-            <div id="btnExplicacion" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.02); border-radius: 10px; border: 1px solid rgba(255,255,255,0.04); cursor: pointer;">
-                <div style="color: rgba(255,255,255,0.3); font-size: 0.75rem; display: flex; align-items: center; gap: 8px;">
-                    <span>💡</span>
-                    <span style="font-weight: 500;">¿Cómo se calcula el impuesto RUS?</span>
+            <div id="btnExplicacion" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;">
+                <div style="color:rgba(255,255,255,0.3);font-size:0.75rem;display:flex;align-items:center;gap:8px;">
+                    <span>💡</span><span style="font-weight:500;">¿Cómo se calcula el impuesto RUS?</span>
                 </div>
-                <span id="iconoExplicacion" style="color: rgba(255,255,255,0.2); font-size: 0.8rem; transition: transform 0.3s;">▼</span>
+                <span id="iconoExplicacion" style="color:rgba(255,255,255,0.2);font-size:0.8rem;">▼</span>
             </div>
-            
-            <!-- Contenido del collapse (oculto por defecto) -->
-            <div id="contenidoExplicacion" style="display: none; padding: 16px 16px 8px 16px;">
-                <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.5); font-size: 0.8rem; line-height: 2;">
-                    <li>✅ Ventas menores a <strong style="color: #ffd700;">S/ 5,000</strong> → Pagas <strong style="color: #ffd700;">S/ 20</strong></li>
-                    <li>⚠️ Ventas de <strong style="color: #ffd700;">S/ 5,000</strong> a <strong style="color: #ffd700;">S/ 8,000</strong> → Pagas <strong style="color: #ffd700;">S/ 50</strong></li>
-                    <li>🚨 Ventas mayores a <strong style="color: #ff4d4d;">S/ 8,000</strong> → <strong style="color: #ff4d4d;">Cambio de régimen obligatorio</strong></li>
+            <div id="contenidoExplicacion" style="display:none;padding:16px 16px 8px 16px;">
+                <ul style="margin:0;padding-left:20px;color:rgba(255,255,255,0.5);font-size:0.8rem;line-height:2;">
+                    <li>✅ Ventas menores a <strong style="color:#ffd700;">S/ 5,000</strong> → Pagas <strong style="color:#ffd700;">S/ 20</strong></li>
+                    <li>⚠️ Ventas de <strong style="color:#ffd700;">S/ 5,000</strong> a <strong style="color:#ffd700;">S/ 8,000</strong> → Pagas <strong style="color:#ffd700;">S/ 50</strong></li>
+                    <li>🚨 Ventas mayores a <strong style="color:#ff4d4d;">S/ 8,000</strong> → <strong style="color:#ff4d4d;">Cambio de régimen obligatorio</strong></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- ===== TRANSACCIONES CON TABS ===== -->
-    <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
-            <h6 style="color: rgba(255,255,255,0.5); font-weight: 600; margin: 0;">📋 Detalle de Transacciones</h6>
-            
-            <!-- Tabs -->
-            <div style="display: flex; gap: 4px; background: rgba(255,255,255,0.03); padding: 4px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.04);">
-                <button onclick="mostrarTab('boletas')" id="tab-boletas" class="tab-btn" style="background: rgba(79, 172, 254, 0.12); color: #4facfe; border: none; padding: 6px 16px; border-radius: 10px; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s;">
-                    📄 Boletas <span style="background: rgba(79, 172, 254, 0.15); padding: 0 8px; border-radius: 10px; font-size: 0.65rem;">3</span>
-                </button>
-                <button onclick="mostrarTab('facturas')" id="tab-facturas" class="tab-btn" style="background: transparent; color: rgba(255,255,255,0.3); border: none; padding: 6px 16px; border-radius: 10px; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s;">
-                    📦 Facturas <span style="background: rgba(240, 147, 251, 0.08); padding: 0 8px; border-radius: 10px; font-size: 0.65rem; color: #f093fb;">1</span>
-                </button>
-                <button onclick="mostrarTab('percepciones')" id="tab-percepciones" class="tab-btn" style="background: transparent; color: rgba(255,255,255,0.3); border: none; padding: 6px 16px; border-radius: 10px; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.3s;">
-                    💰 Percepciones <span style="background: rgba(255, 215, 0, 0.08); padding: 0 8px; border-radius: 10px; font-size: 0.65rem; color: #ffd700;">1</span>
-                </button>
+    <!-- Detalle de Transacciones con Tabs -->
+    <div class="glass-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+            <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin:0;">📋 Detalle de Transacciones</h6>
+            <div class="tabs-container">
+                <button onclick="mostrarTab('boletas')" id="tab-boletas" class="tab-btn active">📄 Boletas <span class="tab-count">3</span></button>
+                <button onclick="mostrarTab('facturas')" id="tab-facturas" class="tab-btn">📦 Facturas <span class="tab-count">1</span></button>
+                <button onclick="mostrarTab('percepciones')" id="tab-percepciones" class="tab-btn">💰 Percepciones <span class="tab-count">1</span></button>
             </div>
         </div>
 
-        <!-- Contenido de Tabs -->
         <!-- Boletas -->
-        <div id="contenido-boletas" class="tab-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; margin-bottom: 6px; border-left: 3px solid #4facfe;">
-                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                    <span style="background: rgba(79, 172, 254, 0.08); color: #4facfe; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">EB01-302</span>
-                    <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">31/05/2026</span>
-                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">KAROLAY CHAVEZ</span>
-                </div>
-                <span style="color: #4facfe; font-weight: 600;">S/ 200.00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.01); border-radius: 12px; margin-bottom: 6px; border-left: 3px solid #4facfe;">
-                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                    <span style="background: rgba(79, 172, 254, 0.08); color: #4facfe; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">EB01-303</span>
-                    <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">31/05/2026</span>
-                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">INACIA CHU</span>
-                </div>
-                <span style="color: #4facfe; font-weight: 600;">S/ 220.00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; margin-bottom: 6px; border-left: 3px solid #4facfe;">
-                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                    <span style="background: rgba(79, 172, 254, 0.08); color: #4facfe; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">EB01-304</span>
-                    <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">31/05/2026</span>
-                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">BEICY VAR</span>
-                </div>
-                <span style="color: #4facfe; font-weight: 600;">S/ 140.00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px 4px 16px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.04);">
-                <span style="color: rgba(255,255,255,0.3);">Total: 3 boletas</span>
-                <span style="color: #ffd700; font-weight: 700;">S/ 560.00</span>
+        <div id="contenido-boletas" class="tab-content active">
+            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(79,172,254,0.08);">📄</div><div><div class="timeline-title">EB01-302 · KAROLAY CHAVEZ</div><div class="timeline-date">31/05/2026</div></div><div style="margin-left:auto;color:#4facfe;font-weight:600;">S/ 200.00</div></div>
+            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(79,172,254,0.08);">📄</div><div><div class="timeline-title">EB01-303 · INACIA CHU</div><div class="timeline-date">31/05/2026</div></div><div style="margin-left:auto;color:#4facfe;font-weight:600;">S/ 220.00</div></div>
+            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(79,172,254,0.08);">📄</div><div><div class="timeline-title">EB01-304 · BEICY VAR</div><div class="timeline-date">31/05/2026</div></div><div style="margin-left:auto;color:#4facfe;font-weight:600;">S/ 140.00</div></div>
+            <div style="display:flex;justify-content:space-between;padding:12px 16px 4px;border-top:1px solid rgba(255,255,255,0.04);margin-top:8px;">
+                <span style="color:rgba(255,255,255,0.3);">Total: 3 boletas</span>
+                <span style="color:#ffd700;font-weight:700;">S/ 560.00</span>
             </div>
         </div>
 
         <!-- Facturas -->
-        <div id="contenido-facturas" class="tab-content" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; margin-bottom: 6px; border-left: 3px solid #f093fb;">
-                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                    <span style="background: rgba(240, 147, 251, 0.08); color: #f093fb; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">F033-00334797</span>
-                    <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">28/05/2026</span>
-                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">NATURA COSMETICOS S.A.</span>
-                </div>
-                <span style="color: #f093fb; font-weight: 600;">S/ 481.66</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px 4px 16px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.04);">
-                <span style="color: rgba(255,255,255,0.3);">Total: 1 factura</span>
-                <span style="color: #ffd700; font-weight: 700;">S/ 481.66</span>
+        <div id="contenido-facturas" class="tab-content">
+            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(240,147,251,0.08);">📦</div><div><div class="timeline-title">F033-00334797 · NATURA COSMETICOS S.A.</div><div class="timeline-date">28/05/2026</div></div><div style="margin-left:auto;color:#f093fb;font-weight:600;">S/ 481.66</div></div>
+            <div style="display:flex;justify-content:space-between;padding:12px 16px 4px;border-top:1px solid rgba(255,255,255,0.04);margin-top:8px;">
+                <span style="color:rgba(255,255,255,0.3);">Total: 1 factura</span>
+                <span style="color:#ffd700;font-weight:700;">S/ 481.66</span>
             </div>
         </div>
 
         <!-- Percepciones -->
-        <div id="contenido-percepciones" class="tab-content" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; margin-bottom: 6px; border-left: 3px solid #ffd700;">
-                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                    <span style="background: rgba(255, 215, 0, 0.08); color: #ffd700; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">P003-00602821</span>
-                    <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">28/05/2026</span>
-                    <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">NATURA COSMETICOS S.A.</span>
-                </div>
-                <span style="color: #ffd700; font-weight: 600;">S/ 8.83</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px 4px 16px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.04);">
-                <span style="color: rgba(255,255,255,0.3);">Total: 1 percepción</span>
-                <span style="color: #ffd700; font-weight: 700;">S/ 8.83</span>
+        <div id="contenido-percepciones" class="tab-content">
+            <div class="timeline-item"><div class="timeline-icon" style="background:rgba(255,215,0,0.08);">💰</div><div><div class="timeline-title">P003-00602821 · NATURA COSMETICOS S.A.</div><div class="timeline-date">28/05/2026</div></div><div style="margin-left:auto;color:#ffd700;font-weight:600;">S/ 8.83</div></div>
+            <div style="display:flex;justify-content:space-between;padding:12px 16px 4px;border-top:1px solid rgba(255,255,255,0.04);margin-top:8px;">
+                <span style="color:rgba(255,255,255,0.3);">Total: 1 percepción</span>
+                <span style="color:#ffd700;font-weight:700;">S/ 8.83</span>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ===== SCRIPTS ===== -->
 <script>
-    // ===== COLLAPSE =====
-    // Obtener elementos
-    var btnExplicacion = document.getElementById('btnExplicacion');
-    var contenidoExplicacion = document.getElementById('contenidoExplicacion');
-    var iconoExplicacion = document.getElementById('iconoExplicacion');
-    
-    // Agregar evento al botón
-    if (btnExplicacion) {
-        btnExplicacion.addEventListener('click', function() {
-            if (contenidoExplicacion.style.display === 'none' || contenidoExplicacion.style.display === '') {
-                contenidoExplicacion.style.display = 'block';
-                iconoExplicacion.textContent = '▲';
-            } else {
-                contenidoExplicacion.style.display = 'none';
-                iconoExplicacion.textContent = '▼';
-            }
-        });
-    }
+    // Collapse
+    document.getElementById('btnExplicacion').addEventListener('click', function() {
+        var content = document.getElementById('contenidoExplicacion');
+        var icon = document.getElementById('iconoExplicacion');
+        if (content.style.display === 'none' || content.style.display === '') {
+            content.style.display = 'block';
+            icon.textContent = '▲';
+        } else {
+            content.style.display = 'none';
+            icon.textContent = '▼';
+        }
+    });
 
-    // ===== TABS =====
+    // Tabs
     function mostrarTab(tab) {
-        // Ocultar todos los contenidos
-        var contenidos = document.querySelectorAll('.tab-content');
-        for (var i = 0; i < contenidos.length; i++) {
-            contenidos[i].style.display = 'none';
-        }
-        
-        // Desactivar todos los botones
-        var botones = document.querySelectorAll('.tab-btn');
-        for (var i = 0; i < botones.length; i++) {
-            botones[i].style.background = 'transparent';
-            botones[i].style.color = 'rgba(255,255,255,0.3)';
-        }
-        
-        // Mostrar el contenido seleccionado
-        var contenido = document.getElementById('contenido-' + tab);
-        if (contenido) {
-            contenido.style.display = 'block';
-        }
-        
-        // Activar el botón seleccionado
-        var btn = document.getElementById('tab-' + tab);
-        if (btn) {
-            btn.style.background = 'rgba(79, 172, 254, 0.12)';
-            btn.style.color = '#4facfe';
-        }
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById('contenido-' + tab).classList.add('active');
+        document.getElementById('tab-' + tab).classList.add('active');
     }
 </script>
-
-<!-- Estilos adicionales -->
-<style>
-    .tab-btn:hover {
-        background: rgba(255, 255, 255, 0.04) !important;
-        color: rgba(255,255,255,0.7) !important;
-    }
-    .tab-btn:active {
-        transform: scale(0.95);
-    }
-    #btnExplicacion:hover {
-        background: rgba(255, 255, 255, 0.04) !important;
-    }
-</style>
 {% endblock %}

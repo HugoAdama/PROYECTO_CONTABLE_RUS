@@ -3,63 +3,43 @@
 {% block title %}Reportes - Sistema Contable{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-4 py-4">
-    <!-- Encabezado -->
-    <div class="row mb-4">
-        <div class="col">
-            <div class="d-flex align-items-center gap-3">
-                <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    📊
-                </div>
-                <div>
-                    <h2 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.75rem;">Reportes</h2>
-                    <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 0.95rem;">Análisis financiero y gráficos de tu negocio</p>
-                </div>
-            </div>
+<div class="main-container">
+    <div class="page-header">
+        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📊</div>
+        <div>
+            <h1 class="page-title">Reportes</h1>
+            <p class="page-subtitle">Análisis financiero y gráficos de tu negocio</p>
         </div>
     </div>
 
     <!-- Filtros -->
-    <div class="glass-card p-4 mb-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+    <div class="glass-card mb-4">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
-                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📅 Mes</label>
-                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
-                    <option value="5" selected style="background: #1a1a2e;">Mayo</option>
-                    <option value="1" style="background: #1a1a2e;">Enero</option>
-                    <option value="2" style="background: #1a1a2e;">Febrero</option>
-                    <option value="3" style="background: #1a1a2e;">Marzo</option>
-                    <option value="4" style="background: #1a1a2e;">Abril</option>
-                    <option value="6" style="background: #1a1a2e;">Junio</option>
-                    <option value="7" style="background: #1a1a2e;">Julio</option>
-                    <option value="8" style="background: #1a1a2e;">Agosto</option>
-                    <option value="9" style="background: #1a1a2e;">Septiembre</option>
-                    <option value="10" style="background: #1a1a2e;">Octubre</option>
-                    <option value="11" style="background: #1a1a2e;">Noviembre</option>
-                    <option value="12" style="background: #1a1a2e;">Diciembre</option>
+                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">📅 Mes</label>
+                <select class="glass-select">
+                    {% for i in range(1, 13) %}
+                    <option value="{{ i }}" {% if i == 5 %}selected{% endif %}>
+                        {{ ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][i-1] }}
+                    </option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="col-md-2">
-                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📆 Año</label>
-                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
-                    <option value="2026" selected style="background: #1a1a2e;">2026</option>
-                    <option value="2025" style="background: #1a1a2e;">2025</option>
-                    <option value="2024" style="background: #1a1a2e;">2024</option>
+                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">📆 Año</label>
+                <select class="glass-select">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026" selected>2026</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <button class="btn w-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; padding: 10px; color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    🔍 Generar
-                </button>
+                <button class="btn-primary-glass w-100">🔍 Generar</button>
             </div>
             <div class="col-md-5">
-                <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                    <button class="btn" style="background: rgba(46, 213, 115, 0.08); border: 1px solid rgba(46, 213, 115, 0.06); border-radius: 12px; padding: 8px 20px; color: #6bff8a; font-weight: 500; font-size: 0.8rem;">
-                        📥 Exportar Excel
-                    </button>
-                    <button class="btn" style="background: rgba(255, 215, 0, 0.04); border: 1px solid rgba(255, 215, 0, 0.04); border-radius: 12px; padding: 8px 20px; color: rgba(255,215,0,0.5); font-weight: 500; font-size: 0.8rem;">
-                        🖨️ Imprimir
-                    </button>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                    <button class="btn-outline-success">📥 Exportar Excel</button>
+                    <button class="btn-outline-glass">🖨️ Imprimir</button>
                 </div>
             </div>
         </div>
@@ -67,54 +47,16 @@
 
     <!-- Métricas -->
     <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="background: rgba(79, 172, 254, 0.04); border: 1px solid rgba(79, 172, 254, 0.06); border-radius: 16px;">
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">Ventas Totales</div>
-                <div style="color: #4facfe; font-size: 1.5rem; font-weight: 700;">S/ 12,450</div>
-                <span style="color: #6bff8a; font-size: 0.65rem; background: rgba(46, 213, 115, 0.08); padding: 2px 12px; border-radius: 20px;">↑ 12%</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="background: rgba(240, 147, 251, 0.04); border: 1px solid rgba(240, 147, 251, 0.06); border-radius: 16px;">
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">Compras</div>
-                <div style="color: #f093fb; font-size: 1.5rem; font-weight: 700;">S/ 8,320</div>
-                <span style="color: #ffa500; font-size: 0.65rem; background: rgba(255, 165, 0, 0.08); padding: 2px 12px; border-radius: 20px;">↓ 5%</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="background: rgba(67, 233, 123, 0.04); border: 1px solid rgba(67, 233, 123, 0.06); border-radius: 16px;">
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">Utilidad</div>
-                <div style="color: #43e97b; font-size: 1.5rem; font-weight: 700;">S/ 4,130</div>
-                <span style="color: #6bff8a; font-size: 0.65rem; background: rgba(46, 213, 115, 0.08); padding: 2px 12px; border-radius: 20px;">↑ 8%</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card p-3 text-center" style="background: rgba(255, 215, 0, 0.04); border: 1px solid rgba(255, 215, 0, 0.06); border-radius: 16px;">
-                <div style="color: rgba(255,255,255,0.2); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">Impuesto RUS</div>
-                <div style="color: #ffd700; font-size: 1.5rem; font-weight: 700;">S/ 622.50</div>
-                <span style="color: rgba(255,215,0,0.4); font-size: 0.65rem;">5%</span>
-            </div>
-        </div>
+        <div class="col-md-3"><div class="glass-card glass-primary text-center"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Ventas</div><div style="color:#4facfe;font-size:1.5rem;font-weight:700;">S/ 12,450</div><span class="badge-glass badge-success">↑ 12%</span></div></div>
+        <div class="col-md-3"><div class="glass-card glass-pink text-center"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Compras</div><div style="color:#f093fb;font-size:1.5rem;font-weight:700;">S/ 8,320</div><span class="badge-glass badge-warning">↓ 5%</span></div></div>
+        <div class="col-md-3"><div class="glass-card glass-success text-center"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Utilidad</div><div style="color:#43e97b;font-size:1.5rem;font-weight:700;">S/ 4,130</div><span class="badge-glass badge-success">↑ 8%</span></div></div>
+        <div class="col-md-3"><div class="glass-card glass-gold text-center"><div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Impuesto</div><div style="color:#ffd700;font-size:1.5rem;font-weight:700;">S/ 622.50</div><span style="color:rgba(255,215,0,0.4);font-size:0.65rem;">5%</span></div></div>
     </div>
 
-    <!-- Gráficos placeholder -->
+    <!-- Gráficos -->
     <div class="row g-4">
-        <div class="col-md-8">
-            <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 16px; min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                <div style="text-align: center; color: rgba(255,255,255,0.1);">
-                    <div style="font-size: 3rem; margin-bottom: 8px;">📈</div>
-                    <div style="font-size: 0.8rem;">Gráfico de evolución aquí</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 16px; min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                <div style="text-align: center; color: rgba(255,255,255,0.1);">
-                    <div style="font-size: 3rem; margin-bottom: 8px;">🍩</div>
-                    <div style="font-size: 0.8rem;">Gráfico circular aquí</div>
-                </div>
-            </div>
-        </div>
+        <div class="col-md-8"><div class="glass-card" style="min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;color:rgba(255,255,255,0.1);"><div><div style="font-size:3rem;">📈</div><div style="font-size:0.8rem;">Gráfico de evolución aquí</div></div></div></div>
+        <div class="col-md-4"><div class="glass-card" style="min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;color:rgba(255,255,255,0.1);"><div><div style="font-size:3rem;">🍩</div><div style="font-size:0.8rem;">Gráfico circular aquí</div></div></div></div>
     </div>
 </div>
 {% endblock %}

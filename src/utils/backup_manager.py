@@ -1,105 +1,114 @@
 # src/utils/backup_manager.py
-"""
-💾 GESTOR DE BACKUPS
-Copia de seguridad automática de la base de datos
-"""
-
 import os
 import shutil
-from pathlib import Path
+import sqlite3
 from datetime import datetime
-import streamlit as st
+from pathlib import Path
+from typing import List, Dict, Any, Optional
 
 class BackupManager:
-    """Gestor de backups automáticos"""
+    """Gestor de copias de seguridad"""
     
-    def __init__(self):
-        self.db_path = Path("contable.db")
-        self.backup_dir = Path("data/backups")
+    def __init__(self, db_path: str = None):
+        self.base_dir = Path(__file__).parent.parent.parent
+        self.db_path = db_path or str(self.base_dir / 'contable.db')
+        self.backup_dir = self.base_dir / 'data' / 'backups'
         self.backup_dir.mkdir(parents=True, exist_ok=True)
     
-    def crear_backup(self):
-        """
-        Crea una copia de seguridad de la base de datos.
-        
-        Returns:
-            str: Ruta del backup creado
-        """
-        if not self.db_path.exists():
-            raise FileNotFoundError("Base de datos no encontrada")
-        
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_name = f"backup_{timestamp}.db"
-        backup_path = self.backup_dir / backup_name
-        
-        shutil.copy2(self.db_path, backup_path)
-        
-        # Mantener solo los últimos 10 backups
-        self._limpiar_backups_antiguos()
-        
-        return str(backup_path)
+    def crear_backup(self) -> Dict[str, Any]:
+        """Crea una copia de seguridad de la base de datos"""
+        try:
+            # Generar nombre del backup
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            backup_name = f"backup_{timestamp}.db"
+            backup_path = self.backup_dir / backup_name
+            
+            # Copiar archivo
+            shutil.copy2(self.db_path, backup_path)
+            
+            # Obtener tamaño
+            size_bytes = backup_path.stat().st_size
+            size_mb = round(size_bytes / (1024 * 1024), 2)
+            
+            return {
+                'exito': True,
+                'nombre': backup_name,
+                'ruta': str(backup_path),
+                'fecha': datetime.now().isoformat(),
+                'tamaño': size_mb,  # ← AHORA ES NUMÉRICO
+                'tamaño_str': f"{size_mb} MB"
+            }
+        except Exception as e:
+            return {'exito': False, 'error': str(e)}
     
-    def _limpiar_backups_antiguos(self):
-        """Elimina backups antiguos (mantiene los 10 más recientes)"""
-        backups = sorted(self.backup_dir.glob("backup_*.db"))
-        if len(backups) > 10:
-            for backup in backups[:-10]:
-                backup.unlink()
-    
-    def listar_backups(self):
-        """
-        Lista todos los backups disponibles.
-        
-        Returns:
-            list: Lista de backups con su información
-        """
+    def listar_backups(self) -> List[Dict[str, Any]]:
+        """Lista todos los backups disponibles"""
         backups = []
-        for backup in sorted(self.backup_dir.glob("backup_*.db"), reverse=True):
-            size = backup.stat().st_size / 1024  # KB
-            date_str = backup.stem.replace("backup_", "")
+        for archivo in self.backup_dir.glob('backup_*.db'):
+            stats = archivo.stat()
+            size_mb = round(stats.st_size / (1024 * 1024), 2)
             backups.append({
-                'nombre': backup.name,
-                'ruta': str(backup),
-                'fecha': date_str,
-                'tamaño': f"{size:.1f} KB"
+                'nombre': archivo.name,
+                'ruta': str(archivo),
+                'fecha': datetime.fromtimestamp(stats.st_mtime).isoformat(),
+                'fecha_legible': datetime.fromtimestamp(stats.st_mtime).strftime('%d/%m/%Y %H:%M'),
+                'tamaño': size_mb,  # ← AHORA ES NUMÉRICO
+                'tamaño_str': f"{size_mb} MB"
             })
-        return backups
+        # Ordenar por fecha (más reciente primero)
+        return sorted(backups, key=lambda x: x['fecha'], reverse=True)
     
-    def restaurar_backup(self, nombre_backup):
-        """
-        Restaura un backup específico.
-        
-        Args:
-            nombre_backup (str): Nombre del archivo de backup
-        
-        Returns:
-            bool: True si se restauró correctamente
-        """
-        backup_path = self.backup_dir / nombre_backup
-        
-        if not backup_path.exists():
-            raise FileNotFoundError(f"Backup no encontrado: {nombre_backup}")
-        
-        # Crear backup del estado actual antes de restaurar
-        self.crear_backup()
-        
-        # Restaurar backup
-        shutil.copy2(backup_path, self.db_path)
-        
-        return True
-    
-    def obtener_estadisticas(self):
-        """
-        Obtiene estadísticas de los backups.
-        
-        Returns:
-            dict: Estadísticas de backups
-        """
+    def obtener_estadisticas(self) -> Dict[str, Any]:
+        """Obtiene estadísticas de los backups"""
         backups = self.listar_backups()
-        total_size = sum(b['tamaño'] for b in backups)
+        
+        if not backups:
+            return {
+                'total_backups': 0,
+                'total_size': 0,
+                'ultimo_backup': None,
+                'backups_por_mes': {}
+            }
+        
+        # Calcular tamaño total (seguro)
+        total_size = 0
+        for b in backups:
+            total_size += b.get('tamaño', 0)
+        
+        # Agrupar por mes
+        meses = {}
+        for b in backups:
+            fecha_str = b.get('fecha', '')
+            if fecha_str:
+                try:
+                    fecha = datetime.fromisoformat(fecha_str)
+                    mes_key = fecha.strftime('%Y-%m')
+                    meses[mes_key] = meses.get(mes_key, 0) + 1
+                except:
+                    pass
         
         return {
             'total_backups': len(backups),
-            'tamaño_total': total_size,
-            'ultimo_backup': backups[0]['fecha'] if backups else None
+            'total_size': round(total_size, 2),
+            'ultimo_backup': backups[0] if backups else None,
+            'backups_por_mes': meses
         }
+    
+    def restaurar_backup(self, nombre_backup: str) -> bool:
+        """Restaura un backup específico"""
+        backup_path = self.backup_dir / nombre_backup
+        if not backup_path.exists():
+            return False
+        
+        try:
+            # Hacer backup del archivo actual antes de restaurar
+            if os.path.exists(self.db_path):
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                shutil.copy2(self.db_path, f"{self.db_path}.{timestamp}.bak")
+            
+            # Restaurar
+            shutil.copy2(backup_path, self.db_path)
+            return True
+        except Exception as e:
+            print(f"Error al restaurar: {e}")
+            return False

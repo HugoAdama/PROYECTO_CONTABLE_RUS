@@ -21,6 +21,8 @@ def create_app():
     
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-123')
+    app.config['TEMPLATES_AUTO_RELOAD'] = True  # ← AÑADIR ESTO
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  # ← AÑADIR ESTO
     app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', 'data/pdfs')
     app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB
     
