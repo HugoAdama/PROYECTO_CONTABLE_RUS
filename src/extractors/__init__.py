@@ -1,19 +1,17 @@
-# src/extractors/__init__.py
 """
-📁 EXTRACTORES - PUNTO DE ENTRADA
+EXTRACTORES - PUNTO DE ENTRADA
 Exporta todos los extractores para facilitar su uso
 """
-
-from .base_extractor import ExtractorBase
-from .extractor_factura import ExtractorFacturaNatura
-from .extractor_boleta import ExtractorBoleta
-from .extractor_percepcion import ExtractorPercepcion
-from .proveedores import ProveedorDetector
+from .base_extractor import BaseExtractor
+from .detector_extractor import DetectorExtractor
+from .factura_extractor import FacturaExtractor
+from .boleta_extractor import BoletaExtractor
+from .percepcion_extractor import PercepcionExtractor
 
 __all__ = [
-    'ExtractorBase',
-    'ExtractorFacturaNatura',
-    'ExtractorBoleta',
-    'ExtractorPercepcion',
-    'ProveedorDetector'
+    'BaseExtractor',
+    'DetectorExtractor',
+    'FacturaExtractor',
+    'BoletaExtractor',
+    'PercepcionExtractor'
 ]

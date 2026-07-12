@@ -1,225 +1,195 @@
-# src/extractors/base_extractor.py
 """
-📄 EXTRACTOR BASE - VERSIÓN MEJORADA
+EXTRACTOR BASE - VERSIÓN MEJORADA CON DETECCIÓN AUTOMÁTICA
 Clase base para todos los extractores de PDF
 """
-
 import pdfplumber
 import re
-import json
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, Tuple
 
-class ExtractorBase(ABC):
-    """
-    Clase base abstracta para todos los extractores de PDF.
-    """
-    
+class BaseExtractor(ABC):
+    """Clase base abstracta para todos los extractores de PDF"""
+
     def __init__(self):
         self.texto = ""
         self.patrones = {}
-    
+
     @abstractmethod
     def extraer(self, ruta_pdf: str) -> Dict[str, Any]:
-        """
-        Método abstracto que debe ser implementado por cada extractor.
-        """
+        """Método abstracto que debe ser implementado por cada extractor"""
         pass
-    
-    def _leer_pdf(self, ruta_pdf: str) -> Optional[str]:
-        """
-        Lee el PDF y devuelve el texto completo.
-        
-        Args:
-            ruta_pdf (str): Ruta al archivo PDF
-            
-        Returns:
-            str: Texto completo del PDF o None si hay error
-        """
+
+    def extraer_texto(self, ruta_pdf: str) -> Optional[str]:
+        """Lee el PDF y guarda el texto completo"""
         try:
             with pdfplumber.open(ruta_pdf) as pdf:
                 texto_completo = ""
                 for pagina in pdf.pages:
-                    texto_completo += pagina.extract_text() or ""
+                    texto = pagina.extract_text()
+                    if texto:
+                        texto_completo += texto + "\n"
                 self.texto = texto_completo
-                return texto_completo
+                return self.texto
         except Exception as e:
             print(f"❌ Error al leer PDF: {e}")
             return None
-    
-    def _buscar_patron(self, patron: str, grupo: int = 1) -> Optional[str]:
-        """
-        Busca un patrón en el texto y devuelve el grupo especificado.
-        
-        Args:
-            patron (str): Patrón Regex
-            grupo (int): Número del grupo a devolver
-            
-        Returns:
-            str: Valor encontrado o None
-        """
-        if not self.texto:
-            return None
-        match = re.search(patron, self.texto, re.IGNORECASE | re.MULTILINE)
-        if match:
-            return match.group(grupo).strip()
-        return None
-    
-    def _buscar_todos_patrones(self, patron: str, grupo: int = 1) -> List[str]:
-        """
-        Busca todas las coincidencias de un patrón.
-        
-        Args:
-            patron (str): Patrón Regex
-            grupo (int): Número del grupo a devolver
-            
-        Returns:
-            list: Lista de valores encontrados
-        """
-        if not self.texto:
-            return []
-        matches = re.findall(patron, self.texto, re.IGNORECASE | re.MULTILINE)
-        if matches:
-            if isinstance(matches[0], tuple):
-                return [m[grupo-1].strip() for m in matches if len(m) >= grupo]
-            return [m.strip() for m in matches]
-        return []
-    
-    def _limpiar_monto(self, valor_str: str) -> float:
-        """
-        Convierte texto de monto a número float.
-        
-        Args:
-            valor_str (str): Texto del monto
-            
-        Returns:
-            float: Valor numérico del monto
-        """
-        if not valor_str:
-            return 0.0
-        
-        # Eliminar todo excepto números, punto y coma
-        valor_limpio = re.sub(r'[^\d.,]', '', valor_str)
-        # Reemplazar coma por punto (para decimales)
-        valor_limpio = valor_limpio.replace(',', '.')
-        
+
+    def buscar_patron(self, patron: str) -> Optional[str]:
+        """Busca un patrón en el texto y devuelve el primer grupo"""
         try:
-            return float(valor_limpio)
-        except ValueError:
-            return 0.0
-    
-    def _extraer_fecha(self, patron: str) -> Optional[datetime]:
-        """
-        Extrae y convierte una fecha.
-        
-        Args:
-            patron (str): Patrón Regex para la fecha
-            
-        Returns:
-            datetime: Objeto datetime o None si no se encuentra
-        """
-        fecha_str = self._buscar_patron(patron)
-        if not fecha_str:
+            match = re.search(patron, self.texto, re.IGNORECASE)
+            if match:
+                if match.groups():
+                    return match.group(1).strip()
+                return match.group(0).strip()
             return None
-        
-        # Intentar diferentes formatos
-        for fmt in ['%d/%m/%Y', '%d-%m-%Y', '%Y-%m-%d', '%d.%m.%Y']:
+        except Exception as e:
+            print(f"❌ Error al buscar patrón: {e}")
+            return None
+
+    def extraer_fecha(self, patron: str) -> Optional[str]:
+        """Extrae una fecha en formato DD/MM/YYYY"""
+        fecha_str = self.buscar_patron(patron)
+        if fecha_str:
             try:
-                return datetime.strptime(fecha_str, fmt)
-            except ValueError:
-                continue
+                for fmt in ['%d/%m/%Y', '%d-%m-%Y', '%d/%m/%y', '%d-%m-%y']:
+                    try:
+                        fecha = datetime.strptime(fecha_str, fmt)
+                        return fecha.strftime('%Y-%m-%d')
+                    except ValueError:
+                        continue
+            except Exception:
+                pass
         return None
-    
-    def _extraer_productos(self, patron: str) -> List[Dict]:
+
+    # ============================================================
+    # DETECCIÓN AUTOMÁTICA DE FECHA (MES Y AÑO)
+    # ============================================================
+
+    def detectar_fecha_emision(self) -> Optional[Tuple[int, int]]:
         """
-        Extrae productos de una lista usando un patrón.
-        
-        Args:
-            patron (str): Patrón Regex para productos
-            
-        Returns:
-            list: Lista de diccionarios con los productos
+        Detecta automáticamente la fecha de emisión del documento.
+        Retorna: (mes, año) o None si no se pudo detectar.
         """
         if not self.texto:
-            return []
-        
-        productos = []
-        matches = re.findall(patron, self.texto, re.IGNORECASE)
-        
-        for match in matches:
-            if isinstance(match, tuple):
-                if len(match) >= 3:
-                    producto = {}
-                    try:
-                        producto['cantidad'] = self._limpiar_monto(match[0])
-                    except:
-                        producto['cantidad'] = 1
-                    
-                    producto['descripcion'] = match[1].strip() if len(match) > 1 else ""
-                    
-                    if len(match) > 2:
-                        producto['precio_unitario'] = self._limpiar_monto(match[2])
-                    if len(match) > 3:
-                        producto['total'] = self._limpiar_monto(match[3])
-                    
-                    productos.append(producto)
-            else:
-                productos.append({'descripcion': match.strip()})
-        
-        return productos
-    
-    def _extraer_ruc(self) -> Optional[str]:
-        """
-        Extrae RUC del texto.
-        
-        Returns:
-            str: RUC encontrado o None
-        """
-        # Buscar en diferentes formatos
-        patrones = [
-            r'RUC\s*[:.]?\s*(\d{11})',
-            r'R\.U\.C\s*[:.]?\s*(\d{11})',
-            r'(\d{11})'
+            return None
+
+        # ============================================================
+        # PATRONES DE FECHA COMUNES
+        # ============================================================
+        patrones_fecha = [
+            # Formato: Fecha Emisión: 08/05/2026
+            r'fecha\s*emisi[oó]n\s*[:]?\s*(\d{2})[/.-](\d{2})[/.-](\d{4})',
+            # Formato: Fecha de Emisión : 31/05/2026
+            r'fecha\s*de\s*emisi[oó]n\s*[:]?\s*(\d{2})[/.-](\d{2})[/.-](\d{4})',
+            # Formato: FECHA: 08/05/2026
+            r'fecha\s*[:]?\s*(\d{2})[/.-](\d{2})[/.-](\d{4})',
+            # Formato: 08/05/2026 (suelto)
+            r'(\d{2})[/.-](\d{2})[/.-](\d{4})',
         ]
-        
-        for patron in patrones:
-            ruc = self._buscar_patron(patron)
-            if ruc:
-                return ruc
-        return None
-    
-    def _extraer_telefono(self) -> Optional[str]:
+
+        for patron in patrones_fecha:
+            match = re.search(patron, self.texto, re.IGNORECASE)
+            if match:
+                try:
+                    dia = int(match.group(1))
+                    mes = int(match.group(2))
+                    anio = int(match.group(3))
+
+                    # Validar que la fecha sea razonable
+                    if 1 <= mes <= 12 and 1 <= dia <= 31 and 2000 <= anio <= 2030:
+                        return (mes, anio)
+                except (ValueError, IndexError):
+                    continue
+
+        # ============================================================
+        # SI NO SE ENCUENTRA FECHA, USAR LA FECHA ACTUAL
+        # ============================================================
+        hoy = datetime.now()
+        return (hoy.month, hoy.year)
+
+    # ============================================================
+    # DETECCIÓN AUTOMÁTICA DE TIPO DE DOCUMENTO
+    # ============================================================
+
+    def detectar_tipo_documento(self) -> str:
         """
-        Extrae teléfono del texto.
-        
-        Returns:
-            str: Teléfono encontrado o None
+        Detecta automáticamente el tipo de documento analizando el texto.
+        Retorna: 'factura', 'boleta', 'percepcion' o 'desconocido'
         """
-        return self._buscar_patron(r'(?:TELÉFONO|TEL|TELEFONO)\s*[:.]?\s*([\d\s\-\(\)]+)')
-    
-    def _extraer_direccion(self) -> Optional[str]:
+        if not self.texto:
+            return 'desconocido'
+
+        texto_lower = self.texto.lower()
+
+        # Detectar Boleta
+        patrones_boleta = [
+            r'boleta\s*de\s*venta\s*electronica',
+            r'boleta\s*electronica',
+            r'eb\d{2}-\d{3,6}',
+            r'ruc\s*[:]?\s*\d{11}\s*eb\d{2}',
+        ]
+        for patron in patrones_boleta:
+            if re.search(patron, texto_lower):
+                return 'boleta'
+
+        # Detectar Factura
+        patrones_factura = [
+            r'factura\s*de\s*venta\s*electronica',
+            r'factura\s*electronica',
+            r'f\d{3}\s*[-]\s*\d{3,8}',
+            r'f\d{3}\s*\d{3,8}',
+        ]
+        for patron in patrones_factura:
+            if re.search(patron, texto_lower):
+                return 'factura'
+
+        # Detectar Percepción
+        patrones_percepcion = [
+            r'percepci[oó]n',
+            r'p\d{3}-006\d{4,8}',
+            r'percepcion\s*de\s*venta',
+        ]
+        for patron in patrones_percepcion:
+            if re.search(patron, texto_lower):
+                return 'percepcion'
+
+        # Detectar por contenido específico
+        if re.search(r'r\.u\.c', texto_lower) and re.search(r'factura', texto_lower):
+            return 'factura'
+        if re.search(r'ruc\s*[:]?\s*\d{11}', texto_lower) and re.search(r'boleta', texto_lower):
+            return 'boleta'
+
+        return 'desconocido'
+
+    def obtener_recomendacion_tipo(self) -> Tuple[str, str]:
         """
-        Extrae dirección del texto.
-        
-        Returns:
-            str: Dirección encontrada o None
+        Detecta el tipo real del documento y devuelve una tupla:
+        (tipo_detectado, mensaje_para_usuario)
         """
-        return self._buscar_patron(r'(?:DIRECCIÓN|DIRECCION|DOMICILIO)\s*[:.]?\s*([^\n]{10,})')
-    
-    def _limpiar_texto(self, texto: str) -> str:
+        tipo_real = self.detectar_tipo_documento()
+
+        mensajes = {
+            'factura': '📄 Este PDF parece ser una Factura',
+            'boleta': '🧾 Este PDF parece ser una Boleta',
+            'percepcion': '💰 Este PDF parece ser una Percepción',
+            'desconocido': '⚠️ No se pudo determinar el tipo de documento'
+        }
+
+        return tipo_real, mensajes.get(tipo_real, mensajes['desconocido'])
+
+    def obtener_recomendacion_fecha(self) -> Tuple[Optional[int], Optional[int], str]:
         """
-        Limpia el texto eliminando espacios extras y caracteres especiales.
-        
-        Args:
-            texto (str): Texto a limpiar
-            
-        Returns:
-            str: Texto limpio
+        Detecta la fecha real del documento y devuelve:
+        (mes_detectado, año_detectado, mensaje_para_usuario)
         """
-        if not texto:
-            return ""
-        # Eliminar espacios múltiples
-        texto = re.sub(r'\s+', ' ', texto)
-        # Eliminar espacios al inicio y final
-        return texto.strip()
+        fecha = self.detectar_fecha_emision()
+        if fecha:
+            mes, anio = fecha
+            meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+            mensaje = f"📅 Fecha detectada: {meses[mes-1]} {anio}"
+            return (mes, anio, mensaje)
+        else:
+            return (None, None, "⚠️ No se pudo detectar la fecha, se usará la seleccionada")
