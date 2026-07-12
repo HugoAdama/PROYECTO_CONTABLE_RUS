@@ -1,20 +1,67 @@
 ﻿{% extends "base.html" %}
+
+{% block title %}Configuración - Sistema Contable{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1 class="main-title">⚙️ Configuración</h1>
-    <div class="glass-card text-center">
-        <p style="color:rgba(255,255,255,0.5);">Configura las notificaciones y ajustes del sistema.</p>
-        <form method="POST" style="max-width:400px; margin:0 auto;">
-            <div class="mb-3">
-                <label class="form-label text-light">📧 Email de origen</label>
-                <input type="email" name="email_origen" class="form-control" placeholder="tu_email@gmail.com">
+<div class="container-fluid px-4 py-4">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    ⚙️
+                </div>
+                <div>
+                    <h2 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.75rem;">Configuración</h2>
+                    <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 0.95rem;">Personaliza el sistema según tus necesidades</p>
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label text-light">📧 Email de destino</label>
-                <input type="email" name="email_destino" class="form-control" placeholder="destinatario@gmail.com">
+        </div>
+    </div>
+
+    <!-- Opciones -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+                <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin-bottom: 16px;">🔧 Configuración General</h6>
+                <div class="mb-3">
+                    <label style="color: rgba(255,255,255,0.2); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">💼 Nombre del Negocio</label>
+                    <input type="text" class="form-control glass-select" value="Mi Negocio" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; width: 100%;">
+                </div>
+                <div class="mb-3">
+                    <label style="color: rgba(255,255,255,0.2); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">📧 Email de Notificaciones</label>
+                    <input type="email" class="form-control glass-select" value="negocio@email.com" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; width: 100%;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <input type="checkbox" checked style="accent-color: #667eea; width: 16px; height: 16px;">
+                    <label style="color: rgba(255,255,255,0.2); font-size: 0.8rem;">🔔 Activar Notificaciones</label>
+                </div>
+                <button class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; padding: 8px 24px; color: white; font-weight: 500; font-size: 0.8rem;">
+                    💾 Guardar Cambios
+                </button>
             </div>
-            <button type="submit" class="btn btn-primary w-100">💾 Guardar Configuración</button>
-        </form>
+        </div>
+        <div class="col-md-6">
+            <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+                <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin-bottom: 16px;">🎨 Apariencia</h6>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <input type="checkbox" checked style="accent-color: #667eea; width: 16px; height: 16px;">
+                    <label style="color: rgba(255,255,255,0.2); font-size: 0.8rem;">🌙 Modo Oscuro</label>
+                </div>
+                <div class="mb-3">
+                    <label style="color: rgba(255,255,255,0.2); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">🎨 Color Primario</label>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #667eea; border: 2px solid rgba(255,255,255,0.2); cursor: pointer;"></div>
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #f093fb; border: 2px solid transparent; cursor: pointer;"></div>
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #43e97b; border: 2px solid transparent; cursor: pointer;"></div>
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #ffd700; border: 2px solid transparent; cursor: pointer;"></div>
+                    </div>
+                </div>
+                <button class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; padding: 8px 24px; color: white; font-weight: 500; font-size: 0.8rem;">
+                    💾 Guardar Cambios
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

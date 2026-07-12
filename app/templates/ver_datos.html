@@ -1,339 +1,101 @@
-﻿<!-- app/templates/ver_datos.html -->
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
+
+{% block title %}Ver Datos - Sistema Contable{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="main-title">📋 Ver Datos</h1>
-    
-    <!-- ============================================= -->
-    <!-- FILTROS                                        -->
-    <!-- ============================================= -->
-    <div class="glass-card">
+<div class="container-fluid px-4 py-4">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    📋
+                </div>
+                <div>
+                    <h2 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.75rem;">Ver Datos</h2>
+                    <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 0.95rem;">Visualiza y filtra tus transacciones registradas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="glass-card p-4 mb-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
-                <label class="form-label text-light">📄 Tipo de Documento</label>
-                <div class="btn-group w-100" role="group">
-                    <a href="{{ url_for('ver_datos', tipo='facturas', mes=mes, año=año) }}" 
-                       class="btn {% if tipo == 'facturas' %}btn-primary{% else %}btn-secondary{% endif %}">
-                        📄 Facturas
-                    </a>
-                    <a href="{{ url_for('ver_datos', tipo='boletas', mes=mes, año=año) }}" 
-                       class="btn {% if tipo == 'boletas' %}btn-primary{% else %}btn-secondary{% endif %}">
-                        📄 Boletas
-                    </a>
-                    <a href="{{ url_for('ver_datos', tipo='percepciones', mes=mes, año=año) }}" 
-                       class="btn {% if tipo == 'percepciones' %}btn-primary{% else %}btn-secondary{% endif %}">
-                        📄 Percepciones
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label text-light">📅 Mes</label>
-                <select class="form-select" onchange="window.location.href='?tipo={{ tipo }}&mes='+this.value+'&año={{ año }}'">
-                    {% for m in range(1, 13) %}
-                        <option value="{{ m }}" {% if m == mes %}selected{% endif %}>
-                            {{ ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][m-1] }}
-                        </option>
-                    {% endfor %}
+                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📄 Tipo</label>
+                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
+                    <option value="todos" style="background: #1a1a2e;">Todos</option>
+                    <option value="facturas" style="background: #1a1a2e;">Facturas</option>
+                    <option value="boletas" selected style="background: #1a1a2e;">Boletas</option>
+                    <option value="percepciones" style="background: #1a1a2e;">Percepciones</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label text-light">📅 Año</label>
-                <select class="form-select" onchange="window.location.href='?tipo={{ tipo }}&mes={{ mes }}&año='+this.value">
-                    {% for a in range(2024, 2027) %}
-                        <option value="{{ a }}" {% if a == año %}selected{% endif %}>{{ a }}</option>
-                    {% endfor %}
+                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📅 Mes</label>
+                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
+                    <option value="5" selected style="background: #1a1a2e;">Mayo</option>
+                    <option value="1" style="background: #1a1a2e;">Enero</option>
+                    <option value="2" style="background: #1a1a2e;">Febrero</option>
+                    <option value="3" style="background: #1a1a2e;">Marzo</option>
+                    <option value="4" style="background: #1a1a2e;">Abril</option>
+                    <option value="6" style="background: #1a1a2e;">Junio</option>
+                    <option value="7" style="background: #1a1a2e;">Julio</option>
+                    <option value="8" style="background: #1a1a2e;">Agosto</option>
+                    <option value="9" style="background: #1a1a2e;">Septiembre</option>
+                    <option value="10" style="background: #1a1a2e;">Octubre</option>
+                    <option value="11" style="background: #1a1a2e;">Noviembre</option>
+                    <option value="12" style="background: #1a1a2e;">Diciembre</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label text-light">&nbsp;</label>
-                <div>
-                    <span class="badge" style="background: rgba(102,126,234,0.2); color: #74b9ff; padding: 0.5rem 1rem; border-radius: 10px;">
-                        📊 {{ datos|length }} registros
-                    </span>
-                </div>
+                <label style="color: rgba(255,255,255,0.3); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">📆 Año</label>
+                <select class="form-select glass-select" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 10px 16px; color: #ffffff; font-weight: 500;">
+                    <option value="2026" selected style="background: #1a1a2e;">2026</option>
+                    <option value="2025" style="background: #1a1a2e;">2025</option>
+                    <option value="2024" style="background: #1a1a2e;">2024</option>
+                </select>
             </div>
-            <div class="col-md-3 text-end">
-                <label class="form-label text-light">&nbsp;</label>
-                <div>
-                    <span style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
-                        Mostrando: <strong style="color:rgba(255,255,255,0.6);">{{ tipo|title }}</strong>
-                    </span>
+            <div class="col-md-2">
+                <button class="btn w-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; padding: 10px; color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    🔍 Filtrar
+                </button>
+            </div>
+            <div class="col-md-3">
+                <div style="background: rgba(79, 172, 254, 0.04); border-radius: 12px; border: 1px solid rgba(79, 172, 254, 0.06); padding: 10px 16px; text-align: center;">
+                    <span style="color: #4facfe; font-weight: 700; font-size: 1.1rem;">1</span>
+                    <span style="color: rgba(255,255,255,0.2); font-size: 0.8rem;"> registro encontrado</span>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- ============================================= -->
-    <!-- MÉTRICAS - CON MEJOR ESPACIADO               -->
-    <!-- ============================================= -->
-    <div class="row g-4 mt-3">
-        <div class="col-md-3">
-            <div class="metric-card">
-                <div class="metric-icon" style="font-size: 1.8rem;">📄</div>
-                <div class="metric-value" style="color: #74b9ff; font-size: 1.6rem;">{{ datos|length }}</div>
-                <div class="metric-label" style="font-size: 0.75rem;">Total Registros</div>
+
+    <!-- Lista de registros -->
+    <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin: 0;">📋 Registros</h6>
+            <span style="color: rgba(255,255,255,0.1); font-size: 0.7rem;">Mostrando 1 de 1</span>
+        </div>
+
+        <!-- Percepción -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border-radius: 14px; margin-bottom: 8px; border-left: 3px solid #ffd700; transition: all 0.3s;">
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+                <span style="background: rgba(255, 215, 0, 0.08); color: #ffd700; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;">P003-00602821</span>
+                <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">28/05/2026</span>
+                <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">NATURA COSMETICOS S.A.</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="color: #ffd700; font-weight: 600;">S/ 8.83</span>
+                <span style="color: rgba(255,255,255,0.1);">|</span>
+                <span style="color: rgba(255,255,255,0.2); font-size: 0.7rem;">Factura: F033-00331167</span>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="metric-card">
-                <div class="metric-icon" style="font-size: 1.8rem;">💰</div>
-                <div class="metric-value" style="color: #00b894; font-size: 1.6rem;">
-                    S/ {{ resumen.total_ventas|default(0)|round(2) if tipo == 'boletas' else resumen.total_compras|default(0)|round(2) }}
-                </div>
-                <div class="metric-label" style="font-size: 0.75rem;">
-                    {% if tipo == 'boletas' %}Total Ventas{% elif tipo == 'facturas' %}Total Compras{% else %}Total Percepciones{% endif %}
-                </div>
-            </div>
+
+        <!-- Total -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px 4px 18px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.04);">
+            <span style="color: rgba(255,255,255,0.2); font-size: 0.8rem;">Total: 1 percepción</span>
+            <span style="color: #ffd700; font-weight: 700;">S/ 18.06</span>
         </div>
-        <div class="col-md-3">
-            <div class="metric-card">
-                <div class="metric-icon" style="font-size: 1.8rem;">📊</div>
-                <div class="metric-value" style="color: #fdcb6e; font-size: 1.6rem;">
-                    {{ "%.2f"|format((datos|length / 30 * 100) if datos|length > 0 else 0) }}%
-                </div>
-                <div class="metric-label" style="font-size: 0.75rem;">Ocupación del Mes</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="metric-card">
-                <div class="metric-icon" style="font-size: 1.8rem;">⭐</div>
-                <div class="metric-value" style="color: #74b9ff; font-size: 1.6rem;">
-                    {{ resumen.total_percepciones|default(0)|round(2) if tipo == 'facturas' else 'N/A' }}
-                </div>
-                <div class="metric-label" style="font-size: 0.75rem;">Percepciones</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- ============================================= -->
-    <!-- TABLA - CON MEJOR ESPACIADO                   -->
-    <!-- ============================================= -->
-    <div class="glass-card mt-4" style="padding: 1.5rem;">
-        <!-- FACTURAS -->
-        {% if tipo == 'facturas' %}
-            <div class="table-responsive">
-                {% if datos %}
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Número</th>
-                                <th>Fecha</th>
-                                <th>Proveedor</th>
-                                <th class="text-end">Sub Total</th>
-                                <th class="text-end">IGV</th>
-                                <th class="text-end">Total</th>
-                                <th class="text-end">Percepción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for f in datos %}
-                                <tr>
-                                    <td><strong>{{ f.numero }}</strong></td>
-                                    <td>{{ f.fecha_emision_str|default('N/A') }}</td>
-                                    <td>{{ f.proveedor }}</td>
-                                    <td class="text-end">S/ {{ f.sub_total|round(2) }}</td>
-                                    <td class="text-end">S/ {{ f.igv|round(2) }}</td>
-                                    <td class="text-end"><strong>S/ {{ f.total_pagar|round(2) }}</strong></td>
-                                    <td class="text-end">S/ {{ f.percepcion|default(0)|round(2) }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3"><strong>TOTALES</strong></td>
-                                <td class="text-end"><strong>S/ {{ resumen.total_compras|default(0)|round(2) }}</strong></td>
-                                <td class="text-end"><strong>S/ {{ (resumen.total_compras|default(0) * 0.18)|round(2) }}</strong></td>
-                                <td class="text-end"><strong>S/ {{ resumen.total_compras|default(0)|round(2) }}</strong></td>
-                                <td class="text-end"><strong>S/ {{ resumen.total_percepciones|default(0)|round(2) }}</strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <p style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
-                        📊 {{ datos|length }} facturas · Total S/ {{ resumen.total_compras|default(0)|round(2) }}
-                    </p>
-                {% else %}
-                    <div class="text-center py-5">
-                        <div style="font-size: 3rem;">📭</div>
-                        <p style="color:rgba(255,255,255,0.4);">No hay facturas guardadas para este mes</p>
-                        <a href="{{ url_for('subir') }}" class="btn btn-primary">📤 Subir Facturas</a>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-        
-        <!-- BOLETAS -->
-        {% if tipo == 'boletas' %}
-            <div class="table-responsive">
-                {% if datos %}
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Número</th>
-                                <th>Fecha</th>
-                                <th>Cliente</th>
-                                <th class="text-end">Monto</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for b in datos %}
-                                <tr>
-                                    <td><strong>{{ b.numero }}</strong></td>
-                                    <td>{{ b.fecha_emision_str|default('N/A') }}</td>
-                                    <td>{{ b.nombre_cliente }}</td>
-                                    <td class="text-end"><strong>S/ {{ b.monto_total|round(2) }}</strong></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3"><strong>TOTAL</strong></td>
-                                <td class="text-end"><strong>S/ {{ resumen.total_ventas|default(0)|round(2) }}</strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <p style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
-                        📊 {{ datos|length }} boletas · Total S/ {{ resumen.total_ventas|default(0)|round(2) }}
-                    </p>
-                {% else %}
-                    <div class="text-center py-5">
-                        <div style="font-size: 3rem;">📭</div>
-                        <p style="color:rgba(255,255,255,0.4);">No hay boletas guardadas para este mes</p>
-                        <a href="{{ url_for('subir') }}" class="btn btn-primary">📤 Subir Boletas</a>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-        
-        <!-- PERCEPCIONES -->
-        {% if tipo == 'percepciones' %}
-            <div class="table-responsive">
-                {% if datos %}
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Número</th>
-                                <th>Fecha</th>
-                                <th>Proveedor</th>
-                                <th>Factura Asociada</th>
-                                <th class="text-end">Monto</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for p in datos %}
-                                <tr>
-                                    <td><strong>{{ p.numero }}</strong></td>
-                                    <td>{{ p.fecha_emision_str|default('N/A') }}</td>
-                                    <td>{{ p.proveedor }}</td>
-                                    <td>{{ p.factura_asociada|default('N/A') }}</td>
-                                    <td class="text-end"><strong>S/ {{ p.monto|round(2) }}</strong></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4"><strong>TOTAL</strong></td>
-                                <td class="text-end"><strong>S/ {{ resumen.total_percepciones|default(0)|round(2) }}</strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <p style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
-                        📊 {{ datos|length }} percepciones · Total S/ {{ resumen.total_percepciones|default(0)|round(2) }}
-                    </p>
-                {% else %}
-                    <div class="text-center py-5">
-                        <div style="font-size: 3rem;">📭</div>
-                        <p style="color:rgba(255,255,255,0.4);">No hay percepciones guardadas para este mes</p>
-                        <a href="{{ url_for('subir') }}" class="btn btn-primary">📤 Subir Percepciones</a>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
     </div>
 </div>
-
-<style>
-    .table-hover tbody tr:hover {
-        background: rgba(255,255,255,0.04) !important;
-    }
-    .table tfoot {
-        font-weight: 600;
-        background: rgba(255,255,255,0.03);
-    }
-    .badge {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
-    }
-    .btn-group .btn {
-        border-radius: 8px !important;
-        padding: 0.5rem 1rem !important;
-        transition: all 0.3s ease !important;
-    }
-    .btn-group .btn:hover {
-        transform: translateY(-2px) !important;
-    }
-    .btn-secondary {
-        color: rgba(255,255,255,0.6) !important;
-        border-color: rgba(255,255,255,0.15) !important;
-        background: transparent !important;
-    }
-    .btn-secondary:hover {
-        background: rgba(255,255,255,0.06) !important;
-        color: white !important;
-        border-color: rgba(255,255,255,0.25) !important;
-    }
-    .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
-        border: none !important;
-        color: white !important;
-    }
-    
-    /* ============================================= */
-    /* MEJORAS DE ESPACIADO                         */
-    /* ============================================= */
-    .metric-card {
-        background: rgba(255,255,255,0.04);
-        backdrop-filter: blur(12px);
-        border-radius: 14px;
-        border: 1px solid rgba(255,255,255,0.06);
-        padding: 1.2rem;
-        text-align: center;
-        min-height: 110px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        transition: all 0.3s ease;
-    }
-    .metric-card:hover {
-        background: rgba(255,255,255,0.08);
-        transform: translateY(-3px);
-    }
-    
-    .glass-card {
-        background: rgba(255,255,255,0.04);
-        backdrop-filter: blur(12px);
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,0.08);
-        padding: 1.5rem;
-        margin: 0.5rem 0;
-    }
-    
-    .table td, .table th {
-        padding: 0.75rem 1rem !important;
-    }
-    
-    @media (max-width: 768px) {
-        .metric-card {
-            min-height: 90px;
-            padding: 1rem;
-        }
-        .metric-value {
-            font-size: 1.2rem !important;
-        }
-        .glass-card {
-            padding: 1rem;
-        }
-    }
-</style>
 {% endblock %}

@@ -1,22 +1,85 @@
 ﻿{% extends "base.html" %}
+
+{% block title %}Backup - Sistema Contable{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1 class="main-title">💾 Backup</h1>
-    <div class="glass-card text-center">
-        <p style="color:rgba(255,255,255,0.5);">Crea y restaura copias de seguridad de tu base de datos.</p>
-        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
-            <div class="metric-card" style="min-width:120px;">
-                <div class="metric-value">{{ stats.total_backups|default(0) }}</div>
-                <div class="metric-label">Total Backups</div>
-            </div>
-            <div class="metric-card" style="min-width:120px;">
-                <div class="metric-value">{{ stats.tamaño_total|default('0 KB') }}</div>
-                <div class="metric-label">Tamaño Total</div>
+<div class="container-fluid px-4 py-4">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    💾
+                </div>
+                <div>
+                    <h2 style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.75rem;">Backup</h2>
+                    <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 0.95rem;">Copia de seguridad y restauración de datos</p>
+                </div>
             </div>
         </div>
-        <form method="POST">
-            <button type="submit" class="btn btn-primary mt-3">📀 Crear Backup</button>
-        </form>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+                <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin-bottom: 4px;">🛡️ Crear Backup</h6>
+                <p style="color: rgba(255,255,255,0.15); font-size: 0.8rem;">Guarda una copia de seguridad completa de tu base de datos</p>
+                <button class="btn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border: none; border-radius: 12px; padding: 8px 24px; color: #1a1a2e; font-weight: 600;">
+                    📀 Crear Backup Ahora
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="glass-card p-4" style="background: rgba(255, 215, 0, 0.02); backdrop-filter: blur(24px); border: 1px solid rgba(255, 215, 0, 0.04); border-radius: 20px;">
+                <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin-bottom: 4px;">🔄 Restaurar Backup</h6>
+                <p style="color: rgba(255,255,255,0.15); font-size: 0.8rem;">Selecciona un backup previo para restaurar</p>
+                <button class="btn" style="background: rgba(255, 215, 0, 0.04); border: 1px solid rgba(255, 215, 0, 0.04); border-radius: 12px; padding: 8px 24px; color: #ffd700; font-weight: 500;">
+                    📂 Seleccionar Backup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de backups -->
+    <div class="glass-card p-4" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h6 style="color: rgba(255,255,255,0.3); font-weight: 600; margin: 0;">📋 Backups Disponibles</h6>
+            <span style="color: rgba(255,255,255,0.08); font-size: 0.7rem;">Últimos 30 días</span>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table" style="color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.02);">
+                <thead>
+                    <tr style="color: rgba(255,255,255,0.15); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px;">
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Tamaño</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>backup_20260712_120514.db</td>
+                        <td style="color: rgba(255,255,255,0.2);">12/07/2026 12:05</td>
+                        <td>2.4 MB</td>
+                        <td>
+                            <button style="background: rgba(46, 213, 115, 0.04); border: 1px solid rgba(46, 213, 115, 0.04); border-radius: 8px; color: #6bff8a; padding: 2px 12px; font-size: 0.7rem;">🔄 Restaurar</button>
+                            <button style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.02); border-radius: 8px; color: rgba(255,255,255,0.2); padding: 2px 12px; font-size: 0.7rem;">📥 Descargar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>backup_20260711_094523.db</td>
+                        <td style="color: rgba(255,255,255,0.2);">11/07/2026 09:45</td>
+                        <td>2.1 MB</td>
+                        <td>
+                            <button style="background: rgba(46, 213, 115, 0.04); border: 1px solid rgba(46, 213, 115, 0.04); border-radius: 8px; color: #6bff8a; padding: 2px 12px; font-size: 0.7rem;">🔄 Restaurar</button>
+                            <button style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.02); border-radius: 8px; color: rgba(255,255,255,0.2); padding: 2px 12px; font-size: 0.7rem;">📥 Descargar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}
