@@ -1,256 +1,212 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Sistema Contable RUS{% endblock %}
+{% block title %}Dashboard - Sistema RUS{% endblock %}
 
 {% block content %}
-<div class="page-header">
+<!-- ============================================
+HEADER
+============================================ -->
+<div class="page-header animate-fade-in">
     <h1 class="page-title">📊 Dashboard</h1>
-    <p class="page-subtitle">Resumen financiero de tu negocio</p>
+    <p class="page-subtitle">Resumen financiero de tu negocio en el Régimen RUS</p>
 </div>
 
-<!-- Tarjetas de estadísticas -->
+<!-- ============================================
+TARJETAS DE ESTADÍSTICAS
+============================================ -->
 <div class="stats-grid">
-    <div class="stat-card ventas" data-tooltip="Total de ventas del mes (suma de todas las boletas)">
-        <div class="stat-header">
-            <div class="stat-icon">💰</div>
-            <span class="stat-badge green">+12%</span>
-        </div>
-        <div class="stat-label">Ventas</div>
-        <div class="stat-value" id="totalVentas">S/ {{ "%.2f"|format(total_ventas or 0) }}</div>
-        <div class="stat-footer">
-            <span class="stat-meta">{{ boletas|length }} boletas</span>
+    <!-- Ventas -->
+    <div class="stat-card animate-fade-in animate-fade-in-delay-1">
+        <div class="stat-icon">💰</div>
+        <div class="stat-info">
+            <span class="stat-label">Ventas</span>
+            <span class="stat-value">S/ {{ "{:,.2f}".format(total_ventas) }}</span>
+            <span class="stat-badge green">+{{ variacion_ventas }}%</span>
         </div>
     </div>
-
-    <div class="stat-card compras" data-tooltip="Total de compras del mes (suma de todas las facturas)">
-        <div class="stat-header">
-            <div class="stat-icon">🛒</div>
-            <span class="stat-badge red">-8%</span>
-        </div>
-        <div class="stat-label">Compras</div>
-        <div class="stat-value" id="totalCompras">S/ {{ "%.2f"|format(total_compras or 0) }}</div>
-        <div class="stat-footer">
-            <span class="stat-meta">{{ facturas|length }} facturas</span>
+    
+    <!-- Compras -->
+    <div class="stat-card animate-fade-in animate-fade-in-delay-2">
+        <div class="stat-icon">🛒</div>
+        <div class="stat-info">
+            <span class="stat-label">Compras</span>
+            <span class="stat-value">S/ {{ "{:,.2f}".format(total_compras) }}</span>
+            <span class="stat-badge red">{{ variacion_compras }}%</span>
         </div>
     </div>
-
-    <div class="stat-card utilidad" data-tooltip="Utilidad = Ventas - Compras">
-        <div class="stat-header">
-            <div class="stat-icon">📈</div>
-            <span class="stat-badge blue">{{ "%.1f"|format((utilidad/total_ventas*100) if total_ventas and total_ventas > 0 else 0) }}%</span>
-        </div>
-        <div class="stat-label">Utilidad</div>
-        <div class="stat-value" id="totalUtilidad">S/ {{ "%.2f"|format(utilidad or 0) }}</div>
-        <div class="stat-footer">
-            <span class="stat-meta">Margen de ganancia</span>
-        </div>
-    </div>
-
-    <div class="stat-card impuesto" data-tooltip="Impuesto RUS a pagar según la categoría">
-        <div class="stat-header">
-            <div class="stat-icon">🏛️</div>
-            {% if estado_rus and estado_rus.estado == 'ok' %}
-            <span class="stat-badge green">OK</span>
-            {% elif estado_rus and estado_rus.estado == 'alerta' %}
-            <span class="stat-badge yellow">⚠️ Alerta</span>
+    
+    <!-- Utilidad -->
+    <div class="stat-card animate-fade-in animate-fade-in-delay-3">
+        <div class="stat-icon">📈</div>
+        <div class="stat-info">
+            <span class="stat-label">Utilidad</span>
+            <span class="stat-value {% if utilidad < 0 %}text-danger{% else %}text-success{% endif %}">
+                S/ {{ "{:,.2f}".format(utilidad) }}
+            </span>
+            {% if utilidad >= 0 %}
+            <span class="stat-badge green">+{{ "%.1f"|format(porcentaje_utilidad) }}%</span>
             {% else %}
-            <span class="stat-badge red">🚨 Urgente</span>
+            <span class="stat-badge red">Pérdida</span>
             {% endif %}
         </div>
-        <div class="stat-label">Impuesto RUS</div>
-        <div class="stat-value" id="totalImpuesto">S/ {{ "%.2f"|format(impuesto or 0) }}</div>
-        <div class="stat-footer">
-            <span class="stat-meta">Ahorro S/ 18.06</span>
+    </div>
+    
+    <!-- Estado RUS -->
+    <div class="stat-card animate-fade-in animate-fade-in-delay-4">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-info">
+            <span class="stat-label">Estado RUS</span>
+            <span class="stat-value {% if estado_rus == 'normal' %}text-success{% elif estado_rus == 'alerta' %}text-warning{% else %}text-danger{% endif %}">
+                {{ estado_rus|upper }}
+            </span>
+            <span class="stat-badge gray">S/ {{ impuesto_mensual }}</span>
         </div>
     </div>
 </div>
 
-<!-- Estado RUS -->
-{% if estado_rus %}
-<div class="rus-status">
-    <div class="rus-info">
-        <span class="rus-icon">{{ estado_rus.icono }}</span>
-        <div>
-            <div class="rus-title">Estado RUS</div>
-            <div class="rus-message">{{ estado_rus.mensaje }}</div>
+<!-- ============================================
+MÉTRICAS ADICIONALES
+============================================ -->
+<div class="grid-3 animate-fade-in animate-fade-in-delay-5">
+    <!-- Total Documentos -->
+    <div class="glass-card">
+        <div class="card-title">📄 Total Documentos</div>
+        <div class="card-value">{{ total_documentos }}</div>
+        <span class="text-muted text-sm">Facturas: {{ total_facturas }} | Boletas: {{ total_boletas }} | Percepciones: {{ total_percepciones_count }}</span>
+    </div>
+    
+    <!-- Último Mes -->
+    <div class="glass-card">
+        <div class="card-title">📅 Último Mes</div>
+        <div class="card-value">{{ ultimo_mes.nombre_mes if ultimo_mes else 'Sin datos' }} {{ ultimo_mes.anio if ultimo_mes else '' }}</div>
+        <span class="text-muted text-sm">Ventas: S/ {{ "{:,.2f}".format(total_ventas) }}</span>
+    </div>
+    
+    <!-- Alertas -->
+    <div class="glass-card">
+        <div class="card-title">⚡ Alertas</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:4px;">
+            <span style="font-size:2.5rem;">
+                {% if estado_rus == 'normal' %}✅{% elif estado_rus == 'alerta' %}⚠️{% else %}🚨{% endif %}
+            </span>
+            <span class="text-muted text-md">
+                {% if estado_rus == 'normal' %}¡Todo en orden!{% elif estado_rus == 'alerta' %}Cuidado, cerca del límite{% else %}¡Excediste el límite!{% endif %}
+            </span>
         </div>
-        <span class="rus-badge ok">{{ estado_rus.estado }}</span>
-    </div>
-    <div class="rus-limit">
-        Límite: <strong>S/ 8,000</strong><br>
-        7.0% del límite
     </div>
 </div>
-{% endif %}
 
-<!-- Alertas -->
-<div class="alert-card" id="alertasContainer">
-    <span class="alert-icon">✅</span>
-    <span class="alert-text"><strong>Alertas del Mes</strong> — No hay alertas pendientes. ¡Todo en orden!</span>
-</div>
-
-<!-- Tablas de datos -->
-<div class="tables-grid">
-    <div class="table-section">
-        <div class="table-title">📄 Últimas Facturas</div>
+<!-- ============================================
+ÚLTIMAS FACTURAS Y BOLETAS
+============================================ -->
+<div class="grid-2 mt-3 animate-fade-in animate-fade-in-delay-3">
+    <!-- Últimas Facturas -->
+    <div class="glass-card">
+        <div class="card-title">📄 Últimas Facturas</div>
         {% if facturas %}
-        <div class="table-responsive">
-            <table class="table table-glass table-paginada" id="tablaFacturas">
+        <div class="table-wrapper">
+            <table class="table-glass">
                 <thead>
                     <tr>
-                        <th>N°</th>
-                        <th>Proveedor</th>
-                        <th class="text-end">Total</th>
+                        <th>Número</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for f in facturas %}
+                    {% for f in facturas[:5] %}
                     <tr>
-                        <td>{{ f.numero_factura }}</td>
-                        <td>{{ f.proveedor }}</td>
-                        <td class="text-end">S/ {{ "%.2f"|format(f.total_pagar or 0) }}</td>
+                        <td><span class="badge-glass factura">{{ f.numero }}</span></td>
+                        <td>S/ {{ "{:,.2f}".format(f.monto) }}</td>
+                        <td>{{ f.fecha_emision.strftime('%d/%m/%Y') }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         {% else %}
-        <p class="text-muted-glass">No hay facturas para mostrar</p>
+        <p class="text-muted text-sm">No hay facturas para mostrar</p>
         {% endif %}
     </div>
-
-    <div class="table-section">
-        <div class="table-title">🧾 Últimas Boletas</div>
+    
+    <!-- Últimas Boletas -->
+    <div class="glass-card">
+        <div class="card-title">🧾 Últimas Boletas</div>
         {% if boletas %}
-        <div class="table-responsive">
-            <table class="table table-glass table-paginada" id="tablaBoletas">
+        <div class="table-wrapper">
+            <table class="table-glass">
                 <thead>
                     <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th class="text-end">Total</th>
+                        <th>Número</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for b in boletas %}
+                    {% for b in boletas[:5] %}
                     <tr>
-                        <td>{{ b.numero_boleta }}</td>
-                        <td>{{ b.cliente }}</td>
-                        <td class="text-end">S/ {{ "%.2f"|format(b.total_pagar or 0) }}</td>
+                        <td><span class="badge-glass boleta">{{ b.numero }}</span></td>
+                        <td>S/ {{ "{:,.2f}".format(b.monto) }}</td>
+                        <td>{{ b.fecha_emision.strftime('%d/%m/%Y') }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         {% else %}
-        <p class="text-muted-glass">No hay boletas para mostrar</p>
+        <p class="text-muted text-sm">No hay boletas para mostrar</p>
         {% endif %}
     </div>
 </div>
 
-<!-- Desglose y resumen -->
-<div class="stats-bottom-grid">
-    <div class="stat-detail">
-        <div class="detail-title">💰 Desglose de Impuestos RUS</div>
-        <div class="detail-row">
-            <span class="detail-label">Ventas del Mes</span>
-            <span class="detail-value">S/ {{ "%.2f"|format(total_ventas or 0) }}</span>
+<!-- ============================================
+DESGLOSE DE IMPUESTOS Y RESUMEN
+============================================ -->
+<div class="grid-2 mt-3 animate-fade-in animate-fade-in-delay-4">
+    <!-- Desglose de Impuestos -->
+    <div class="glass-card">
+        <div class="card-title">🏛️ Desglose de Impuestos RUS</div>
+        <div class="stat-row">
+            <span class="text-muted">Ventas del Mes</span>
+            <span class="text-white font-semibold">S/ {{ "{:,.2f}".format(total_ventas) }}</span>
         </div>
-        <div class="detail-row">
-            <span class="detail-label">Impuesto a Pagar</span>
-            <span class="detail-value green">S/ {{ "%.2f"|format(impuesto or 0) }}</span>
+        <div class="stat-row">
+            <span class="text-muted">Impuesto a Pagar</span>
+            <span class="text-white font-semibold">S/ {{ "{:,.2f}".format(impuesto_mensual) }}</span>
         </div>
-        <div class="detail-row">
-            <span class="detail-label">Régimen</span>
-            <span class="detail-value"><span class="badge-sm">Menos de S/ 5,000</span></span>
+        <div class="stat-row">
+            <span class="text-muted">Régimen</span>
+            <span>
+                {% if total_ventas <= 5000 %}
+                <span class="badge-glass" style="background:rgba(74,222,128,0.12);color:#4ade80;">MENOS DE S/5,000</span>
+                {% elif total_ventas <= 8000 %}
+                <span class="badge-glass" style="background:rgba(251,191,36,0.12);color:#fbbf24;">ENTRE S/5,000 Y S/8,000</span>
+                {% else %}
+                <span class="badge-glass" style="background:rgba(248,113,113,0.12);color:#f87171;">MÁS DE S/8,000</span>
+                {% endif %}
+            </span>
         </div>
     </div>
-
-    <div class="stat-detail">
-        <div class="detail-title">📊 Resumen de Transacciones</div>
-        <div class="detail-row">
-            <span class="detail-label">Facturas</span>
-            <span class="detail-value">{{ facturas|length }}</span>
+    
+    <!-- Resumen de Transacciones -->
+    <div class="glass-card">
+        <div class="card-title">📊 Resumen de Transacciones</div>
+        <div class="stat-row">
+            <span>📄 Facturas</span>
+            <span class="font-bold">{{ total_facturas }}</span>
         </div>
-        <div class="detail-row">
-            <span class="detail-label">Boletas</span>
-            <span class="detail-value">{{ boletas|length }}</span>
+        <div class="stat-row">
+            <span>🧾 Boletas</span>
+            <span class="font-bold">{{ total_boletas }}</span>
         </div>
-        <div class="detail-row">
-            <span class="detail-label">Percepciones</span>
-            <span class="detail-value">{{ percepciones|length }}</span>
+        <div class="stat-row">
+            <span>📋 Percepciones</span>
+            <span class="font-bold">{{ total_percepciones_count }}</span>
         </div>
-        <hr class="divider-light bold">
-        <div class="detail-row">
-            <span class="detail-label" style="font-weight: 600; color: rgba(255,255,255,0.6);">Total Documentos</span>
-            <span class="detail-value highlight">{{ facturas|length + boletas|length + percepciones|length }}</span>
+        <div class="stat-row total">
+            <span class="font-semibold">📦 Total Documentos</span>
+            <span class="font-bold text-white">{{ total_documentos }}</span>
         </div>
     </div>
 </div>
-
-<!-- Tooltips -->
-<div id="tooltipContainer" style="display: none; position: fixed; padding: 8px 12px; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); border-radius: 8px; color: #fff; font-size: 0.85rem; max-width: 300px; pointer-events: none; z-index: 10000;"></div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ============================================================
-    // INICIALIZAR PAGINACIÓN EN LAS TABLAS
-    // ============================================================
-    const tablaFacturas = document.getElementById('tablaFacturas');
-    const tablaBoletas = document.getElementById('tablaBoletas');
-    
-    if (tablaFacturas) {
-        new PaginadorTabla('tablaFacturas', { rowsPerPage: 5, maxButtons: 3 });
-    }
-    if (tablaBoletas) {
-        new PaginadorTabla('tablaBoletas', { rowsPerPage: 5, maxButtons: 3 });
-    }
-    
-    // ============================================================
-    // TOOLTIPS (Información al pasar el mouse)
-    // ============================================================
-    const tooltipContainer = document.getElementById('tooltipContainer');
-    const elementosConTooltip = document.querySelectorAll('[data-tooltip]');
-    
-    elementosConTooltip.forEach(el => {
-        el.addEventListener('mouseenter', function(e) {
-            const texto = this.getAttribute('data-tooltip');
-            tooltipContainer.textContent = texto;
-            tooltipContainer.style.display = 'block';
-            actualizarPosicionTooltip(e);
-        });
-        
-        el.addEventListener('mousemove', function(e) {
-            actualizarPosicionTooltip(e);
-        });
-        
-        el.addEventListener('mouseleave', function() {
-            tooltipContainer.style.display = 'none';
-        });
-    });
-    
-    function actualizarPosicionTooltip(e) {
-        const x = e.clientX + 15;
-        const y = e.clientY + 15;
-        tooltipContainer.style.left = x + 'px';
-        tooltipContainer.style.top = y + 'px';
-        
-        // Evitar que el tooltip se salga de la pantalla
-        const rect = tooltipContainer.getBoundingClientRect();
-        if (rect.right > window.innerWidth) {
-            tooltipContainer.style.left = (e.clientX - rect.width - 15) + 'px';
-        }
-        if (rect.bottom > window.innerHeight) {
-            tooltipContainer.style.top = (e.clientY - rect.height - 15) + 'px';
-        }
-    }
-    
-    // ============================================================
-    // NOTIFICACIÓN DE BIENVENIDA
-    // ============================================================
-    notificaciones.toast('info', 'Bienvenido a tu Dashboard financiero. ¡Todo en orden!', '📊 Sistema RUS');
-});
-</script>
 {% endblock %}

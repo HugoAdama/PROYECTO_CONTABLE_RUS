@@ -1,46 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Historial - Sistema Contable RUS{% endblock %}
+{% block title %}Historial - Sistema RUS{% endblock %}
 
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-fade-in">
     <h1 class="page-title">📜 Historial</h1>
     <p class="page-subtitle">Registro de todas las actividades del sistema</p>
 </div>
 
 <!-- Filtros -->
-<div class="glass-card p-3 mb-4">
-    <div class="row g-3 align-items-end">
-        <div class="col-md-3">
-            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Acción</label>
-            <select class="form-select glass-select">
-                <option value="todas">Todas</option>
-                <option value="subida">Subida de archivos</option>
-                <option value="backup">Backup</option>
-                <option value="alerta">Alerta</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Desde</label>
-            <input type="date" class="form-control glass-input" value="2026-07-01">
-        </div>
-        <div class="col-md-3">
-            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Hasta</label>
-            <input type="date" class="form-control glass-input" value="2026-07-13">
-        </div>
-        <div class="col-md-3">
-            <button class="btn btn-primary-glass w-100">
-                <i class="bi bi-funnel"></i> Filtrar
-            </button>
-        </div>
-    </div>
+<div class="filters-bar animate-fade-in animate-fade-in-delay-1">
+    <label for="accion">Acción:</label>
+    <select id="accion">
+        <option>Todas</option>
+        <option>Subida</option>
+        <option>Backup</option>
+        <option>Alerta</option>
+    </select>
+    
+    <label for="desde">Desde:</label>
+    <input type="date" class="form-control" style="width:auto;padding:8px 12px;">
+    
+    <label for="hasta">Hasta:</label>
+    <input type="date" class="form-control" style="width:auto;padding:8px 12px;">
+    
+    <button class="btn-filter"><i class="fas fa-filter"></i> Filtrar</button>
 </div>
 
-<!-- Tabla de historial -->
-<div class="glass-card p-3">
-    <h5 style="color: #fff;">📋 Registro de Actividades</h5>
-    <div class="table-responsive">
-        <table class="table table-glass table-paginada" id="tablaHistorial">
+<!-- Tabla de Historial -->
+<div class="glass-card animate-fade-in animate-fade-in-delay-2">
+    <div class="table-wrapper">
+        <table class="table-glass">
             <thead>
                 <tr>
                     <th>Acción</th>
@@ -51,57 +41,44 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>📤 Subida</td>
+                    <td><span class="badge-glass" style="background:rgba(96,165,250,0.1);color:#60a5fa;">Subida</span></td>
                     <td>Archivo procesado: factura_001.pdf</td>
                     <td>12/07/2026 14:30</td>
-                    <td><span class="badge-glass bg-success">Completado</span></td>
+                    <td><span class="badge-glass" style="background:rgba(74,222,128,0.1);color:#4ade80;">COMPLETADO</span></td>
                 </tr>
                 <tr>
-                    <td>💾 Backup</td>
+                    <td><span class="badge-glass" style="background:rgba(251,191,36,0.1);color:#fbbf24;">Backup</span></td>
                     <td>Backup creado: backup_20260712_120514.db</td>
                     <td>12/07/2026 12:05</td>
-                    <td><span class="badge-glass bg-success">Completado</span></td>
+                    <td><span class="badge-glass" style="background:rgba(74,222,128,0.1);color:#4ade80;">COMPLETADO</span></td>
                 </tr>
                 <tr>
-                    <td>⚠️ Alerta</td>
+                    <td><span class="badge-glass" style="background:rgba(251,191,36,0.1);color:#fbbf24;">Alerta</span></td>
                     <td>Límite RUS cercano - Ventas: 7,850.00</td>
                     <td>11/07/2026 18:20</td>
-                    <td><span class="badge-glass bg-warning">Advertencia</span></td>
+                    <td><span class="badge-glass" style="background:rgba(251,191,36,0.1);color:#fbbf24;">ADVERTENCIA</span></td>
                 </tr>
                 <tr>
-                    <td>📤 Subida</td>
+                    <td><span class="badge-glass" style="background:rgba(96,165,250,0.1);color:#60a5fa;">Subida</span></td>
                     <td>Archivo procesado: boleta_002.pdf</td>
                     <td>11/07/2026 10:15</td>
-                    <td><span class="badge-glass bg-success">Completado</span></td>
+                    <td><span class="badge-glass" style="background:rgba(74,222,128,0.1);color:#4ade80;">COMPLETADO</span></td>
                 </tr>
                 <tr>
-                    <td>📤 Subida</td>
+                    <td><span class="badge-glass" style="background:rgba(96,165,250,0.1);color:#60a5fa;">Subida</span></td>
                     <td>Archivo procesado: factura_003.pdf</td>
                     <td>10/07/2026 16:45</td>
-                    <td><span class="badge-glass bg-danger">Error</span></td>
+                    <td><span class="badge-glass" style="background:rgba(248,113,113,0.1);color:#f87171;">ERROR</span></td>
                 </tr>
             </tbody>
         </table>
     </div>
+    
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:8px;">
+        <span class="text-muted text-sm">Mostrando 1-5 de 5 registros</span>
+        <div style="display:flex;gap:8px;">
+            <button class="btn-filter btn-sm">10 filas</button>
+        </div>
+    </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ============================================================
-    // INICIALIZAR PAGINACIÓN
-    // ============================================================
-    var tabla = document.getElementById('tablaHistorial');
-    if (tabla) {
-        new PaginadorTabla('tablaHistorial', { rowsPerPage: 10, maxButtons: 5 });
-    }
-
-    // ============================================================
-    // NOTIFICACIÓN DE BIENVENIDA
-    // ============================================================
-    // 👇 CORREGIDO: notificaciones (con 'e')
-    notificaciones.toast('info', '📜 Mostrando las últimas actividades del sistema.', 'Historial');
-});
-</script>
 {% endblock %}

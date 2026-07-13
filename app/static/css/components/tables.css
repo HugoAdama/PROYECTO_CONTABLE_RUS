@@ -1,0 +1,76 @@
+/* ============================================
+   TABLAS
+   ============================================ */
+
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-sm);
+}
+
+.table-glass {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+.table-glass thead th {
+    text-align: left;
+    padding: 12px 14px 12px 0;
+    color: rgba(255,255,255,0.25);
+    font-weight: 600;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.table-glass tbody td {
+    padding: 12px 14px 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+    vertical-align: middle;
+}
+
+.table-glass tbody tr {
+    transition: all var(--transition-fast);
+}
+
+.table-glass tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.01);
+}
+
+.table-glass tbody tr:hover {
+    background: rgba(255,255,255,0.04);
+}
+
+/* --- Badges en tablas --- */
+.badge-glass {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    background: rgba(96,165,250,0.08);
+    color: var(--primary);
+    border: 1px solid rgba(96,165,250,0.05);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-glass.factura {
+    background: rgba(96,165,250,0.08);
+    color: var(--primary);
+    border-color: rgba(96,165,250,0.05);
+}
+
+.badge-glass.boleta {
+    background: rgba(74,222,128,0.08);
+    color: var(--success);
+    border-color: rgba(74,222,128,0.05);
+}
+
+.badge-glass.percepcion {
+    background: rgba(251,191,36,0.08);
+    color: var(--warning);
+    border-color: rgba(251,191,36,0.05);
+}

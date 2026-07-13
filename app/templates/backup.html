@@ -1,133 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}Backup - Sistema Contable RUS{% endblock %}
+{% block title %}Backup - Sistema RUS{% endblock %}
 
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-fade-in">
     <h1 class="page-title">💾 Backup</h1>
     <p class="page-subtitle">Copia de seguridad y restauración de datos</p>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="glass-card p-3">
-            <h5 style="color: #fff;">📤 Crear Backup</h5>
-            <p class="text-muted-glass" style="font-size: 0.9rem;">Guarda una copia de seguridad completa de tu base de datos</p>
-            <button class="btn btn-primary-glass w-100" id="crearBackupBtn">
-                <i class="bi bi-cloud-arrow-up"></i> Crear Backup Ahora
-            </button>
-        </div>
+<div class="grid-2 animate-fade-in animate-fade-in-delay-1">
+    <!-- Crear Backup -->
+    <div class="glass-card">
+        <div class="card-title">📦 Crear Backup</div>
+        <p class="text-muted text-sm" style="margin-bottom:16px;">
+            Guarda una copia de seguridad completa de tu base de datos
+        </p>
+        <button class="btn btn-success" style="width:100%;justify-content:center;">
+            <i class="fas fa-save"></i> Crear Backup Ahora
+        </button>
     </div>
-    <div class="col-md-6">
-        <div class="glass-card p-3">
-            <h5 style="color: #fff;">📥 Restaurar Backup</h5>
-            <p class="text-muted-glass" style="font-size: 0.9rem;">Selecciona un backup previo para restaurar</p>
-            <select class="form-select glass-select" id="backupSelect">
-                <option value="">Seleccionar Backup</option>
-                {% for b in backups %}
-                <option value="{{ b.nombre }}">{{ b.nombre }} - {{ b.fecha }} ({{ b.tamano }})</option>
-                {% endfor %}
-            </select>
-            <button class="btn btn-success-glass w-100 mt-2" id="restaurarBackupBtn">
-                <i class="bi bi-cloud-arrow-down"></i> Restaurar
-            </button>
-        </div>
+    
+    <!-- Restaurar -->
+    <div class="glass-card">
+        <div class="card-title">🔄 Restaurar Backup</div>
+        <p class="text-muted text-sm" style="margin-bottom:16px;">
+            Selecciona un backup previo para restaurar
+        </p>
+        <select class="form-control" style="margin-bottom:12px;">
+            <option>Seleccionar Backup</option>
+        </select>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;">
+            <i class="fas fa-undo"></i> Restaurar
+        </button>
     </div>
 </div>
 
-<!-- Lista de backups -->
-<div class="glass-card p-3 mt-4">
-    <h5 style="color: #fff;">📋 Backups Disponibles</h5>
-    {% if backups %}
-    <div class="table-responsive">
-        <table class="table table-glass table-paginada" id="tablaBackups">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Tamaño</th>
-                    <th class="text-end">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for b in backups %}
-                <tr>
-                    <td>{{ b.nombre }}</td>
-                    <td>{{ b.fecha }}</td>
-                    <td>{{ b.tamano }}</td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-success-glass restaurarBtn" data-backup="{{ b.nombre }}">
-                            <i class="bi bi-arrow-counterclockwise"></i> Restaurar
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="text-muted-glass mt-2" style="font-size: 0.8rem;">Últimos 30 días</div>
-    {% else %}
-    <p class="text-muted-glass">No hay backups disponibles</p>
-    {% endif %}
+<!-- Backups Disponibles -->
+<div class="glass-card mt-3 animate-fade-in animate-fade-in-delay-2">
+    <div class="card-title">📋 Backups Disponibles</div>
+    <p class="text-muted text-sm">No hay backups disponibles</p>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ============================================================
-    // INICIALIZAR PAGINACIÓN
-    // ============================================================
-    var tabla = document.getElementById('tablaBackups');
-    if (tabla) {
-        new PaginadorTabla('tablaBackups', { rowsPerPage: 5, maxButtons: 3 });
-    }
-
-    // ============================================================
-    // CREAR BACKUP
-    // ============================================================
-    var crearBtn = document.getElementById('crearBackupBtn');
-    if (crearBtn) {
-        crearBtn.addEventListener('click', function() {
-            var btn = this;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Creando...';
-            // 👇 CORREGIDO: notificaciones (con 'e')
-            notificaciones.toast('info', 'Creando copia de seguridad...', '💾 Procesando');
-
-            setTimeout(function() {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-cloud-arrow-up"></i> Crear Backup Ahora';
-                notificaciones.toast('success', 'Backup creado correctamente: backup_20260713_120000.db', '✅ Completado');
-            }, 2000);
-        });
-    }
-
-    // ============================================================
-    // RESTAURAR BACKUP (botones en tabla)
-    // ============================================================
-    var restaurarBtns = document.querySelectorAll('.restaurarBtn');
-    restaurarBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            var nombre = this.dataset.backup;
-            notificaciones.toast('warning', '¿Restaurar backup "' + nombre + '"? Esta acción es irreversible.', '⚠️ Confirmar');
-        });
-    });
-
-    // ============================================================
-    // RESTAURAR BACKUP (desde select)
-    // ============================================================
-    var restaurarSelectBtn = document.getElementById('restaurarBackupBtn');
-    if (restaurarSelectBtn) {
-        restaurarSelectBtn.addEventListener('click', function() {
-            var select = document.getElementById('backupSelect');
-            if (select && select.value) {
-                notificaciones.toast('warning', '¿Restaurar backup "' + select.value + '"? Esta acción es irreversible.', '⚠️ Confirmar');
-            } else {
-                notificaciones.toast('error', 'Por favor, selecciona un backup para restaurar.', 'Error');
-            }
-        });
-    }
-});
-</script>
 {% endblock %}

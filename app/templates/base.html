@@ -3,147 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema Contable RUS{% endblock %}</title>
-
-    <!-- Bootstrap y Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <title>{% block title %}Sistema RUS{% endblock %}</title>
     
-    <!-- Estilos del sistema -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- CSS Principal -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
+    
+    <!-- Estilos del Sidebar (directo en head para evitar problemas de carga) -->
+    <style>
+        /* ============================================
+           SIDEBAR - ESTILOS DIRECTOS
+           ============================================ */
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(175deg, rgba(8,8,30,0.97), rgba(16,16,45,0.98));
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-right: 1px solid rgba(255,255,255,0.04);
+            padding: 28px 20px 24px;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 8px 0 60px rgba(0,0,0,0.4);
+        }
+        
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(96,165,250,0.15); border-radius: 10px; }
+        
+        .sidebar-brand {
+            text-align: center;
+            padding: 8px 0 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 24px;
+            flex-shrink: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-brand:hover { transform: scale(1.02); }
+        
+        .sidebar-brand .logo-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-brand h2 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin: 0;
+        }
+        
+        .sidebar-brand .brand-sub {
+            display: block;
+            color: rgba(255,255,255,0.08);
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        .sidebar-nav { list-style: none; padding: 0; margin: 0; flex: 1; }
+        .sidebar-nav .nav-section {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.06);
+            padding: 16px 16px 8px;
+            font-weight: 700;
+            display: block;
+        }
+        .sidebar-nav li { margin-bottom: 2px; }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            color: rgba(255,255,255,0.35);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid transparent;
+        }
+        
+        .sidebar-nav a i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+            color: rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-nav a .nav-text { flex: 1; transition: all 0.3s ease; }
+        
+        .sidebar-nav a:hover {
+            background: rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.8);
+            transform: translateX(4px);
+            border-color: rgba(255,255,255,0.03);
+        }
+        
+        .sidebar-nav a:hover i {
+            color: #60a5fa;
+            transform: scale(1.1);
+        }
+        
+        .sidebar-nav a.active {
+            background: rgba(96,165,250,0.06);
+            color: #60a5fa;
+            border: 1px solid rgba(96,165,250,0.04);
+            box-shadow: 0 4px 30px rgba(96,165,250,0.03);
+        }
+        
+        .sidebar-nav a.active i { color: #60a5fa; }
+        .sidebar-nav a.active .nav-text { color: #60a5fa; }
+        
+        .sidebar-nav a.active::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #60a5fa, #a78bfa);
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 0 30px rgba(96,165,250,0.2);
+        }
+        
+        .sidebar-footer {
+            text-align: center;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+        .sidebar-footer .version {
+            color: rgba(255,255,255,0.04);
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(16px);
+        }
+        .sidebar-toggle:hover { background: rgba(255,255,255,0.08); transform: scale(1.05); }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+            .sidebar { transform: translateX(-100%); width: 300px; padding: 24px 18px; }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-left: 0; padding: 20px 16px 32px; }
+        }
+        
+        @media (max-width: 480px) {
+            .sidebar { width: 280px; padding: 20px 14px; }
+            .sidebar-brand h2 { font-size: 1.2rem; }
+            .sidebar-brand .logo-icon { font-size: 2.5rem; }
+            .sidebar-nav a { padding: 10px 14px; font-size: 0.9rem; }
+            .sidebar-nav a i { font-size: 1rem; width: 20px; }
+        }
+    </style>
+    
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-
-    <!-- Botón para móvil -->
-    <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú">
-        <i class="bi bi-list"></i>
+    <!-- Toggle Móvil -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menú">
+        <i class="fas fa-bars"></i>
     </button>
+    
+    <!-- Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Menú lateral -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <div class="logo-icon">📊</div>
-            <div>
-                <div class="logo-name">Mi Negocio</div>
-                <div class="logo-sub">CONTROL FINANCIERO</div>
-            </div>
-        </div>
-
-        <ul class="nav-menu">
-            <li class="nav-item {% if request.endpoint == 'main.index' %}active{% endif %}">
-                <a href="{{ url_for('main.index') }}" class="nav-link">
-                    <span class="nav-icon">🏠</span> Inicio
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menú principal">
+        <a href="{{ url_for('main.index') }}" class="sidebar-brand" title="Ir al inicio">
+            <span class="logo-icon">🏢</span>
+            <h2>Mi Negocio</h2>
+            <span class="brand-sub">Control Financiero</span>
+        </a>
+        
+        <ul class="sidebar-nav">
+            <li><span class="nav-section">Principal</span></li>
+            <li>
+                <a href="{{ url_for('main.index') }}" class="{% if request.endpoint == 'main.index' %}active{% endif %}">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">Inicio</span>
                 </a>
             </li>
-            <li class="nav-item {% if request.endpoint == 'main.subir' %}active{% endif %}">
-                <a href="{{ url_for('main.subir') }}" class="nav-link">
-                    <span class="nav-icon">📤</span> Subir Archivos
+            <li>
+                <a href="{{ url_for('main.subir') }}" class="{% if request.endpoint == 'main.subir' %}active{% endif %}">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span class="nav-text">Subir Archivos</span>
                 </a>
             </li>
-            <li class="nav-item {% if request.endpoint == 'main.ver_datos' %}active{% endif %}">
-                <a href="{{ url_for('main.ver_datos') }}" class="nav-link">
-                    <span class="nav-icon">📋</span> Ver Datos
+            <li>
+                <a href="{{ url_for('main.ver_datos') }}" class="{% if request.endpoint == 'main.ver_datos' %}active{% endif %}">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="nav-text">Ver Datos</span>
                 </a>
             </li>
-            <li class="nav-item {% if request.endpoint == 'main.reportes' %}active{% endif %}">
-                <a href="{{ url_for('main.reportes') }}" class="nav-link">
-                    <span class="nav-icon">📊</span> Reportes
+            
+            <li><span class="nav-section">Análisis</span></li>
+            <li>
+                <a href="{{ url_for('main.reportes') }}" class="{% if request.endpoint == 'main.reportes' %}active{% endif %}">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="nav-text">Reportes</span>
                 </a>
             </li>
-            <li class="nav-item {% if request.endpoint == 'main.carpetas' %}active{% endif %}">
-                <a href="{{ url_for('main.carpetas') }}" class="nav-link">
-                    <span class="nav-icon">📁</span> Gestion Carpetas
+            <li>
+                <a href="{{ url_for('main.carpetas') }}" class="{% if request.endpoint == 'main.carpetas' %}active{% endif %}">
+                    <i class="fas fa-folder-open"></i>
+                    <span class="nav-text">Gestión Carpetas</span>
                 </a>
             </li>
-            <li class="nav-item {% if request.endpoint == 'main.backup' %}active{% endif %}">
-                <a href="{{ url_for('main.backup') }}" class="nav-link">
-                    <span class="nav-icon">💾</span> Backup
+            
+            <li><span class="nav-section">Sistema</span></li>
+            <li>
+                <a href="{{ url_for('main.backup') }}" class="{% if request.endpoint == 'main.backup' %}active{% endif %}">
+                    <i class="fas fa-database"></i>
+                    <span class="nav-text">Backup</span>
                 </a>
             </li>
-            <li class="nav-item {% if request.endpoint == 'main.historial' %}active{% endif %}">
-                <a href="{{ url_for('main.historial') }}" class="nav-link">
-                    <span class="nav-icon">📜</span> Historial
+            <li>
+                <a href="{{ url_for('main.historial') }}" class="{% if request.endpoint == 'main.historial' %}active{% endif %}">
+                    <i class="fas fa-clock"></i>
+                    <span class="nav-text">Historial</span>
                 </a>
             </li>
-            <li class="nav-item {% if request.endpoint == 'main.configuracion' %}active{% endif %}">
-                <a href="{{ url_for('main.configuracion') }}" class="nav-link">
-                    <span class="nav-icon">⚙️</span> Configuracion
+            <li>
+                <a href="{{ url_for('main.configuracion') }}" class="{% if request.endpoint == 'main.configuracion' %}active{% endif %}">
+                    <i class="fas fa-sliders-h"></i>
+                    <span class="nav-text">Configuración</span>
                 </a>
             </li>
         </ul>
-
-        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.03);">
-            <div style="color: rgba(255,255,255,0.15); font-size: 0.6rem; text-align: center; letter-spacing: 0.5px;">
-                v3.2 · Flask
-            </div>
+        
+        <div class="sidebar-footer">
+            <span class="version">v3.2 · Flask</span>
         </div>
     </nav>
 
-    <!-- Contenido principal -->
-    <main class="main-content" id="mainContent">
-        <div style="height: 10px;"></div>
+    <!-- Main Content -->
+    <main class="main-content">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Scripts de Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Scripts del sistema (UX mejorada) -->
+    <!-- ============================================
+    SCRIPTS - CARGA MODULAR
+    ============================================ -->
+    
+    <!-- 1. Configuración Global -->
+    <script src="{{ url_for('static', filename='js/config/settings.js') }}"></script>
+    
+    <!-- 2. Utilidades -->
+    <script src="{{ url_for('static', filename='js/utils/dom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/utils/format.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/utils/api.js') }}"></script>
+    
+    <!-- 3. Módulos principales -->
+    <script src="{{ url_for('static', filename='js/modules/notifications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modules/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modules/filters.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modules/pagination.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modules/upload.js') }}"></script>
+    
+    <!-- 4. Módulos opcionales (solo si Plotly está presente) -->
+    {% if request.endpoint == 'main.reportes' %}
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/modules/charts.js') }}"></script>
+    {% endif %}
+    
+    <!-- 5. Punto de entrada (app.js) -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/paginacion.js') }}"></script>
-
-    <!-- Script para el menú móvil -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileToggle = document.getElementById('mobileToggle');
-            const sidebar = document.getElementById('sidebar');
-
-            if (mobileToggle) {
-                mobileToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('mobile-open');
-                    const icon = this.querySelector('i');
-                    if (icon) {
-                        icon.classList.toggle('bi-list');
-                        icon.classList.toggle('bi-x');
-                    }
-                });
-            }
-
-            // Cerrar menú al hacer clic fuera
-            document.addEventListener('click', function(event) {
-                if (window.innerWidth <= 768) {
-                    const isClickInsideSidebar = sidebar.contains(event.target);
-                    const isClickOnToggle = mobileToggle && mobileToggle.contains(event.target);
-
-                    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('mobile-open')) {
-                        sidebar.classList.remove('mobile-open');
-                        const icon = mobileToggle?.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('bi-x');
-                            icon.classList.add('bi-list');
-                        }
-                    }
-                }
-            });
-
-            // Cerrar menú al redimensionar
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768 && sidebar.classList.contains('mobile-open')) {
-                    sidebar.classList.remove('mobile-open');
-                    const icon = mobileToggle?.querySelector('i');
-                    if (icon) {
-                        icon.classList.remove('bi-x');
-                        icon.classList.add('bi-list');
-                    }
-                }
-            });
-        });
-    </script>
-
+    
+    <!-- 6. Scripts específicos de la página -->
     {% block extra_js %}{% endblock %}
 </body>
 </html>

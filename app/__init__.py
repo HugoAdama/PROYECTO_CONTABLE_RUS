@@ -1,27 +1,35 @@
-# app/__init__.py
-"""
-Fábrica de la aplicación Flask
-"""
-
 from flask import Flask
-import os
+from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+import os
 
-load_dotenv()
-
+# ============================================
+# db a nivel de módulo - ACCESIBLE PARA TODA LA APP
+# ============================================
+db = SQLAlchemy()
 
 def create_app():
-    """Crea y configura la aplicación Flask"""
-    
+    """Fábrica de la aplicación Flask"""
+    load_dotenv()
     app = Flask(__name__)
     
-    # Configuración
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-123456')
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+    # Configuraciones
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-123')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.getenv('DB_NAME', 'contable.db')}"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', 'data/pdfs')
+    app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_FILE_SIZE', 52428800))
     
-    # Registrar blueprint
-    from app.routes import bp
-    app.register_blueprint(bp)
+    # Inicializar db con la app
+    db.init_app(app)
+    
+    # Crear tablas si no existen
+    with app.app_context():
+        from src.database import crear_tablas
+        crear_tablas()
+    
+    # Registrar rutas
+    from app.routes import main_bp
+    app.register_blueprint(main_bp)
     
     return app

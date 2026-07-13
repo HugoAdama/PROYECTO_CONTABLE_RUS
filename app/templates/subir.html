@@ -1,290 +1,135 @@
 {% extends "base.html" %}
 
-{% block title %}Subir Archivos - Sistema Contable RUS{% endblock %}
+{% block title %}Subir Archivos - Sistema RUS{% endblock %}
+
+{% block extra_css %}
+<style>
+    .drop-zone {
+        border: 2px dashed rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 48px 32px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: rgba(255,255,255,0.02);
+    }
+    
+    .drop-zone:hover {
+        border-color: rgba(96,165,250,0.2);
+        background: rgba(255,255,255,0.04);
+    }
+    
+    .drop-zone.dragover {
+        border-color: var(--primary);
+        background: rgba(96,165,250,0.05);
+        transform: scale(1.01);
+    }
+    
+    .drop-zone .icon {
+        font-size: 4rem;
+        margin-bottom: 16px;
+        display: block;
+    }
+    
+    .drop-zone h3 {
+        color: rgba(255,255,255,0.5);
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+    
+    .drop-zone p {
+        color: rgba(255,255,255,0.2);
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-fade-in">
     <h1 class="page-title">📤 Subir Archivos</h1>
     <p class="page-subtitle">Procesa automáticamente tus facturas y boletas desde PDF</p>
 </div>
 
-<div class="glass-card p-4" id="uploadCard">
-    <form id="uploadForm" enctype="multipart/form-data">
-        <!-- Drop Zone -->
-        <div class="drop-zone" id="dropZone" style="padding: 3rem 2rem; text-align: center; cursor: pointer; border: 2px dashed rgba(255,255,255,0.08); border-radius: 16px; transition: all 0.3s ease; background: rgba(255,255,255,0.02);">
-            <div class="text-center">
-                <i class="bi bi-cloud-upload" style="font-size: 4rem; color: rgba(255,255,255,0.15); display: block; margin-bottom: 1rem;"></i>
-                <h5 style="color: #fff; font-weight: 500;">Arrastra tus archivos PDF aquí</h5>
-                <p class="text-muted-glass" style="font-size: 0.9rem;">o haz clic para seleccionar</p>
-                <span class="badge-glass bg-info" style="font-size: 0.7rem;">PDFs permitidos</span>
-                <input type="file" name="archivos" id="fileInput" accept=".pdf" multiple style="display: none;">
-            </div>
-        </div>
-        
-        <!-- Configuración -->
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Tipo de Documento</label>
-                <select name="tipo" class="form-select glass-select" id="tipoDocumento">
-                    <option value="factura">📄 Factura</option>
-                    <option value="boleta" selected>🧾 Boleta</option>
-                    <option value="percepcion">💰 Percepción</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Mes</label>
-                <select name="mes" class="form-select glass-select">
-                    <option value="1">Enero</option>
-                    <option value="2">Febrero</option>
-                    <option value="3">Marzo</option>
-                    <option value="4">Abril</option>
-                    <option value="5" selected>Mayo</option>
-                    <option value="6">Junio</option>
-                    <option value="7">Julio</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Año</label>
-                <select name="anio" class="form-select glass-select">
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026" selected>2026</option>
-                </select>
-            </div>
-        </div>
-        
-        <!-- Botón -->
-        <div class="mt-4">
-            <button type="submit" class="btn btn-primary-glass w-100" style="padding: 0.8rem; font-weight: 600; letter-spacing: 0.5px;" id="submitBtn">
-                <i class="bi bi-upload"></i> Subir y Procesar
-            </button>
-        </div>
-    </form>
-    
-    <!-- La barra de progreso ahora se genera dinámicamente con JavaScript -->
+<!-- Drop Zone -->
+<div class="drop-zone animate-fade-in animate-fade-in-delay-1" id="drop-zone">
+    <span class="icon">📂</span>
+    <h3>Arrastra tus archivos PDF aquí</h3>
+    <p>o haz clic para seleccionar</p>
+    <button class="btn btn-primary" style="margin-top:16px;">
+        <i class="fas fa-cloud-upload-alt"></i> Seleccionar Archivos
+    </button>
+    <input type="file" id="fileInput" accept=".pdf" multiple style="display:none;">
 </div>
 
-<!-- Últimos archivos procesados -->
-<div class="glass-card p-3 mt-4">
-    <div class="d-flex align-items-center justify-content-between">
-        <h5 style="color: #fff; margin: 0;">📂 Últimos archivos procesados</h5>
-        <span class="badge-glass bg-info">{{ total_documentos }} documentos</span>
-    </div>
-    <hr class="divider-glass">
-    <div id="fileList">
-        {% if facturas or boletas or percepciones %}
-        <div class="table-responsive">
-            <table class="table table-glass table-paginada" id="tablaDocumentos">
-                <thead>
-                    <tr>
-                        <th>Archivo</th>
-                        <th>Tipo</th>
-                        <th class="text-end">Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for f in facturas[:10] %}
-                    <tr>
-                        <td>{{ f.numero_factura }}</td>
-                        <td><span class="badge-glass bg-primary">Factura</span></td>
-                        <td class="text-end text-muted-glass">{{ f.fecha_emision.strftime('%d/%m/%Y') if f.fecha_emision else '-' }}</td>
-                    </tr>
-                    {% endfor %}
-                    {% for b in boletas[:10] %}
-                    <tr>
-                        <td>{{ b.numero_boleta }}</td>
-                        <td><span class="badge-glass bg-success">Boleta</span></td>
-                        <td class="text-end text-muted-glass">{{ b.fecha_emision.strftime('%d/%m/%Y') if b.fecha_emision else '-' }}</td>
-                    </tr>
-                    {% endfor %}
-                    {% for p in percepciones[:10] %}
-                    <tr>
-                        <td>{{ p.numero_comprobante }}</td>
-                        <td><span class="badge-glass bg-warning">Percepción</span></td>
-                        <td class="text-end text-muted-glass">{{ p.fecha_emision.strftime('%d/%m/%Y') if p.fecha_emision else '-' }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<!-- Formulario -->
+<div class="grid-2 mt-3 animate-fade-in animate-fade-in-delay-2">
+    <div class="glass-card">
+        <div class="card-title">📋 Datos del Documento</div>
+        
+        <div class="form-group">
+            <label>Tipo de Documento</label>
+            <select class="form-control">
+                <option>Boleta</option>
+                <option>Factura</option>
+                <option>Percepción</option>
+            </select>
         </div>
-        {% else %}
-        <p class="text-muted-glass">No hay archivos procesados recientemente</p>
-        {% endif %}
+        
+        <div class="form-group">
+            <label>Mes</label>
+            <select class="form-control">
+                <option>Enero</option>
+                <option>Febrero</option>
+                <option>Marzo</option>
+                <option>Abril</option>
+                <option>Mayo</option>
+                <option>Junio</option>
+                <option>Julio</option>
+                <option>Agosto</option>
+                <option>Septiembre</option>
+                <option>Octubre</option>
+                <option>Noviembre</option>
+                <option>Diciembre</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Año</label>
+            <select class="form-control">
+                <option>2026</option>
+                <option>2025</option>
+                <option>2024</option>
+            </select>
+        </div>
+        
+        <button class="btn btn-success" style="width:100%;justify-content:center;margin-top:8px;">
+            <i class="fas fa-upload"></i> Subir y Procesar
+        </button>
+    </div>
+    
+    <div class="glass-card">
+        <div class="card-title">📁 Últimos archivos procesados</div>
+        <p class="text-muted text-sm">No hay archivos procesados recientemente</p>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- Cargar los nuevos scripts de UX -->
-<script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
-<script src="{{ url_for('static', filename='js/paginacion.js') }}"></script>
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ============================================================
-    // ELEMENTOS DEL DOM
-    // ============================================================
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const uploadForm = document.getElementById('uploadForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const tipoDocumento = document.getElementById('tipoDocumento');
-    
-    // ============================================================
-    // DRAG & DROP
-    // ============================================================
-    dropZone.addEventListener('click', function() {
-        fileInput.click();
-    });
-    
-    dropZone.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.style.borderColor = 'rgba(102, 126, 234, 0.4)';
-        this.style.background = 'rgba(102, 126, 234, 0.06)';
-    });
-    
-    dropZone.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        this.style.borderColor = 'rgba(255,255,255,0.08)';
-        this.style.background = 'rgba(255,255,255,0.02)';
-    });
-    
-    dropZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.style.borderColor = 'rgba(255,255,255,0.08)';
-        this.style.background = 'rgba(255,255,255,0.02)';
-        
-        if (e.dataTransfer.files.length) {
-            fileInput.files = e.dataTransfer.files;
-            uploadForm.dispatchEvent(new Event('submit'));
-        }
-    });
-    
-    // ============================================================
-    // MOSTRAR ARCHIVOS SELECCIONADOS
-    // ============================================================
-    fileInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            const nombres = Array.from(this.files).map(f => f.name).join(', ');
-            notificaciones.toast('info', `📎 ${this.files.length} archivo(s) seleccionado(s): ${nombres}`, 'Archivos listos');
-        }
-    });
-    
-    // ============================================================
-    // ENVÍO DEL FORMULARIO CON NOTIFICACIONES Y PROGRESO REAL
-    // ============================================================
-    uploadForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const archivos = fileInput.files;
-        
-        // Validar que haya archivos
-        if (archivos.length === 0) {
-            notificaciones.toast('warning', 'Por favor, selecciona al menos un archivo PDF.', 'Atención');
-            return;
-        }
-        
-        // Deshabilitar botón y cambiar texto
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '⏳ Procesando...';
-        
-        // Mostrar barra de progreso
-        const progress = notificaciones.progreso('Subiendo y procesando archivos...', archivos.length);
-        
-        // Simular progreso mientras se procesa (mejora UX)
-        let progresoSimulado = 0;
-        const intervaloProgreso = setInterval(() => {
-            progresoSimulado += Math.random() * 15;
-            if (progresoSimulado > 90) {
-                progresoSimulado = 90;
-                clearInterval(intervaloProgreso);
-            }
-            progress.actualizar(
-                Math.min(Math.round(progresoSimulado), 90), 
-                100, 
-                'Subiendo archivos...'
-            );
-        }, 300);
-        
-        try {
-            const response = await fetch('/api/subir_pdf', {
-                method: 'POST',
-                body: formData
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar UploadModule
+        if (typeof UploadModule !== 'undefined') {
+            UploadModule.init('drop-zone', 'fileInput');
+            
+            // Configurar callback cuando se seleccionan archivos
+            UploadModule.setOnFilesSelected(function(files) {
+                console.log('Archivos seleccionados:', files);
+                // Aquí puedes agregar lógica para subir los archivos
+                if (typeof NotificationsModule !== 'undefined') {
+                    NotificationsModule.success('Archivos listos para procesar');
+                }
             });
-            
-            // Verificar si la respuesta es JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                console.error('Respuesta no JSON:', text);
-                throw new Error('El servidor devolvió una respuesta no válida. Por favor, intenta de nuevo.');
-            }
-            
-            const result = await response.json();
-            
-            // Limpiar intervalo de progreso simulado
-            clearInterval(intervaloProgreso);
-            
-            if (result.success) {
-                // Completar barra de progreso
-                progress.completar(`✅ ${result.total_procesados} archivos procesados correctamente`);
-                
-                // Mostrar notificación de éxito
-                let mensajeExito = `${result.total_procesados} archivo(s) procesado(s) correctamente`;
-                if (result.total_errores > 0) {
-                    mensajeExito += `, ${result.total_errores} con errores`;
-                }
-                notificaciones.toast('success', mensajeExito, '¡Éxito!');
-                
-                // Mostrar advertencias si las hay
-                if (result.advertencias && result.advertencias.length > 0) {
-                    result.advertencias.forEach(adv => {
-                        notificaciones.toast('warning', adv, 'Aviso');
-                    });
-                }
-                
-                // Mostrar errores si los hay
-                if (result.errores && result.errores.length > 0) {
-                    result.errores.forEach(err => {
-                        notificaciones.toast('error', err, 'Error');
-                    });
-                }
-                
-                // Recargar después de 3 segundos
-                setTimeout(() => {
-                    location.reload();
-                }, 3000);
-            } else {
-                progress.completar('❌ Error al procesar los archivos');
-                notificaciones.toast('error', result.error || 'Error desconocido al procesar los archivos.', 'Error');
-            }
-        } catch (error) {
-            clearInterval(intervaloProgreso);
-            progress.completar('❌ Error de conexión');
-            notificaciones.toast('error', error.message || 'Error de conexión con el servidor.', 'Error de conexión');
-            console.error('Error en la subida:', error);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="bi bi-upload"></i> Subir y Procesar';
         }
     });
-    
-    // ============================================================
-    // INICIALIZAR PAGINACIÓN EN LA TABLA
-    // ============================================================
-    const tabla = document.getElementById('tablaDocumentos');
-    if (tabla) {
-        new PaginadorTabla('tablaDocumentos', {
-            rowsPerPage: 10,
-            maxButtons: 5
-        });
-    }
-});
 </script>
 {% endblock %}

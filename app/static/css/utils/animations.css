@@ -1,0 +1,79 @@
+/* ============================================
+   ANIMACIONES GLOBALES
+   ============================================ */
+
+/* --- Animaciones principales --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInNav {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes floatGlow {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(96,165,250,0.05)); }
+    50% { filter: drop-shadow(0 0 40px rgba(96,165,250,0.12)); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* --- Clases de animación --- */
+.animate-fade-in {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+}
+.animate-fade-in-delay-1 { animation-delay: 0.08s; }
+.animate-fade-in-delay-2 { animation-delay: 0.16s; }
+.animate-fade-in-delay-3 { animation-delay: 0.24s; }
+.animate-fade-in-delay-4 { animation-delay: 0.32s; }
+.animate-fade-in-delay-5 { animation-delay: 0.40s; }
+.animate-fade-in-delay-6 { animation-delay: 0.48s; }
+
+.animate-scale-in {
+    animation: fadeInScale 0.5s ease forwards;
+    opacity: 0;
+}
+
+.animate-slide-left {
+    animation: slideInLeft 0.5s ease forwards;
+    opacity: 0;
+}
+
+.float-glow {
+    animation: floatGlow 4s ease-in-out infinite;
+}
+
+/* --- Hover animations --- */
+.hover-lift {
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.hover-glow {
+    transition: all var(--transition);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-glow);
+    border-color: rgba(96,165,250,0.1);
+}

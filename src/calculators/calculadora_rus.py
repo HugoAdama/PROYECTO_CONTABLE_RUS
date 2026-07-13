@@ -1,25 +1,41 @@
 # src/calculators/calculadora_rus.py
 class CalculadoraRUS:
+    """Calculadora para el Régimen Único Simplificado"""
+    
     LIMITE_MENSUAL = 8000
-    LIMITE_ALERTA = 7800
-    MONTO_BAJO = 5000
-
-    def __init__(self, ventas_mes, mes=None, anio=None):
-        self.ventas = ventas_mes
-        self.mes = mes
-        self.anio = anio
-
-    def calcular_impuesto(self):
-        if self.ventas < self.MONTO_BAJO:
-            return 20
+    IMPUESTO_NORMAL = 20
+    IMPUESTO_ALERTA = 50
+    
+    @staticmethod
+    def calcular_estado(ventas_mensuales):
+        """
+        Calcula el estado del contribuyente según sus ventas mensuales
+        Retorna: (estado, impuesto)
+        """
+        if ventas_mensuales <= 5000:
+            return 'normal', CalculadoraRUS.IMPUESTO_NORMAL
+        elif ventas_mensuales <= CalculadoraRUS.LIMITE_MENSUAL:
+            return 'alerta', CalculadoraRUS.IMPUESTO_ALERTA
         else:
-            return 50
-
-    def obtener_estado(self):
-        if self.ventas > self.LIMITE_MENSUAL:
-            return {'estado': 'excedido', 'mensaje': '🔴 HAS EXCEDIDO EL LÍMITE!', 'color': 'danger', 'icono': '🚨'}
-        elif self.ventas >= self.LIMITE_ALERTA:
-            return {'estado': 'alerta', 'mensaje': f'⚠️ ¡Cuidado! Estás a S/ {self.LIMITE_MENSUAL - self.ventas:,.2f} del límite', 'color': 'warning', 'icono': '⚠️'}
+            return 'urgente', 0
+    
+    @staticmethod
+    def calcular_impuesto_final(ventas, percepciones):
+        """Calcula el impuesto final después de percepciones"""
+        impuesto_base = ventas * 0.05
+        return max(0, impuesto_base - percepciones)
+    
+    @staticmethod
+    def esta_dentro_limite(ventas_mensuales):
+        """Verifica si las ventas están dentro del límite mensual"""
+        return ventas_mensuales <= CalculadoraRUS.LIMITE_MENSUAL
+    
+    @staticmethod
+    def get_alerta(ventas_mensuales):
+        """Obtiene el nivel de alerta según las ventas"""
+        if ventas_mensuales <= 5000:
+            return 'success'
+        elif ventas_mensuales <= CalculadoraRUS.LIMITE_MENSUAL:
+            return 'warning'
         else:
-            porcentaje = (self.ventas / self.LIMITE_MENSUAL) * 100
-            return {'estado': 'ok', 'mensaje': f'✅ Bien, estás al {porcentaje:.1f}% del límite', 'color': 'success', 'icono': '✅'}
+            return 'danger'

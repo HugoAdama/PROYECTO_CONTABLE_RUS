@@ -1,246 +1,175 @@
 {% extends "base.html" %}
 
-{% block title %}Ver Datos - Sistema Contable RUS{% endblock %}
+{% block title %}Ver Datos - Sistema RUS{% endblock %}
 
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-fade-in">
     <h1 class="page-title">📋 Ver Datos</h1>
-    <p class="page-subtitle">Visualiza y filtra tus transacciones registradas</p>
+    <p class="page-subtitle">Visualización y filtrado de transacciones</p>
 </div>
 
 <!-- Filtros -->
-<div class="glass-card p-3 mb-4">
-    <form method="GET" action="{{ url_for('main.ver_datos') }}" class="row g-3 align-items-end" id="filtrosForm">
-        <div class="col-md-3">
-            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Tipo</label>
-            <select name="tipo" class="form-select glass-select">
-                <option value="todas" {% if tipo == 'todas' %}selected{% endif %}>📋 Todas</option>
-                <option value="facturas" {% if tipo == 'facturas' %}selected{% endif %}>📄 Facturas</option>
-                <option value="boletas" {% if tipo == 'boletas' %}selected{% endif %}>🧾 Boletas</option>
-                <option value="percepciones" {% if tipo == 'percepciones' %}selected{% endif %}>💰 Percepciones</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Mes</label>
-            <select name="mes" class="form-select glass-select">
-                <option value="1" {% if mes == 1 %}selected{% endif %}>Enero</option>
-                <option value="2" {% if mes == 2 %}selected{% endif %}>Febrero</option>
-                <option value="3" {% if mes == 3 %}selected{% endif %}>Marzo</option>
-                <option value="4" {% if mes == 4 %}selected{% endif %}>Abril</option>
-                <option value="5" {% if mes == 5 %}selected{% endif %}>Mayo</option>
-                <option value="6" {% if mes == 6 %}selected{% endif %}>Junio</option>
-                <option value="7" {% if mes == 7 %}selected{% endif %}>Julio</option>
-                <option value="8" {% if mes == 8 %}selected{% endif %}>Agosto</option>
-                <option value="9" {% if mes == 9 %}selected{% endif %}>Septiembre</option>
-                <option value="10" {% if mes == 10 %}selected{% endif %}>Octubre</option>
-                <option value="11" {% if mes == 11 %}selected{% endif %}>Noviembre</option>
-                <option value="12" {% if mes == 12 %}selected{% endif %}>Diciembre</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Año</label>
-            <select name="anio" class="form-select glass-select">
-                <option value="2024" {% if anio == 2024 %}selected{% endif %}>2024</option>
-                <option value="2025" {% if anio == 2025 %}selected{% endif %}>2025</option>
-                <option value="2026" {% if anio == 2026 %}selected{% endif %}>2026</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <button type="submit" class="btn btn-primary-glass w-100" id="filtrarBtn">
-                <i class="bi bi-funnel"></i> Filtrar
-            </button>
-        </div>
-    </form>
+<div class="filters-bar animate-fade-in animate-fade-in-delay-1" id="filters-form">
+    <label for="filtro_tipo">Tipo:</label>
+    <select id="filtro_tipo" name="tipo">
+        <option value="todos" {% if tipo_actual == 'todos' %}selected{% endif %}>Todos</option>
+        <option value="facturas" {% if tipo_actual == 'facturas' %}selected{% endif %}>Facturas</option>
+        <option value="boletas" {% if tipo_actual == 'boletas' %}selected{% endif %}>Boletas</option>
+        <option value="percepciones" {% if tipo_actual == 'percepciones' %}selected{% endif %}>Percepciones</option>
+    </select>
+    
+    <label for="filtro_anio">Año:</label>
+    <select id="filtro_anio" name="anio">
+        <option value="">Todos</option>
+        {% for a in años_disponibles %}
+        <option value="{{ a }}" {% if a == anio_actual %}selected{% endif %}>{{ a }}</option>
+        {% endfor %}
+    </select>
+    
+    <label for="filtro_mes">Mes:</label>
+    <select id="filtro_mes" name="mes">
+        <option value="">Todos</option>
+        {% for m in range(1, 13) %}
+        <option value="{{ m }}" {% if m == mes_actual %}selected{% endif %}>
+            {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][m-1] }}
+        </option>
+        {% endfor %}
+    </select>
+    
+    <button class="btn-filter" onclick="aplicarFiltros()">🔍 Aplicar Filtros</button>
+    <button class="btn-filter" onclick="limpiarFiltros()">✕ Limpiar</button>
 </div>
 
-<!-- Resumen -->
-<div class="row g-4 mb-4">
-    <div class="col-md-3">
-        <div class="glass-card p-3 text-center">
-            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Facturas</span>
-            <h4 style="color: #fff;">S/ {{ "%.2f"|format(total_facturas or 0) }}</h4>
-            <span class="text-muted-glass" style="font-size: 0.75rem;">{{ facturas|length }} registros</span>
-        </div>
+<!-- Tabla -->
+<div class="glass-card animate-fade-in animate-fade-in-delay-2">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <span class="text-muted text-sm">
+            Mostrando <strong class="text-white">{{ items|length }}</strong> de <strong class="text-white">{{ total_items }}</strong> registros
+        </span>
     </div>
-    <div class="col-md-3">
-        <div class="glass-card p-3 text-center">
-            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Boletas</span>
-            <h4 style="color: #fff;">S/ {{ "%.2f"|format(total_boletas or 0) }}</h4>
-            <span class="text-muted-glass" style="font-size: 0.75rem;">{{ boletas|length }} registros</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="glass-card p-3 text-center">
-            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Percepciones</span>
-            <h4 style="color: #fff;">S/ {{ "%.2f"|format(total_percepciones or 0) }}</h4>
-            <span class="text-muted-glass" style="font-size: 0.75rem;">{{ percepciones|length }} registros</span>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="glass-card p-3 text-center">
-            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Total General</span>
-            <h4 style="color: #667eea;">S/ {{ "%.2f"|format(total_general or 0) }}</h4>
-            <span class="text-muted-glass" style="font-size: 0.75rem;">{{ total_registros }} documentos</span>
-        </div>
+    
+    <div class="table-wrapper">
+        <table class="table-glass">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Número</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Proveedor/Cliente</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        {% if item.tipo == 'Factura' %}
+                        <span class="badge-glass factura">📄 Factura</span>
+                        {% elif item.tipo == 'Boleta' %}
+                        <span class="badge-glass boleta">🧾 Boleta</span>
+                        {% else %}
+                        <span class="badge-glass percepcion">📋 Percepción</span>
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ item.numero }}</strong></td>
+                    <td>{{ item.fecha.strftime('%d/%m/%Y') if item.fecha else '-' }}</td>
+                    <td>S/ {{ "{:,.2f}".format(item.monto) }}</td>
+                    <td>{{ item.proveedor_cliente or '-' }}</td>
+                    <td>{{ item.descripcion or '-' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align:center;color:rgba(255,255,255,0.2);padding:48px 0;">
+                        No hay registros para mostrar
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
-<!-- Tablas -->
-<div class="row">
-    <!-- Facturas -->
-    {% if tipo == 'todas' or tipo == 'facturas' %}
-    <div class="col-12 mb-4">
-        <div class="glass-card p-3">
-            <h5 style="color: #fff;">📄 Facturas</h5>
-            {% if facturas %}
-            <div class="table-responsive">
-                <table class="table table-glass table-paginada" id="tablaFacturas">
-                    <thead>
-                        <tr>
-                            <th>N°</th>
-                            <th>Proveedor</th>
-                            <th>RUC</th>
-                            <th>Fecha</th>
-                            <th class="text-end">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for f in facturas %}
-                        <tr>
-                            <td>{{ f.numero_factura }}</td>
-                            <td>{{ f.proveedor }}</td>
-                            <td>{{ f.ruc_proveedor }}</td>
-                            <td>{{ f.fecha_emision.strftime('%d/%m/%Y') if f.fecha_emision else '-' }}</td>
-                            <td class="text-end">S/ {{ "%.2f"|format(f.total_pagar or 0) }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <p class="text-muted-glass">No hay facturas para mostrar</p>
-            {% endif %}
-        </div>
-    </div>
+<!-- Paginación -->
+{% if total_pages > 1 %}
+<div style="display:flex;justify-content:center;gap:8px;margin-top:24px;flex-wrap:wrap;">
+    {% if page > 1 %}
+    <a href="#" onclick="cambiarPagina({{ page - 1 }})" class="btn-filter">◀ Anterior</a>
     {% endif %}
-
-    <!-- Boletas -->
-    {% if tipo == 'todas' or tipo == 'boletas' %}
-    <div class="col-12 mb-4">
-        <div class="glass-card p-3">
-            <h5 style="color: #fff;">🧾 Boletas</h5>
-            {% if boletas %}
-            <div class="table-responsive">
-                <table class="table table-glass table-paginada" id="tablaBoletas">
-                    <thead>
-                        <tr>
-                            <th>N°</th>
-                            <th>Cliente</th>
-                            <th>RUC</th>
-                            <th>Fecha</th>
-                            <th class="text-end">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for b in boletas %}
-                        <tr>
-                            <td>{{ b.numero_boleta }}</td>
-                            <td>{{ b.cliente }}</td>
-                            <td>{{ b.ruc_cliente }}</td>
-                            <td>{{ b.fecha_emision.strftime('%d/%m/%Y') if b.fecha_emision else '-' }}</td>
-                            <td class="text-end">S/ {{ "%.2f"|format(b.total_pagar or 0) }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <p class="text-muted-glass">No hay boletas para mostrar</p>
-            {% endif %}
-        </div>
-    </div>
+    
+    {% set start_page = [page - 2, 1]|max %}
+    {% set end_page = [page + 2, total_pages]|min %}
+    
+    {% if start_page > 1 %}
+    <a href="#" onclick="cambiarPagina(1)" class="btn-filter">1</a>
+    {% if start_page > 2 %}
+    <span style="color:rgba(255,255,255,0.15);padding:8px;">…</span>
     {% endif %}
-
-    <!-- Percepciones -->
-    {% if tipo == 'todas' or tipo == 'percepciones' %}
-    <div class="col-12 mb-4">
-        <div class="glass-card p-3">
-            <h5 style="color: #fff;">💰 Percepciones</h5>
-            {% if percepciones %}
-            <div class="table-responsive">
-                <table class="table table-glass table-paginada" id="tablaPercepciones">
-                    <thead>
-                        <tr>
-                            <th>N° Comprobante</th>
-                            <th>Proveedor</th>
-                            <th>RUC</th>
-                            <th>Fecha</th>
-                            <th class="text-end">Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for p in percepciones %}
-                        <tr>
-                            <td>{{ p.numero_comprobante }}</td>
-                            <td>{{ p.proveedor }}</td>
-                            <td>{{ p.ruc_proveedor }}</td>
-                            <td>{{ p.fecha_emision.strftime('%d/%m/%Y') if p.fecha_emision else '-' }}</td>
-                            <td class="text-end" style="color:#ffd700;font-weight:600;">S/ {{ "%.2f"|format(p.monto or 0) }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <p class="text-muted-glass">No hay percepciones para mostrar</p>
-            {% endif %}
-        </div>
-    </div>
+    {% endif %}
+    
+    {% for p in range(start_page, end_page + 1) %}
+    <a href="#" onclick="cambiarPagina({{ p }})" class="btn-filter {% if p == page %}active{% endif %}">{{ p }}</a>
+    {% endfor %}
+    
+    {% if end_page < total_pages %}
+    {% if end_page < total_pages - 1 %}
+    <span style="color:rgba(255,255,255,0.15);padding:8px;">…</span>
+    {% endif %}
+    <a href="#" onclick="cambiarPagina({{ total_pages }})" class="btn-filter">{{ total_pages }}</a>
+    {% endif %}
+    
+    {% if page < total_pages %}
+    <a href="#" onclick="cambiarPagina({{ page + 1 }})" class="btn-filter">Siguiente ▶</a>
     {% endif %}
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ============================================================
-    // INICIALIZAR PAGINACIÓN EN TODAS LAS TABLAS
-    // ============================================================
-    var tablas = ['tablaFacturas', 'tablaBoletas', 'tablaPercepciones'];
-    tablas.forEach(function(id) {
-        var tabla = document.getElementById(id);
-        if (tabla) {
-            new PaginadorTabla(id, { rowsPerPage: 10, maxButtons: 5 });
+    // Función para aplicar filtros usando FiltersModule
+    function aplicarFiltros() {
+        const tipo = document.getElementById('filtro_tipo').value;
+        const anio = document.getElementById('filtro_anio').value;
+        const mes = document.getElementById('filtro_mes').value;
+        
+        const params = {};
+        if (tipo && tipo !== 'todos') params.tipo = tipo;
+        if (anio) params.anio = anio;
+        if (mes) params.mes = mes;
+        
+        if (typeof FiltersModule !== 'undefined') {
+            FiltersModule.applyFilters('/ver_datos', params);
+        } else {
+            // Fallback
+            let url = '/ver_datos?';
+            if (tipo && tipo !== 'todos') url += 'tipo=' + tipo + '&';
+            if (anio) url += 'anio=' + anio + '&';
+            if (mes) url += 'mes=' + mes + '&';
+            window.location.href = url;
         }
-    });
-
-    // ============================================================
-    // NOTIFICACIÓN AL APLICAR FILTROS
-    // ============================================================
-    var filtrosForm = document.getElementById('filtrosForm');
-    var filtrarBtn = document.getElementById('filtrarBtn');
-
-    if (filtrosForm) {
-        filtrosForm.addEventListener('submit', function(e) {
-            // 👇 CORREGIDO: notificaciones (con 'e')
-            notificaciones.toast('info', 'Aplicando filtros...', '⏳ Cargando');
-            if (filtrarBtn) {
-                filtrarBtn.disabled = true;
-                filtrarBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Cargando...';
-            }
-        });
     }
 
-    // ============================================================
-    // NOTIFICACIÓN DE BIENVENIDA (CORREGIDO)
-    // ============================================================
-    // 👇 CORREGIDO: {{ total_registros|tojson }}
-    var totalRegistros = {{ total_registros|tojson }};
-    if (totalRegistros > 0) {
-        notificaciones.toast('info', '📊 ' + totalRegistros + ' registros encontrados para el período seleccionado.', 'Datos cargados');
-    } else {
-        notificaciones.toast('warning', 'No hay registros para el período seleccionado. Prueba con otro mes/año.', 'Sin datos');
+    function limpiarFiltros() {
+        document.getElementById('filtro_tipo').value = 'todos';
+        document.getElementById('filtro_anio').value = '';
+        document.getElementById('filtro_mes').value = '';
+        aplicarFiltros();
     }
-});
+
+    function cambiarPagina(page) {
+        if (typeof PaginationModule !== 'undefined') {
+            PaginationModule.goToPage(page);
+        } else {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', page);
+            window.location.href = url.toString();
+        }
+    }
+
+    // Exponer funciones globalmente
+    window.aplicarFiltros = aplicarFiltros;
+    window.limpiarFiltros = limpiarFiltros;
+    window.cambiarPagina = cambiarPagina;
 </script>
 {% endblock %}
