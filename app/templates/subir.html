@@ -8,7 +8,7 @@
     <p class="page-subtitle">Procesa automáticamente tus facturas y boletas desde PDF</p>
 </div>
 
-<div class="glass-card p-4">
+<div class="glass-card p-4" id="uploadCard">
     <form id="uploadForm" enctype="multipart/form-data">
         <!-- Drop Zone -->
         <div class="drop-zone" id="dropZone" style="padding: 3rem 2rem; text-align: center; cursor: pointer; border: 2px dashed rgba(255,255,255,0.08); border-radius: 16px; transition: all 0.3s ease; background: rgba(255,255,255,0.02);">
@@ -66,18 +66,7 @@
         </div>
     </form>
     
-    <!-- Progreso -->
-    <div id="uploadProgress" class="mt-4" style="display: none;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <div style="flex: 1;">
-                <div style="height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
-                    <div id="progressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 10px; transition: width 0.3s ease;"></div>
-                </div>
-            </div>
-            <span id="progressText" style="color: rgba(255,255,255,0.6); font-size: 0.85rem; font-weight: 500; min-width: 40px;">0%</span>
-        </div>
-        <p class="text-muted-glass mt-2" id="uploadStatus" style="font-size: 0.85rem; white-space: pre-line;">Procesando archivos...</p>
-    </div>
+    <!-- La barra de progreso ahora se genera dinámicamente con JavaScript -->
 </div>
 
 <!-- Últimos archivos procesados -->
@@ -90,7 +79,7 @@
     <div id="fileList">
         {% if facturas or boletas or percepciones %}
         <div class="table-responsive">
-            <table class="table table-glass">
+            <table class="table table-glass table-paginada" id="tablaDocumentos">
                 <thead>
                     <tr>
                         <th>Archivo</th>
@@ -131,23 +120,28 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Cargar los nuevos scripts de UX -->
+<script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
+<script src="{{ url_for('static', filename='js/paginacion.js') }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // ELEMENTOS DEL DOM
+    // ============================================================
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const uploadForm = document.getElementById('uploadForm');
-    const uploadProgress = document.getElementById('uploadProgress');
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const uploadStatus = document.getElementById('uploadStatus');
     const submitBtn = document.getElementById('submitBtn');
+    const tipoDocumento = document.getElementById('tipoDocumento');
     
-    // Click en drop zone
+    // ============================================================
+    // DRAG & DROP
+    // ============================================================
     dropZone.addEventListener('click', function() {
         fileInput.click();
     });
     
-    // Drag and drop
     dropZone.addEventListener('dragover', function(e) {
         e.preventDefault();
         this.style.borderColor = 'rgba(102, 126, 234, 0.4)';
@@ -172,34 +166,51 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // ============================================================
-    // ENVÍO DEL FORMULARIO CON FETCH
+    // MOSTRAR ARCHIVOS SELECCIONADOS
+    // ============================================================
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            const nombres = Array.from(this.files).map(f => f.name).join(', ');
+            notificaciones.toast('info', `📎 ${this.files.length} archivo(s) seleccionado(s): ${nombres}`, 'Archivos listos');
+        }
+    });
+    
+    // ============================================================
+    // ENVÍO DEL FORMULARIO CON NOTIFICACIONES Y PROGRESO REAL
     // ============================================================
     uploadForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const formData = new FormData(this);
+        const archivos = fileInput.files;
         
-        // Mostrar progreso
-        uploadProgress.style.display = 'block';
+        // Validar que haya archivos
+        if (archivos.length === 0) {
+            notificaciones.toast('warning', 'Por favor, selecciona al menos un archivo PDF.', 'Atención');
+            return;
+        }
+        
+        // Deshabilitar botón y cambiar texto
         submitBtn.disabled = true;
         submitBtn.innerHTML = '⏳ Procesando...';
-        uploadStatus.textContent = 'Subiendo archivos...';
         
-        // Simular progreso
-        let progress = 0;
-        const interval = setInterval(function() {
-            progress += Math.random() * 10;
-            if (progress > 95) {
-                progress = 95;
-                clearInterval(interval);
+        // Mostrar barra de progreso
+        const progress = notificaciones.progreso('Subiendo y procesando archivos...', archivos.length);
+        
+        // Simular progreso mientras se procesa (mejora UX)
+        let progresoSimulado = 0;
+        const intervaloProgreso = setInterval(() => {
+            progresoSimulado += Math.random() * 15;
+            if (progresoSimulado > 90) {
+                progresoSimulado = 90;
+                clearInterval(intervaloProgreso);
             }
-            progressBar.style.width = progress + '%';
-            progressText.textContent = Math.round(progress) + '%';
-            
-            if (progress > 30) uploadStatus.textContent = '📄 Extrayendo datos de los PDFs...';
-            if (progress > 60) uploadStatus.textContent = '💾 Guardando en la base de datos...';
-            if (progress > 80) uploadStatus.textContent = '✅ Finalizando proceso...';
-        }, 200);
+            progress.actualizar(
+                Math.min(Math.round(progresoSimulado), 90), 
+                100, 
+                'Subiendo archivos...'
+            );
+        }, 300);
         
         try {
             const response = await fetch('/api/subir_pdf', {
@@ -212,66 +223,68 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
                 console.error('Respuesta no JSON:', text);
-                throw new Error('El servidor devolvió una respuesta no válida');
+                throw new Error('El servidor devolvió una respuesta no válida. Por favor, intenta de nuevo.');
             }
             
             const result = await response.json();
             
-            // Completar barra de progreso
-            clearInterval(interval);
-            progressBar.style.width = '100%';
-            progressText.textContent = '100%';
+            // Limpiar intervalo de progreso simulado
+            clearInterval(intervaloProgreso);
             
             if (result.success) {
-                // Mostrar mensaje de éxito
-                let mensaje = `✅ ${result.mensaje}`;
-                if (result.procesados && result.procesados.length > 0) {
-                    mensaje += '\n\n📄 Documentos procesados:';
-                    result.procesados.forEach(doc => {
-                        const total = doc.total || doc.monto || 0;
-                        const numero = doc.numero || doc.archivo;
-                        mensaje += `\n  - ${doc.tipo}: ${numero} (S/ ${total})`;
+                // Completar barra de progreso
+                progress.completar(`✅ ${result.total_procesados} archivos procesados correctamente`);
+                
+                // Mostrar notificación de éxito
+                let mensajeExito = `${result.total_procesados} archivo(s) procesado(s) correctamente`;
+                if (result.total_errores > 0) {
+                    mensajeExito += `, ${result.total_errores} con errores`;
+                }
+                notificaciones.toast('success', mensajeExito, '¡Éxito!');
+                
+                // Mostrar advertencias si las hay
+                if (result.advertencias && result.advertencias.length > 0) {
+                    result.advertencias.forEach(adv => {
+                        notificaciones.toast('warning', adv, 'Aviso');
                     });
                 }
+                
+                // Mostrar errores si los hay
                 if (result.errores && result.errores.length > 0) {
-                    mensaje += '\n\n⚠️ Errores:';
                     result.errores.forEach(err => {
-                        mensaje += `\n  - ${err}`;
+                        notificaciones.toast('error', err, 'Error');
                     });
                 }
-                if (result.carpeta) {
-                    mensaje += `\n\n📁 Guardado en: ${result.carpeta}`;
-                }
-                uploadStatus.textContent = mensaje;
                 
                 // Recargar después de 3 segundos
                 setTimeout(() => {
                     location.reload();
                 }, 3000);
             } else {
-                uploadStatus.textContent = `❌ Error: ${result.error || 'Error desconocido'}`;
-                progressBar.style.background = 'linear-gradient(90deg, #eb3349, #f45c43)';
+                progress.completar('❌ Error al procesar los archivos');
+                notificaciones.toast('error', result.error || 'Error desconocido al procesar los archivos.', 'Error');
             }
         } catch (error) {
-            clearInterval(interval);
-            uploadStatus.textContent = `❌ Error de conexión: ${error.message}`;
-            progressBar.style.background = 'linear-gradient(90deg, #eb3349, #f45c43)';
+            clearInterval(intervaloProgreso);
+            progress.completar('❌ Error de conexión');
+            notificaciones.toast('error', error.message || 'Error de conexión con el servidor.', 'Error de conexión');
+            console.error('Error en la subida:', error);
         } finally {
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="bi bi-upload"></i> Subir y Procesar';
         }
     });
     
-    // Mostrar archivos seleccionados
-    fileInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            const nombres = Array.from(this.files).map(f => f.name).join(', ');
-            uploadStatus.textContent = `📎 Archivos seleccionados: ${nombres}`;
-            uploadProgress.style.display = 'block';
-            progressBar.style.width = '0%';
-            progressText.textContent = '0%';
-        }
-    });
+    // ============================================================
+    // INICIALIZAR PAGINACIÓN EN LA TABLA
+    // ============================================================
+    const tabla = document.getElementById('tablaDocumentos');
+    if (tabla) {
+        new PaginadorTabla('tablaDocumentos', {
+            rowsPerPage: 10,
+            maxButtons: 5
+        });
+    }
 });
 </script>
 {% endblock %}

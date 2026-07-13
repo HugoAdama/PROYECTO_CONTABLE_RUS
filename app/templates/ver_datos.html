@@ -10,7 +10,7 @@
 
 <!-- Filtros -->
 <div class="glass-card p-3 mb-4">
-    <form method="GET" action="{{ url_for('main.ver_datos') }}" class="row g-3 align-items-end">
+    <form method="GET" action="{{ url_for('main.ver_datos') }}" class="row g-3 align-items-end" id="filtrosForm">
         <div class="col-md-3">
             <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Tipo</label>
             <select name="tipo" class="form-select glass-select">
@@ -46,7 +46,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <button type="submit" class="btn btn-primary-glass w-100">
+            <button type="submit" class="btn btn-primary-glass w-100" id="filtrarBtn">
                 <i class="bi bi-funnel"></i> Filtrar
             </button>
         </div>
@@ -94,7 +94,7 @@
             <h5 style="color: #fff;">📄 Facturas</h5>
             {% if facturas %}
             <div class="table-responsive">
-                <table class="table table-glass">
+                <table class="table table-glass table-paginada" id="tablaFacturas">
                     <thead>
                         <tr>
                             <th>N°</th>
@@ -131,7 +131,7 @@
             <h5 style="color: #fff;">🧾 Boletas</h5>
             {% if boletas %}
             <div class="table-responsive">
-                <table class="table table-glass">
+                <table class="table table-glass table-paginada" id="tablaBoletas">
                     <thead>
                         <tr>
                             <th>N°</th>
@@ -168,7 +168,7 @@
             <h5 style="color: #fff;">💰 Percepciones</h5>
             {% if percepciones %}
             <div class="table-responsive">
-                <table class="table table-glass">
+                <table class="table table-glass table-paginada" id="tablaPercepciones">
                     <thead>
                         <tr>
                             <th>N° Comprobante</th>
@@ -198,4 +198,49 @@
     </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // INICIALIZAR PAGINACIÓN EN TODAS LAS TABLAS
+    // ============================================================
+    var tablas = ['tablaFacturas', 'tablaBoletas', 'tablaPercepciones'];
+    tablas.forEach(function(id) {
+        var tabla = document.getElementById(id);
+        if (tabla) {
+            new PaginadorTabla(id, { rowsPerPage: 10, maxButtons: 5 });
+        }
+    });
+
+    // ============================================================
+    // NOTIFICACIÓN AL APLICAR FILTROS
+    // ============================================================
+    var filtrosForm = document.getElementById('filtrosForm');
+    var filtrarBtn = document.getElementById('filtrarBtn');
+
+    if (filtrosForm) {
+        filtrosForm.addEventListener('submit', function(e) {
+            // 👇 CORREGIDO: notificaciones (con 'e')
+            notificaciones.toast('info', 'Aplicando filtros...', '⏳ Cargando');
+            if (filtrarBtn) {
+                filtrarBtn.disabled = true;
+                filtrarBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Cargando...';
+            }
+        });
+    }
+
+    // ============================================================
+    // NOTIFICACIÓN DE BIENVENIDA (CORREGIDO)
+    // ============================================================
+    // 👇 CORREGIDO: {{ total_registros|tojson }}
+    var totalRegistros = {{ total_registros|tojson }};
+    if (totalRegistros > 0) {
+        notificaciones.toast('info', '📊 ' + totalRegistros + ' registros encontrados para el período seleccionado.', 'Datos cargados');
+    } else {
+        notificaciones.toast('warning', 'No hay registros para el período seleccionado. Prueba con otro mes/año.', 'Sin datos');
+    }
+});
+</script>
 {% endblock %}

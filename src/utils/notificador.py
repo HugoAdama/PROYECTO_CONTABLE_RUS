@@ -1,202 +1,218 @@
-# src/utils/notificador.py
 """
-📧 NOTIFICADOR POR EMAIL
-Envía alertas automáticas por correo electrónico
+Sistema de notificaciones para la interfaz de usuario y emails
 """
-
+from typing import Dict, Any, List, Optional
+from datetime import datetime
+import json
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from datetime import datetime
-import os
-from dotenv import load_dotenv
 
-# Cargar variables de entorno
-load_dotenv()
+class Notificador:
+    """Gestor de notificaciones para la UI (toasts, alertas, progreso)"""
+    
+    @staticmethod
+    def crear_toast(tipo: str, mensaje: str, titulo: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Crea una notificación toast para la UI
+        
+        Args:
+            tipo: 'success', 'error', 'warning', 'info'
+            mensaje: Texto principal de la notificación
+            titulo: Título opcional de la notificación
+        """
+        colores = {
+            'success': 'bg-success',
+            'error': 'bg-danger',
+            'warning': 'bg-warning',
+            'info': 'bg-info'
+        }
+        iconos = {
+            'success': '✅',
+            'error': '❌',
+            'warning': '⚠️',
+            'info': 'ℹ️'
+        }
+        
+        return {
+            'tipo': tipo,
+            'titulo': titulo or tipo.capitalize(),
+            'mensaje': mensaje,
+            'color': colores.get(tipo, 'bg-secondary'),
+            'icono': iconos.get(tipo, '📢'),
+            'timestamp': datetime.now().isoformat()
+        }
+    
+    @staticmethod
+    def crear_alerta(tipo: str, mensaje: str, acciones: Optional[List[Dict]] = None) -> Dict[str, Any]:
+        """
+        Crea una alerta interactiva para la UI
+        
+        Args:
+            tipo: 'success', 'error', 'warning', 'info'
+            mensaje: Texto principal de la alerta
+            acciones: Lista de acciones (botones) para la alerta
+        """
+        colores = {
+            'success': '#38ef7d',
+            'error': '#eb3349',
+            'warning': '#f7971e',
+            'info': '#4facfe'
+        }
+        
+        return {
+            'tipo': tipo,
+            'mensaje': mensaje,
+            'color': colores.get(tipo, '#667eea'),
+            'acciones': acciones or [],
+            'timestamp': datetime.now().isoformat()
+        }
+    
+    @staticmethod
+    def crear_progreso(titulo: str, total: int, actual: int = 0) -> Dict[str, Any]:
+        """
+        Crea un objeto de progreso para la UI
+        
+        Args:
+            titulo: Descripción del proceso
+            total: Número total de elementos
+            actual: Elementos procesados actualmente
+        """
+        porcentaje = (actual / total * 100) if total > 0 else 0
+        
+        return {
+            'titulo': titulo,
+            'total': total,
+            'actual': actual,
+            'porcentaje': min(porcentaje, 100),
+            'mensaje': f'Procesando {actual} de {total}...'
+        }
+
+
+# ============================================================
+# CLASE NotificadorEmail - Para envío de correos electrónicos
+# ============================================================
 
 class NotificadorEmail:
     """
-    Envía notificaciones por email usando SMTP.
+    Clase para enviar notificaciones por correo electrónico
     """
     
-    def __init__(self):
-        self.smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
-        self.smtp_port = int(os.getenv('SMTP_PORT', 587))
-        self.email_origen = os.getenv('EMAIL_ORIGEN')
-        self.email_password = os.getenv('EMAIL_PASSWORD')
-        self.email_destino = os.getenv('EMAIL_DESTINO')
-    
-    def enviar_alerta_limite(self, ventas: float, limite: float = 8000):
+    def __init__(self, smtp_server: str = 'smtp.gmail.com', smtp_port: int = 587, 
+                 email_remitente: str = None, password: str = None):
         """
-        Envía alerta cuando las ventas se acercan al límite RUS.
+        Inicializa el notificador de email
         
         Args:
-            ventas (float): Ventas actuales del mes
-            limite (float): Límite RUS (8000 por defecto)
+            smtp_server: Servidor SMTP (ej: smtp.gmail.com)
+            smtp_port: Puerto SMTP (587 para TLS)
+            email_remitente: Email del remitente
+            password: Contraseña del remitente
         """
-        porcentaje = (ventas / limite) * 100
-        mensaje = self._generar_mensaje_limite(ventas, limite, porcentaje)
-        
-        return self._enviar_email(
-            asunto="⚠️ Alerta RUS - Control Financiero",
-            mensaje=mensaje
-        )
+        self.smtp_server = smtp_server
+        self.smtp_port = smtp_port
+        self.email_remitente = email_remitente
+        self.password = password
     
-    def _generar_mensaje_limite(self, ventas, limite, porcentaje):
-        """Genera el mensaje de alerta de límite."""
-        
-        if porcentaje > 100:
-            nivel = "🚨 URGENTE"
-            color = "rojo"
-            recomendacion = "¡Has superado el límite RUS! Consulta a tu contador inmediatamente."
-        elif porcentaje > 90:
-            nivel = "⚠️ ADVERTENCIA"
-            color = "naranja"
-            recomendacion = f"Te faltan S/ {limite - ventas:,.2f} para llegar al límite. Controla tus ventas."
-        elif porcentaje > 70:
-            nivel = "ℹ️ INFORMACIÓN"
-            color = "amarillo"
-            recomendacion = f"Estás al {porcentaje:.0f}% del límite RUS. Sigue así."
-        else:
-            return None
-        
-        mensaje = f"""
-        <html>
-        <head>
-            <style>
-                body {{ font-family: Arial, sans-serif; }}
-                .header {{ background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; text-align: center; }}
-                .content {{ padding: 20px; }}
-                .alert-{color} {{ padding: 15px; border-radius: 8px; margin: 10px 0; }}
-                .metric {{ display: inline-block; padding: 10px 20px; background: #f0f0f0; border-radius: 8px; margin: 5px; }}
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h1>📊 Control Financiero RUS</h1>
-                <p>{nivel}</p>
-            </div>
-            <div class="content">
-                <h2>Estado de tus ventas</h2>
-                <div class="alert-{color}">
-                    <p><strong>Ventas actuales:</strong> S/ {ventas:,.2f}</p>
-                    <p><strong>Límite RUS:</strong> S/ {limite:,.2f}</p>
-                    <p><strong>Porcentaje usado:</strong> {porcentaje:.1f}%</p>
-                </div>
-                <h3>💡 Recomendación</h3>
-                <p>{recomendacion}</p>
-                <hr>
-                <p style="color: #666; font-size: 0.8rem;">
-                    Este es un mensaje automático del Sistema de Control Financiero.<br>
-                    Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M')}
-                </p>
-            </div>
-        </body>
-        </html>
+    def enviar_alerta(self, destinatario: str, asunto: str, mensaje: str) -> bool:
         """
+        Envía una alerta por correo electrónico
         
-        return mensaje
-    
-    def _enviar_email(self, asunto: str, mensaje: str) -> bool:
-        """
-        Envía el email usando SMTP.
+        Args:
+            destinatario: Email del destinatario
+            asunto: Asunto del correo
+            mensaje: Cuerpo del mensaje
         
         Returns:
-            bool: True si se envió correctamente
+            bool: True si se envió correctamente, False en caso contrario
         """
-        if not self.email_origen or not self.email_password:
-            print("⚠️ Credenciales de email no configuradas")
-            return False
-        
-        if not self.email_destino:
-            print("⚠️ Email de destino no configurado")
+        if not all([self.email_remitente, self.password, destinatario]):
+            print("⚠️ No se puede enviar email: faltan credenciales")
             return False
         
         try:
             # Crear mensaje
             msg = MIMEMultipart()
-            msg['From'] = self.email_origen
-            msg['To'] = self.email_destino
+            msg['From'] = self.email_remitente
+            msg['To'] = destinatario
             msg['Subject'] = asunto
             
-            # Agregar contenido HTML
-            msg.attach(MIMEText(mensaje, 'html'))
+            # Agregar cuerpo
+            msg.attach(MIMEText(mensaje, 'plain', 'utf-8'))
             
             # Conectar y enviar
             with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
                 server.starttls()
-                server.login(self.email_origen, self.email_password)
+                server.login(self.email_remitente, self.password)
                 server.send_message(msg)
             
-            print(f"✅ Email enviado a {self.email_destino}")
+            print(f"✅ Email enviado a {destinatario}")
             return True
             
         except Exception as e:
             print(f"❌ Error al enviar email: {e}")
             return False
     
-    def enviar_resumen_mensual(self, resumen: dict, mes: int, año: int):
+    def enviar_alerta_rus(self, destinatario: str, ventas: float, estado: str, 
+                          limite: float = 8000) -> bool:
         """
-        Envía un resumen mensual por email.
+        Envía una alerta específica del RUS
         
         Args:
-            resumen (dict): Resumen financiero del mes
-            mes (int): Mes
-            año (int): Año
+            destinatario: Email del destinatario
+            ventas: Ventas del mes
+            estado: Estado del RUS ('ok', 'alerta', 'peligro')
+            limite: Límite máximo de ventas
         """
-        nombre_mes = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
-                     "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][mes-1]
+        estados_mensaje = {
+            'ok': '✅ Todo en orden. Tus ventas están dentro del límite RUS.',
+            'alerta': f'⚠️ Estás cerca del límite RUS (S/ {limite:,.2f}). Ventas actuales: S/ {ventas:,.2f}',
+            'peligro': f'🚨 HAS SUPERADO EL LÍMITE RUS (S/ {limite:,.2f}). Ventas actuales: S/ {ventas:,.2f}.'
+        }
         
         mensaje = f"""
-        <html>
-        <head>
-            <style>
-                body {{ font-family: Arial, sans-serif; }}
-                .header {{ background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; text-align: center; }}
-                .content {{ padding: 20px; }}
-                .metric-card {{ display: inline-block; padding: 15px 25px; background: #f8f9fa; border-radius: 10px; margin: 5px; min-width: 120px; text-align: center; }}
-                .metric-value {{ font-size: 1.5rem; font-weight: bold; color: #2d3436; }}
-                .metric-label {{ font-size: 0.8rem; color: #636e72; }}
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h1>📊 Resumen Mensual</h1>
-                <p>{nombre_mes} {año}</p>
-            </div>
-            <div class="content">
-                <h2>📈 Resumen Financiero</h2>
-                <div style="text-align: center;">
-                    <div class="metric-card">
-                        <div class="metric-value">S/ {resumen['total_ventas']:,.2f}</div>
-                        <div class="metric-label">💰 Ventas</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">S/ {resumen['total_compras']:,.2f}</div>
-                        <div class="metric-label">📦 Compras</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" style="color: {'#00b894' if resumen['utilidad'] > 0 else '#ff6b6b'}">
-                            S/ {resumen['utilidad']:,.2f}
-                        </div>
-                        <div class="metric-label">💵 Utilidad</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">S/ {resumen['total_percepciones']:,.2f}</div>
-                        <div class="metric-label">⭐ Percepciones</div>
-                    </div>
-                </div>
-                <hr>
-                <p style="color: #666; font-size: 0.8rem;">
-                    Este es un resumen automático del Sistema de Control Financiero.<br>
-                    Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M')}
-                </p>
-            </div>
-        </body>
-        </html>
+        📊 REPORTE RUS - {datetime.now().strftime('%d/%m/%Y')}
+        
+        {estados_mensaje.get(estado, 'Estado desconocido')}
+        
+        📈 Ventas del mes: S/ {ventas:,.2f}
+        📉 Límite permitido: S/ {limite:,.2f}
+        
+        ---
+        Este es un mensaje automático del Sistema de Control Financiero RUS.
         """
         
-        return self._enviar_email(
-            asunto=f"📊 Resumen {nombre_mes} {año} - Control Financiero",
-            mensaje=mensaje
-        )
+        asunto = f"🚨 Alerta RUS - {estado.upper()}" if estado != 'ok' else "✅ Reporte RUS - Todo en orden"
+        
+        return self.enviar_alerta(destinatario, asunto, mensaje)
+    
+    def enviar_resumen_mensual(self, destinatario: str, datos: Dict[str, Any]) -> bool:
+        """
+        Envía un resumen mensual del estado financiero
+        
+        Args:
+            destinatario: Email del destinatario
+            datos: Diccionario con los datos del resumen
+        """
+        ventas = datos.get('ventas', 0)
+        compras = datos.get('compras', 0)
+        utilidad = datos.get('utilidad', 0)
+        impuesto = datos.get('impuesto', 0)
+        mes = datos.get('mes', 'Mes')
+        anio = datos.get('anio', 'Año')
+        
+        mensaje = f"""
+        📊 RESUMEN FINANCIERO - {mes} {anio}
+        
+        📈 Ventas: S/ {ventas:,.2f}
+        📉 Compras: S/ {compras:,.2f}
+        💰 Utilidad: S/ {utilidad:,.2f}
+        🏛️ Impuesto RUS: S/ {impuesto:,.2f}
+        
+        ---
+        Este es un resumen automático del Sistema de Control Financiero RUS.
+        """
+        
+        asunto = f"📊 Resumen Financiero - {mes} {anio}"
+        
+        return self.enviar_alerta(destinatario, asunto, mensaje)

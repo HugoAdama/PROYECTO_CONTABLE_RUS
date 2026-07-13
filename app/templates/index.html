@@ -8,51 +8,45 @@
     <p class="page-subtitle">Resumen financiero de tu negocio</p>
 </div>
 
-<!-- ============================================================
-     TARJETAS DE ESTADÍSTICAS - UNIFICADAS
-     ============================================================ -->
+<!-- Tarjetas de estadísticas -->
 <div class="stats-grid">
-    <!-- Ventas -->
-    <div class="stat-card ventas">
+    <div class="stat-card ventas" data-tooltip="Total de ventas del mes (suma de todas las boletas)">
         <div class="stat-header">
             <div class="stat-icon">💰</div>
             <span class="stat-badge green">+12%</span>
         </div>
         <div class="stat-label">Ventas</div>
-        <div class="stat-value">S/ {{ "%.2f"|format(total_ventas) }}</div>
+        <div class="stat-value" id="totalVentas">S/ {{ "%.2f"|format(total_ventas or 0) }}</div>
         <div class="stat-footer">
             <span class="stat-meta">{{ boletas|length }} boletas</span>
         </div>
     </div>
 
-    <!-- Compras -->
-    <div class="stat-card compras">
+    <div class="stat-card compras" data-tooltip="Total de compras del mes (suma de todas las facturas)">
         <div class="stat-header">
             <div class="stat-icon">🛒</div>
             <span class="stat-badge red">-8%</span>
         </div>
         <div class="stat-label">Compras</div>
-        <div class="stat-value">S/ {{ "%.2f"|format(total_compras) }}</div>
+        <div class="stat-value" id="totalCompras">S/ {{ "%.2f"|format(total_compras or 0) }}</div>
         <div class="stat-footer">
             <span class="stat-meta">{{ facturas|length }} facturas</span>
         </div>
     </div>
 
-    <!-- Utilidad -->
-    <div class="stat-card utilidad">
+    <div class="stat-card utilidad" data-tooltip="Utilidad = Ventas - Compras">
         <div class="stat-header">
             <div class="stat-icon">📈</div>
-            <span class="stat-badge blue">{{ "%.1f"|format((utilidad/total_ventas*100) if total_ventas > 0 else 0) }}%</span>
+            <span class="stat-badge blue">{{ "%.1f"|format((utilidad/total_ventas*100) if total_ventas and total_ventas > 0 else 0) }}%</span>
         </div>
         <div class="stat-label">Utilidad</div>
-        <div class="stat-value">S/ {{ "%.2f"|format(utilidad) }}</div>
+        <div class="stat-value" id="totalUtilidad">S/ {{ "%.2f"|format(utilidad or 0) }}</div>
         <div class="stat-footer">
             <span class="stat-meta">Margen de ganancia</span>
         </div>
     </div>
 
-    <!-- Impuesto -->
-    <div class="stat-card impuesto">
+    <div class="stat-card impuesto" data-tooltip="Impuesto RUS a pagar según la categoría">
         <div class="stat-header">
             <div class="stat-icon">🏛️</div>
             {% if estado_rus and estado_rus.estado == 'ok' %}
@@ -64,16 +58,14 @@
             {% endif %}
         </div>
         <div class="stat-label">Impuesto RUS</div>
-        <div class="stat-value">S/ {{ "%.2f"|format(impuesto) }}</div>
+        <div class="stat-value" id="totalImpuesto">S/ {{ "%.2f"|format(impuesto or 0) }}</div>
         <div class="stat-footer">
             <span class="stat-meta">Ahorro S/ 18.06</span>
         </div>
     </div>
 </div>
 
-<!-- ============================================================
-     ESTADO RUS
-     ============================================================ -->
+<!-- Estado RUS -->
 {% if estado_rus %}
 <div class="rus-status">
     <div class="rus-info">
@@ -82,7 +74,7 @@
             <div class="rus-title">Estado RUS</div>
             <div class="rus-message">{{ estado_rus.mensaje }}</div>
         </div>
-        <span class="rus-badge ok">OK</span>
+        <span class="rus-badge ok">{{ estado_rus.estado }}</span>
     </div>
     <div class="rus-limit">
         Límite: <strong>S/ 8,000</strong><br>
@@ -91,24 +83,19 @@
 </div>
 {% endif %}
 
-<!-- ============================================================
-     ALERTAS
-     ============================================================ -->
-<div class="alert-card">
+<!-- Alertas -->
+<div class="alert-card" id="alertasContainer">
     <span class="alert-icon">✅</span>
     <span class="alert-text"><strong>Alertas del Mes</strong> — No hay alertas pendientes. ¡Todo en orden!</span>
 </div>
 
-<!-- ============================================================
-     TABLAS - FACTURAS Y BOLETAS
-     ============================================================ -->
+<!-- Tablas de datos -->
 <div class="tables-grid">
-    <!-- Facturas -->
     <div class="table-section">
         <div class="table-title">📄 Últimas Facturas</div>
         {% if facturas %}
         <div class="table-responsive">
-            <table class="table table-glass">
+            <table class="table table-glass table-paginada" id="tablaFacturas">
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -117,11 +104,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for f in facturas[:5] %}
+                    {% for f in facturas %}
                     <tr>
                         <td>{{ f.numero_factura }}</td>
                         <td>{{ f.proveedor }}</td>
-                        <td class="text-end">S/ {{ "%.2f"|format(f.total_pagar) }}</td>
+                        <td class="text-end">S/ {{ "%.2f"|format(f.total_pagar or 0) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -132,12 +119,11 @@
         {% endif %}
     </div>
 
-    <!-- Boletas -->
     <div class="table-section">
         <div class="table-title">🧾 Últimas Boletas</div>
         {% if boletas %}
         <div class="table-responsive">
-            <table class="table table-glass">
+            <table class="table table-glass table-paginada" id="tablaBoletas">
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -146,11 +132,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for b in boletas[:5] %}
+                    {% for b in boletas %}
                     <tr>
                         <td>{{ b.numero_boleta }}</td>
                         <td>{{ b.cliente }}</td>
-                        <td class="text-end">S/ {{ "%.2f"|format(b.total_pagar) }}</td>
+                        <td class="text-end">S/ {{ "%.2f"|format(b.total_pagar or 0) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -162,20 +148,17 @@
     </div>
 </div>
 
-<!-- ============================================================
-     DESGLOSE Y RESUMEN
-     ============================================================ -->
+<!-- Desglose y resumen -->
 <div class="stats-bottom-grid">
-    <!-- Desglose de Impuestos -->
     <div class="stat-detail">
         <div class="detail-title">💰 Desglose de Impuestos RUS</div>
         <div class="detail-row">
             <span class="detail-label">Ventas del Mes</span>
-            <span class="detail-value">S/ {{ "%.2f"|format(total_ventas) }}</span>
+            <span class="detail-value">S/ {{ "%.2f"|format(total_ventas or 0) }}</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">Impuesto a Pagar</span>
-            <span class="detail-value green">S/ {{ "%.2f"|format(impuesto) }}</span>
+            <span class="detail-value green">S/ {{ "%.2f"|format(impuesto or 0) }}</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">Régimen</span>
@@ -183,7 +166,6 @@
         </div>
     </div>
 
-    <!-- Resumen de Transacciones -->
     <div class="stat-detail">
         <div class="detail-title">📊 Resumen de Transacciones</div>
         <div class="detail-row">
@@ -205,4 +187,70 @@
         </div>
     </div>
 </div>
+
+<!-- Tooltips -->
+<div id="tooltipContainer" style="display: none; position: fixed; padding: 8px 12px; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); border-radius: 8px; color: #fff; font-size: 0.85rem; max-width: 300px; pointer-events: none; z-index: 10000;"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // INICIALIZAR PAGINACIÓN EN LAS TABLAS
+    // ============================================================
+    const tablaFacturas = document.getElementById('tablaFacturas');
+    const tablaBoletas = document.getElementById('tablaBoletas');
+    
+    if (tablaFacturas) {
+        new PaginadorTabla('tablaFacturas', { rowsPerPage: 5, maxButtons: 3 });
+    }
+    if (tablaBoletas) {
+        new PaginadorTabla('tablaBoletas', { rowsPerPage: 5, maxButtons: 3 });
+    }
+    
+    // ============================================================
+    // TOOLTIPS (Información al pasar el mouse)
+    // ============================================================
+    const tooltipContainer = document.getElementById('tooltipContainer');
+    const elementosConTooltip = document.querySelectorAll('[data-tooltip]');
+    
+    elementosConTooltip.forEach(el => {
+        el.addEventListener('mouseenter', function(e) {
+            const texto = this.getAttribute('data-tooltip');
+            tooltipContainer.textContent = texto;
+            tooltipContainer.style.display = 'block';
+            actualizarPosicionTooltip(e);
+        });
+        
+        el.addEventListener('mousemove', function(e) {
+            actualizarPosicionTooltip(e);
+        });
+        
+        el.addEventListener('mouseleave', function() {
+            tooltipContainer.style.display = 'none';
+        });
+    });
+    
+    function actualizarPosicionTooltip(e) {
+        const x = e.clientX + 15;
+        const y = e.clientY + 15;
+        tooltipContainer.style.left = x + 'px';
+        tooltipContainer.style.top = y + 'px';
+        
+        // Evitar que el tooltip se salga de la pantalla
+        const rect = tooltipContainer.getBoundingClientRect();
+        if (rect.right > window.innerWidth) {
+            tooltipContainer.style.left = (e.clientX - rect.width - 15) + 'px';
+        }
+        if (rect.bottom > window.innerHeight) {
+            tooltipContainer.style.top = (e.clientY - rect.height - 15) + 'px';
+        }
+    }
+    
+    // ============================================================
+    // NOTIFICACIÓN DE BIENVENIDA
+    // ============================================================
+    notificaciones.toast('info', 'Bienvenido a tu Dashboard financiero. ¡Todo en orden!', '📊 Sistema RUS');
+});
+</script>
 {% endblock %}

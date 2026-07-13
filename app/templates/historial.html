@@ -1,70 +1,107 @@
 {% extends "base.html" %}
 
-{% block title %}Historial - Sistema Contable{% endblock %}
+{% block title %}Historial - Sistema Contable RUS{% endblock %}
 
 {% block content %}
-<div class="main-container">
-    <!-- Encabezado -->
-    <div class="page-header">
-        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📜</div>
-        <div>
-            <h1 class="page-title">Historial</h1>
-            <p class="page-subtitle">Registro de todas las actividades del sistema</p>
-        </div>
-    </div>
+<div class="page-header">
+    <h1 class="page-title">📜 Historial</h1>
+    <p class="page-subtitle">Registro de todas las actividades del sistema</p>
+</div>
 
-    <!-- Filtros -->
-    <div class="glass-card mb-4">
-        <div class="row g-3 align-items-end">
-            <div class="col-md-3">
-                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Accion</label>
-                <select class="glass-select">
-                    <option value="todas" selected>Todas</option>
-                    <option value="subida">Subida de archivos</option>
-                    <option value="procesamiento">Procesamiento</option>
-                    <option value="backup">Backup</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Desde</label>
-                <input type="date" class="glass-input" value="2026-07-01">
-            </div>
-            <div class="col-md-3">
-                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Hasta</label>
-                <input type="date" class="glass-input" value="2026-07-12">
-            </div>
-            <div class="col-md-3">
-                <button class="btn-primary-glass w-100">Filtrar</button>
-            </div>
+<!-- Filtros -->
+<div class="glass-card p-3 mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Acción</label>
+            <select class="form-select glass-select">
+                <option value="todas">Todas</option>
+                <option value="subida">Subida de archivos</option>
+                <option value="backup">Backup</option>
+                <option value="alerta">Alerta</option>
+            </select>
         </div>
-    </div>
-
-    <!-- Actividades -->
-    <div class="glass-card">
-        <div class="timeline-item">
-            <div class="timeline-icon" style="background:rgba(46,213,115,0.04);">📤</div>
-            <div>
-                <div class="timeline-title">Archivo procesado: factura_001.pdf</div>
-                <div class="timeline-date">12/07/2026 14:30 - Tipo: Factura</div>
-                <span class="badge-glass badge-success">Completado</span>
-            </div>
+        <div class="col-md-3">
+            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Desde</label>
+            <input type="date" class="form-control glass-input" value="2026-07-01">
         </div>
-        <div class="timeline-item">
-            <div class="timeline-icon" style="background:rgba(79,172,254,0.04);">💾</div>
-            <div>
-                <div class="timeline-title">Backup creado: backup_20260712_120514.db</div>
-                <div class="timeline-date">12/07/2026 12:05 - Tamaño: 2.4 MB</div>
-                <span class="badge-glass badge-success">Completado</span>
-            </div>
+        <div class="col-md-3">
+            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Hasta</label>
+            <input type="date" class="form-control glass-input" value="2026-07-13">
         </div>
-        <div class="timeline-item">
-            <div class="timeline-icon" style="background:rgba(255,215,0,0.04);">⚠️</div>
-            <div>
-                <div class="timeline-title">Alerta: Limite RUS cercano</div>
-                <div class="timeline-date">11/07/2026 18:20 - Ventas: S/ 7,850.00</div>
-                <span class="badge-glass badge-warning">Advertencia</span>
-            </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary-glass w-100">
+                <i class="bi bi-funnel"></i> Filtrar
+            </button>
         </div>
     </div>
 </div>
+
+<!-- Tabla de historial -->
+<div class="glass-card p-3">
+    <h5 style="color: #fff;">📋 Registro de Actividades</h5>
+    <div class="table-responsive">
+        <table class="table table-glass table-paginada" id="tablaHistorial">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Detalle</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>📤 Subida</td>
+                    <td>Archivo procesado: factura_001.pdf</td>
+                    <td>12/07/2026 14:30</td>
+                    <td><span class="badge-glass bg-success">Completado</span></td>
+                </tr>
+                <tr>
+                    <td>💾 Backup</td>
+                    <td>Backup creado: backup_20260712_120514.db</td>
+                    <td>12/07/2026 12:05</td>
+                    <td><span class="badge-glass bg-success">Completado</span></td>
+                </tr>
+                <tr>
+                    <td>⚠️ Alerta</td>
+                    <td>Límite RUS cercano - Ventas: 7,850.00</td>
+                    <td>11/07/2026 18:20</td>
+                    <td><span class="badge-glass bg-warning">Advertencia</span></td>
+                </tr>
+                <tr>
+                    <td>📤 Subida</td>
+                    <td>Archivo procesado: boleta_002.pdf</td>
+                    <td>11/07/2026 10:15</td>
+                    <td><span class="badge-glass bg-success">Completado</span></td>
+                </tr>
+                <tr>
+                    <td>📤 Subida</td>
+                    <td>Archivo procesado: factura_003.pdf</td>
+                    <td>10/07/2026 16:45</td>
+                    <td><span class="badge-glass bg-danger">Error</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // INICIALIZAR PAGINACIÓN
+    // ============================================================
+    var tabla = document.getElementById('tablaHistorial');
+    if (tabla) {
+        new PaginadorTabla('tablaHistorial', { rowsPerPage: 10, maxButtons: 5 });
+    }
+
+    // ============================================================
+    // NOTIFICACIÓN DE BIENVENIDA
+    // ============================================================
+    // 👇 CORREGIDO: notificaciones (con 'e')
+    notificaciones.toast('info', '📜 Mostrando las últimas actividades del sistema.', 'Historial');
+});
+</script>
 {% endblock %}

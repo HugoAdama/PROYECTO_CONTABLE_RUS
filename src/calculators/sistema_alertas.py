@@ -1,47 +1,73 @@
-# src/calculators/sistema_alertas.py - Agregar notificación por email
-
-from .calculadora_rus import CalculadoraRUS
-from src.utils.notificador import NotificadorEmail
+"""
+Sistema de alertas para el RUS
+"""
+from datetime import datetime
+from typing import Dict, Any, Optional
+from src.utils.notificador import NotificadorEmail  # ✅ Importación correcta
 
 class SistemaAlertas:
-    """Sistema de alertas con notificaciones por email."""
+    """Sistema de alertas para el RUS"""
     
-    def __init__(self, mes, año):
-        self.mes = mes
-        self.año = año
-        self.calculadora = CalculadoraRUS(mes, año)
-        self.notificador = NotificadorEmail()
+    def __init__(self, email_notificaciones: Optional[str] = None):
+        self.email_notificaciones = email_notificaciones
+        self.notificador_email = NotificadorEmail() if email_notificaciones else None
     
-    def verificar_todas(self):
-        """Verifica todas las alertas y envía notificaciones si es necesario."""
-        alertas = []
+    def verificar_limite_rus(self, ventas: float, limite: float = 8000) -> Dict[str, Any]:
+        """
+        Verifica si las ventas superan el límite RUS
         
-        # 1. Alerta de límite RUS
-        nivel, mensaje = self.calculadora.verificar_limite()
-        if mensaje:
-            alertas.append({'nivel': nivel, 'mensaje': mensaje})
-            
-            # Enviar email si es crítica o advertencia
-            if nivel in ['CRITICAL', 'WARNING']:
-                self._enviar_alerta_limite()
+        Args:
+            ventas: Ventas del mes
+            limite: Límite máximo permitido
         
-        # 2. Alerta de impuestos
-        resultado = self.calculadora.calcular_impuesto_real()
-        if resultado['error']:
-            alertas.append({'nivel': 'CRITICAL', 'mensaje': resultado['mensaje']})
-        elif resultado['ahorro'] > 0:
-            alertas.append({
-                'nivel': 'SUCCESS',
-                'mensaje': f'✅ Ahorraste S/ {resultado["ahorro"]:.2f} en impuestos'
-            })
+        Returns:
+            Dict con estado, mensaje y color
+        """
+        if ventas > limite:
+            return {
+                'estado': 'peligro',
+                'mensaje': f'🚨 Límite RUS superado: S/ {ventas:,.2f} > S/ {limite:,.2f}',
+                'color': 'danger',
+                'icono': '🚨'
+            }
+        elif ventas > limite * 0.8:
+            return {
+                'estado': 'alerta',
+                'mensaje': f'⚠️ Cerca del límite RUS: S/ {ventas:,.2f} / S/ {limite:,.2f}',
+                'color': 'warning',
+                'icono': '⚠️'
+            }
+        else:
+            return {
+                'estado': 'ok',
+                'mensaje': f'✅ Dentro del límite RUS: S/ {ventas:,.2f} / S/ {limite:,.2f}',
+                'color': 'success',
+                'icono': '✅'
+            }
+    
+    def enviar_alerta_si_es_necesario(self, ventas: float, limite: float = 8000) -> bool:
+        """
+        Envía una alerta por email si las ventas superan el límite o están cerca
         
-        return alertas
-    
-    def _enviar_alerta_limite(self):
-        """Envía alerta de límite por email."""
-        ventas = self.calculadora.ventas_totales
-        self.notificador.enviar_alerta_limite(ventas)
-    
-    def enviar_resumen_mensual(self, resumen):
-        """Envía resumen mensual por email."""
-        return self.notificador.enviar_resumen_mensual(resumen, self.mes, self.año)
+        Args:
+            ventas: Ventas del mes
+            limite: Límite máximo permitido
+        
+        Returns:
+            bool: True si se envió la alerta, False en caso contrario
+        """
+        if not self.notificador_email or not self.email_notificaciones:
+            return False
+        
+        resultado = self.verificar_limite_rus(ventas, limite)
+        estado = resultado.get('estado', 'ok')
+        
+        if estado != 'ok':
+            return self.notificador_email.enviar_alerta_rus(
+                self.email_notificaciones,
+                ventas,
+                estado,
+                limite
+            )
+        
+        return False

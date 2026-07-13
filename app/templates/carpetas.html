@@ -1,81 +1,107 @@
 {% extends "base.html" %}
 
-{% block title %}Gestion Carpetas - Sistema Contable{% endblock %}
+{% block title %}Gestión de Carpetas - Sistema Contable RUS{% endblock %}
 
 {% block content %}
-<div class="main-container">
-    <!-- Encabezado -->
-    <div class="page-header">
-        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📁</div>
-        <div>
-            <h1 class="page-title">Gestion Carpetas</h1>
-            <p class="page-subtitle">Organiza y administra tus documentos por mes y año</p>
-        </div>
-    </div>
+<div class="page-header">
+    <h1 class="page-title">📁 Gestión de Carpetas</h1>
+    <p class="page-subtitle">Organiza y administra tus documentos por mes y año</p>
+</div>
 
-    <!-- Estadisticas -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="glass-card text-center" style="background:rgba(255,255,255,0.02);">
-                <div style="font-size:1.8rem;">📄</div>
-                <div style="color:#ffffff;font-size:1.2rem;font-weight:600;">24</div>
-                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Total PDFs</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">📂 Estructura de Carpetas</h5>
+            <div style="padding: 10px 0; font-family: monospace; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                <div>📁 data/</div>
+                <div style="padding-left: 20px;">📁 boletas/</div>
+                <div style="padding-left: 40px;">📁 2026_05/</div>
+                <div style="padding-left: 60px; color: rgba(255,255,255,0.4);">📄 20260712_175746_PDF-BOLETAEB01-302.pdf</div>
+                <div style="padding-left: 60px; color: rgba(255,255,255,0.4);">📄 20260712_175746_PDF-BOLETAEB01-303.pdf</div>
+                <div style="padding-left: 20px;">📁 facturas/</div>
+                <div style="padding-left: 40px;">📁 2026_05/</div>
+                <div style="padding-left: 60px; color: rgba(255,255,255,0.4);">📄 20260712_180533_20101796532-01-F033-00.pdf</div>
+                <div style="padding-left: 20px;">📁 percepciones/</div>
+                <div style="padding-left: 40px;">📁 2026_05/</div>
+                <div style="padding-left: 60px; color: rgba(255,255,255,0.4);">📄 20260712_181603_20101796532-40-P003-00.pdf</div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card text-center" style="background:rgba(255,255,255,0.02);">
-                <div style="font-size:1.8rem;">📂</div>
-                <div style="color:#ffffff;font-size:1.2rem;font-weight:600;">6</div>
-                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Carpetas</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card text-center" style="background:rgba(255,255,255,0.02);">
-                <div style="font-size:1.8rem;">📅</div>
-                <div style="color:#ffffff;font-size:1.2rem;font-weight:600;">2026</div>
-                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Año actual</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card text-center" style="background:rgba(255,215,0,0.02);border-color:rgba(255,215,0,0.04);">
-                <div style="font-size:1.8rem;">💾</div>
-                <div style="color:#ffd700;font-size:1.2rem;font-weight:600;">15.2 MB</div>
-                <div style="color:rgba(255,255,255,0.2);font-size:0.7rem;">Espacio usado</div>
+            <div class="mt-3">
+                <button class="btn btn-primary-glass btn-sm me-2" id="organizarBtn">
+                    <i class="bi bi-arrow-repeat"></i> Organizar Automático
+                </button>
+                <button class="btn btn-info-glass btn-sm" id="verEstadisticasBtn">
+                    <i class="bi bi-graph-up"></i> Ver Estadísticas
+                </button>
             </div>
         </div>
     </div>
-
-    <!-- Estructura -->
-    <div class="glass-card">
-        <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">Estructura de Carpetas</h6>
-        <div style="color:rgba(255,255,255,0.5);">
-            <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.02);">
-                <span style="color:#ffd700;">📁</span> data/
-                <div style="padding-left:24px;margin-top:4px;">
-                    <div style="padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.02);">
-                        <span style="color:#ffd700;">📁</span> pdfs/
-                        <div style="padding-left:24px;margin-top:4px;">
-                            <div style="display:flex;justify-content:space-between;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.02);">
-                                <span><span style="color:#ffd700;">📁</span> facturas/</span>
-                                <span style="color:rgba(255,255,255,0.15);font-size:0.7rem;">8 archivos</span>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.02);">
-                                <span><span style="color:#ffd700;">📁</span> boletas/</span>
-                                <span style="color:rgba(255,255,255,0.15);font-size:0.7rem;">12 archivos</span>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;padding:6px 12px;">
-                                <span><span style="color:#ffd700;">📁</span> percepciones/</span>
-                                <span style="color:rgba(255,255,255,0.15);font-size:0.7rem;">4 archivos</span>
-                            </div>
-                        </div>
+    <div class="col-md-6">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">📊 Estadísticas de Carpetas</h5>
+            <div class="row mt-3">
+                <div class="col-6">
+                    <div class="stat-detail">
+                        <div class="detail-label" style="color: rgba(255,255,255,0.4);">Carpetas</div>
+                        <div class="detail-value" style="font-size: 1.5rem; color: #fff;">24</div>
+                        <div style="color: rgba(255,255,255,0.3); font-size: 0.75rem;">6 meses activos</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-detail">
+                        <div class="detail-label" style="color: rgba(255,255,255,0.4);">Archivos</div>
+                        <div class="detail-value" style="font-size: 1.5rem; color: #fff;">8</div>
+                        <div style="color: rgba(255,255,255,0.3); font-size: 0.75rem;">15.2 MB usados</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; color: rgba(255,255,255,0.5); font-size: 0.8rem;">
+                        <span>Facturas</span>
+                        <span>12 archivos</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 4px;">
+                        <span>Boletas</span>
+                        <span>8 archivos</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 4px;">
+                        <span>Percepciones</span>
+                        <span>4 archivos</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="mt-4" style="display:flex;gap:8px;">
-            <button class="btn-outline-glass">Organizar Automatico</button>
-            <button class="btn-outline-success">Ver Estadisticas</button>
-        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // ORGANIZAR CARPETAS
+    // ============================================================
+    var organizarBtn = document.getElementById('organizarBtn');
+    if (organizarBtn) {
+        organizarBtn.addEventListener('click', function() {
+            // 👇 CORREGIDO: notificaciones (con 'e')
+            notificaciones.toast('info', 'Organizando carpetas y archivos...', '📁 Procesando');
+
+            setTimeout(function() {
+                notificaciones.toast('success', 'Carpetas organizadas correctamente.', '✅ Listo');
+            }, 1500);
+        });
+    }
+
+    // ============================================================
+    // VER ESTADÍSTICAS
+    // ============================================================
+    var estadisticasBtn = document.getElementById('verEstadisticasBtn');
+    if (estadisticasBtn) {
+        estadisticasBtn.addEventListener('click', function() {
+            notificaciones.toast('info', 'Cargando estadísticas detalladas...', '📊 Analizando');
+        });
+    }
+});
+</script>
 {% endblock %}

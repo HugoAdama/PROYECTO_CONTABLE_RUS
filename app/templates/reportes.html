@@ -1,101 +1,214 @@
 {% extends "base.html" %}
 
-{% block title %}Reportes - Sistema Contable{% endblock %}
+{% block title %}Reportes - Sistema Contable RUS{% endblock %}
 
 {% block content %}
-<div class="main-container">
-    <!-- Encabezado -->
-    <div class="page-header">
-        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📊</div>
-        <div>
-            <h1 class="page-title">Reportes</h1>
-            <p class="page-subtitle">Analisis financiero y graficos de tu negocio</p>
+<div class="page-header">
+    <h1 class="page-title">📊 Reportes</h1>
+    <p class="page-subtitle">Análisis financiero y gráficos de tu negocio</p>
+</div>
+
+<!-- Filtros -->
+<div class="glass-card p-3 mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Mes</label>
+            <select id="reporteMes" class="form-select glass-select">
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5" selected>Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Año</label>
+            <select id="reporteAnio" class="form-select glass-select">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary-glass w-100" id="generarReporteBtn">
+                <i class="bi bi-bar-chart"></i> Generar
+            </button>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-success-glass w-100" id="exportarExcelBtn">
+                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+            </button>
         </div>
     </div>
+</div>
 
-    <!-- Filtros -->
-    <div class="glass-card mb-4">
-        <div class="row g-3 align-items-end">
-            <div class="col-md-3">
-                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Mes</label>
-                <select class="glass-select">
-                    {% for i in range(1, 13) %}
-                    <option value="{{ i }}" {% if i == 5 %}selected{% endif %}>
-                        {{ ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][i-1] }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label style="color:rgba(255,255,255,0.3);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Año</label>
-                <select class="glass-select">
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026" selected>2026</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button class="btn-primary-glass w-100">Generar</button>
-            </div>
-            <div class="col-md-5">
-                <div style="display:flex;gap:8px;justify-content:flex-end;">
-                    <button class="btn-outline-success">Exportar Excel</button>
-                    <button class="btn-outline-glass">Imprimir</button>
-                </div>
+<!-- Indicadores -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="glass-card p-3 text-center">
+            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Ventas</span>
+            <h3 style="color: #38ef7d;">S/ {{ "%.2f"|format(total_ventas or 0) }}</h3>
+            <span class="text-muted-glass" style="font-size: 0.75rem;">{{ boletas|length }} boletas</span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card p-3 text-center">
+            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Compras</span>
+            <h3 style="color: #eb3349;">S/ {{ "%.2f"|format(total_compras or 0) }}</h3>
+            <span class="text-muted-glass" style="font-size: 0.75rem;">{{ facturas|length }} facturas</span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card p-3 text-center">
+            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Utilidad</span>
+            <h3 style="color: #4facfe;">S/ {{ "%.2f"|format(utilidad or 0) }}</h3>
+            <span class="text-muted-glass" style="font-size: 0.75rem;">{{ "%.1f"|format((utilidad/total_ventas*100) if total_ventas and total_ventas > 0 else 0) }}% margen</span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card p-3 text-center">
+            <span class="text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Impuesto RUS</span>
+            <h3 style="color: #f7971e;">S/ {{ "%.2f"|format(impuesto or 0) }}</h3>
+            <span class="text-muted-glass" style="font-size: 0.75rem;">A pagar</span>
+        </div>
+    </div>
+</div>
+
+<!-- Gráficos (placeholder) -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">📈 Evolución de Ventas</h5>
+            <div id="graficoEvolucion" style="height: 300px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.2);">
+                <i class="bi bi-bar-chart" style="font-size: 4rem;"></i>
+                <span style="margin-left: 15px; font-size: 1.1rem;">Gráfico en desarrollo</span>
             </div>
         </div>
     </div>
-
-    <!-- Metricas -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="glass-card glass-primary text-center">
-                <div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Ventas</div>
-                <div style="color:#4facfe;font-size:1.5rem;font-weight:700;">S/ 12,450</div>
-                <span class="badge-glass badge-success">↑ 12%</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card glass-pink text-center">
-                <div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Compras</div>
-                <div style="color:#f093fb;font-size:1.5rem;font-weight:700;">S/ 8,320</div>
-                <span class="badge-glass badge-warning">↓ 5%</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card glass-success text-center">
-                <div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Utilidad</div>
-                <div style="color:#43e97b;font-size:1.5rem;font-weight:700;">S/ 4,130</div>
-                <span class="badge-glass badge-success">↑ 8%</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="glass-card glass-gold text-center">
-                <div style="color:rgba(255,255,255,0.2);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px;">Impuesto</div>
-                <div style="color:#ffd700;font-size:1.5rem;font-weight:700;">S/ 622.50</div>
-                <span style="color:rgba(255,215,0,0.4);font-size:0.65rem;">5%</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Graficos -->
-    <div class="row g-4">
-        <div class="col-md-8">
-            <div class="glass-card" style="min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;color:rgba(255,255,255,0.1);">
-                <div>
-                    <div style="font-size:3rem;">📈</div>
-                    <div style="font-size:0.8rem;">Grafico de evolucion aqui</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="glass-card" style="min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;color:rgba(255,255,255,0.1);">
-                <div>
-                    <div style="font-size:3rem;">🍩</div>
-                    <div style="font-size:0.8rem;">Grafico circular aqui</div>
-                </div>
+    <div class="col-md-4">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">📊 Distribución</h5>
+            <div id="graficoDistribucion" style="height: 300px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.2);">
+                <i class="bi bi-pie-chart" style="font-size: 4rem;"></i>
+                <span style="margin-left: 15px; font-size: 1.1rem;">Gráfico en desarrollo</span>
             </div>
         </div>
     </div>
 </div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">📋 Detalle de Transacciones</h5>
+            <div class="table-responsive">
+                <table class="table table-glass table-paginada" id="tablaReportes">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Número</th>
+                            <th>Cliente/Proveedor</th>
+                            <th>Fecha</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in facturas %}
+                        <tr>
+                            <td><span class="badge-glass bg-primary">Factura</span></td>
+                            <td>{{ f.numero_factura }}</td>
+                            <td>{{ f.proveedor }}</td>
+                            <td>{{ f.fecha_emision.strftime('%d/%m/%Y') if f.fecha_emision else '-' }}</td>
+                            <td class="text-end">S/ {{ "%.2f"|format(f.total_pagar or 0) }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for b in boletas %}
+                        <tr>
+                            <td><span class="badge-glass bg-success">Boleta</span></td>
+                            <td>{{ b.numero_boleta }}</td>
+                            <td>{{ b.cliente }}</td>
+                            <td>{{ b.fecha_emision.strftime('%d/%m/%Y') if b.fecha_emision else '-' }}</td>
+                            <td class="text-end">S/ {{ "%.2f"|format(b.total_pagar or 0) }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for p in percepciones %}
+                        <tr>
+                            <td><span class="badge-glass bg-warning">Percepción</span></td>
+                            <td>{{ p.numero_comprobante }}</td>
+                            <td>{{ p.proveedor }}</td>
+                            <td>{{ p.fecha_emision.strftime('%d/%m/%Y') if p.fecha_emision else '-' }}</td>
+                            <td class="text-end">S/ {{ "%.2f"|format(p.monto or 0) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // INICIALIZAR PAGINACIÓN EN LA TABLA
+    // ============================================================
+    var tabla = document.getElementById('tablaReportes');
+    if (tabla) {
+        new PaginadorTabla('tablaReportes', { rowsPerPage: 10, maxButtons: 5 });
+    }
+
+    // ============================================================
+    // GENERAR REPORTE
+    // ============================================================
+    var generarBtn = document.getElementById('generarReporteBtn');
+    if (generarBtn) {
+        generarBtn.addEventListener('click', function() {
+            var mesSelect = document.getElementById('reporteMes');
+            var anioSelect = document.getElementById('reporteAnio');
+            var mes = mesSelect ? mesSelect.value : '5';
+            var anio = anioSelect ? anioSelect.value : '2026';
+            var nombreMes = utils.obtenerNombreMes(parseInt(mes));
+            // 👇 CORREGIDO: notificaciones (con 'e')
+            notificaciones.toast('info', 'Generando reporte para ' + nombreMes + ' ' + anio + '...', '⏳ Cargando');
+
+            setTimeout(function() {
+                notificaciones.toast('success', 'Reporte generado correctamente.', '✅ Listo');
+            }, 1500);
+        });
+    }
+
+    // ============================================================
+    // EXPORTAR EXCEL
+    // ============================================================
+    var exportarBtn = document.getElementById('exportarExcelBtn');
+    if (exportarBtn) {
+        exportarBtn.addEventListener('click', function() {
+            notificaciones.toast('info', 'Preparando archivo Excel...', '📊 Exportando');
+
+            setTimeout(function() {
+                notificaciones.toast('success', 'Archivo Excel generado correctamente.', '✅ Listo');
+            }, 2000);
+        });
+    }
+
+    // ============================================================
+    // NOTIFICACIÓN DE BIENVENIDA (CORREGIDO)
+    // ============================================================
+    // 👇 CORREGIDO: {{ (facturas|length + boletas|length + percepciones|length)|tojson }}
+    var totalDocs = {{ (facturas|length + boletas|length + percepciones|length)|tojson }};
+    if (totalDocs > 0) {
+        notificaciones.toast('info', '📊 ' + totalDocs + ' transacciones encontradas para el período actual.', 'Reporte disponible');
+    } else {
+        notificaciones.toast('warning', 'No hay transacciones para el período seleccionado.', 'Sin datos');
+    }
+});
+</script>
 {% endblock %}

@@ -1,56 +1,135 @@
 {% extends "base.html" %}
 
-{% block title %}Configuracion - Sistema Contable{% endblock %}
+{% block title %}Configuración - Sistema Contable RUS{% endblock %}
 
 {% block content %}
-<div class="main-container">
-    <!-- Encabezado -->
-    <div class="page-header">
-        <div class="icon-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">⚙️</div>
-        <div>
-            <h1 class="page-title">Configuracion</h1>
-            <p class="page-subtitle">Personaliza el sistema segun tus necesidades</p>
+<div class="page-header">
+    <h1 class="page-title">⚙️ Configuración</h1>
+    <p class="page-subtitle">Personaliza tu sistema de control financiero</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">📋 Configuración General</h5>
+            <form id="configForm">
+                <div class="mb-3">
+                    <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Nombre del Negocio</label>
+                    <input type="text" class="form-control glass-input" value="Mi Negocio" placeholder="Nombre de tu negocio">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Email de Notificaciones</label>
+                    <input type="email" class="form-control glass-input" value="negocio@email.com" placeholder="tu@email.com">
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="notificacionesCheck" checked>
+                    <label class="form-check-label text-muted-glass" for="notificacionesCheck">Activar Notificaciones</label>
+                </div>
+                <button type="submit" class="btn btn-primary-glass w-100">
+                    <i class="bi bi-check2"></i> Guardar Cambios
+                </button>
+            </form>
         </div>
     </div>
-
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="glass-card">
-                <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">Configuracion General</h6>
-                <div class="mb-3">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">Nombre del Negocio</label>
-                    <input type="text" class="glass-input" value="Mi Negocio">
-                </div>
-                <div class="mb-3">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">Email de Notificaciones</label>
-                    <input type="email" class="glass-input" value="negocio@email.com">
-                </div>
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-                    <input type="checkbox" checked style="accent-color:#667eea;width:16px;height:16px;">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.8rem;">Activar Notificaciones</label>
-                </div>
-                <button class="btn-primary-glass">Guardar Cambios</button>
+    <div class="col-md-6">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">🎨 Apariencia</h5>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="modoOscuroCheck">
+                <label class="form-check-label text-muted-glass" for="modoOscuroCheck">Modo Oscuro</label>
             </div>
+            <div class="mb-3">
+                <label class="form-label text-muted-glass" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;">Color Primario</label>
+                <div class="d-flex gap-2">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #667eea; cursor: pointer; border: 2px solid rgba(255,255,255,0.1);" onclick="seleccionarColor('#667eea')"></div>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #38ef7d; cursor: pointer; border: 2px solid rgba(255,255,255,0.1);" onclick="seleccionarColor('#38ef7d')"></div>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #eb3349; cursor: pointer; border: 2px solid rgba(255,255,255,0.1);" onclick="seleccionarColor('#eb3349')"></div>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #f7971e; cursor: pointer; border: 2px solid rgba(255,255,255,0.1);" onclick="seleccionarColor('#f7971e')"></div>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #4facfe; cursor: pointer; border: 2px solid rgba(255,255,255,0.1);" onclick="seleccionarColor('#4facfe')"></div>
+                </div>
+            </div>
+            <button class="btn btn-success-glass w-100" id="guardarAparienciaBtn">
+                <i class="bi bi-palette"></i> Guardar Cambios
+            </button>
         </div>
-        <div class="col-md-6">
-            <div class="glass-card">
-                <h6 style="color:rgba(255,255,255,0.3);font-weight:600;margin-bottom:16px;">Apariencia</h6>
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-                    <input type="checkbox" checked style="accent-color:#667eea;width:16px;height:16px;">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.8rem;">Modo Oscuro</label>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="glass-card p-3">
+            <h5 style="color: #fff;">ℹ️ Información del Sistema</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="text-muted-glass" style="font-size: 0.8rem;">Versión</div>
+                    <div style="color: #fff;">3.2 (Julio 2026)</div>
                 </div>
-                <div class="mb-3">
-                    <label style="color:rgba(255,255,255,0.2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;">Color Primario</label>
-                    <div style="display:flex;gap:8px;margin-top:8px;">
-                        <div style="width:32px;height:32px;border-radius:50%;background:#667eea;border:2px solid rgba(255,255,255,0.2);cursor:pointer;"></div>
-                        <div style="width:32px;height:32px;border-radius:50%;background:#f093fb;border:2px solid transparent;cursor:pointer;"></div>
-                        <div style="width:32px;height:32px;border-radius:50%;background:#43e97b;border:2px solid transparent;cursor:pointer;"></div>
-                        <div style="width:32px;height:32px;border-radius:50%;background:#ffd700;border:2px solid transparent;cursor:pointer;"></div>
-                    </div>
+                <div class="col-md-4">
+                    <div class="text-muted-glass" style="font-size: 0.8rem;">Base de Datos</div>
+                    <div style="color: #fff;">SQLite 3.x</div>
                 </div>
-                <button class="btn-primary-glass">Guardar Cambios</button>
+                <div class="col-md-4">
+                    <div class="text-muted-glass" style="font-size: 0.8rem;">Framework</div>
+                    <div style="color: #fff;">Flask 2.3+</div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // CONFIGURACIÓN - GUARDAR
+    // ============================================================
+    var configForm = document.getElementById('configForm');
+    if (configForm) {
+        configForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // 👇 CORREGIDO: notificaciones (con 'e')
+            notificaciones.toast('success', 'Configuración guardada correctamente.', '✅ Guardado');
+        });
+    }
+
+    // ============================================================
+    // GUARDAR APARIENCIA
+    // ============================================================
+    var guardarAparienciaBtn = document.getElementById('guardarAparienciaBtn');
+    if (guardarAparienciaBtn) {
+        guardarAparienciaBtn.addEventListener('click', function() {
+            notificaciones.toast('success', 'Preferencias de apariencia guardadas.', '✅ Guardado');
+        });
+    }
+
+    // ============================================================
+    // MODO OSCURO (demo)
+    // ============================================================
+    var modoOscuroCheck = document.getElementById('modoOscuroCheck');
+    if (modoOscuroCheck) {
+        modoOscuroCheck.addEventListener('change', function() {
+            if (this.checked) {
+                notificaciones.toast('info', 'Modo oscuro activado.', '🌙');
+                document.body.style.background = '#0a0a1a';
+            } else {
+                notificaciones.toast('info', 'Modo claro activado.', '☀️');
+                document.body.style.background = '';
+            }
+        });
+    }
+});
+
+// ============================================================
+// SELECCIONAR COLOR (función global)
+// ============================================================
+function seleccionarColor(color) {
+    // 👇 CORREGIDO: notificaciones (con 'e')
+    notificaciones.toast('info', 'Color seleccionado: ' + color, '🎨');
+    var botones = document.querySelectorAll('.btn-primary-glass');
+    botones.forEach(function(btn) {
+        btn.style.background = color;
+    });
+}
+</script>
 {% endblock %}
