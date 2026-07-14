@@ -4,132 +4,473 @@
 
 {% block extra_css %}
 <style>
+    /* ============================================
+       SUBIR ARCHIVOS - ESTILOS ESPECÍFICOS
+       ============================================ */
+    
+    /* --- Drop Zone --- */
     .drop-zone {
-        border: 2px dashed rgba(255,255,255,0.08);
+        border: 2px dashed rgba(255, 255, 255, 0.08);
         border-radius: 16px;
         padding: 48px 32px;
         text-align: center;
-        transition: all 0.3s ease;
+        transition: all 0.4s ease;
         cursor: pointer;
-        background: rgba(255,255,255,0.02);
+        background: rgba(255, 255, 255, 0.02);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .drop-zone::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.02), transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
     }
     
     .drop-zone:hover {
-        border-color: rgba(96,165,250,0.2);
-        background: rgba(255,255,255,0.04);
+        border-color: rgba(96, 165, 250, 0.15);
+        background: rgba(255, 255, 255, 0.04);
+    }
+    
+    .drop-zone:hover::before {
+        opacity: 1;
     }
     
     .drop-zone.dragover {
         border-color: var(--primary);
-        background: rgba(96,165,250,0.05);
+        background: rgba(96, 165, 250, 0.05);
         transform: scale(1.01);
+        box-shadow: 0 0 60px rgba(96, 165, 250, 0.05);
     }
     
     .drop-zone .icon {
-        font-size: 4rem;
+        font-size: 4.5rem;
         margin-bottom: 16px;
         display: block;
+        transition: transform 0.4s ease;
+    }
+    
+    .drop-zone:hover .icon {
+        transform: scale(1.05) rotate(-3deg);
     }
     
     .drop-zone h3 {
-        color: rgba(255,255,255,0.5);
+        color: rgba(255, 255, 255, 0.5);
         font-weight: 500;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
+        font-size: 1.1rem;
     }
     
     .drop-zone p {
-        color: rgba(255,255,255,0.2);
+        color: rgba(255, 255, 255, 0.2);
         font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+    
+    .drop-zone .btn-select {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 28px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: var(--font);
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+    }
+    
+    .drop-zone .btn-select:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(59, 130, 246, 0.25);
+    }
+    
+    /* --- Formulario de subida --- */
+    .upload-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    
+    .upload-form .form-group-full {
+        grid-column: 1 / -1;
+    }
+    
+    .upload-form .form-group label {
+        display: block;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 4px;
+    }
+    
+    .upload-form .form-group .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        color: #ffffff;
+        font-size: 0.95rem;
+        font-family: var(--font);
+        transition: all 0.3s ease;
+    }
+    
+    .upload-form .form-group .form-control:focus {
+        outline: none;
+        border-color: rgba(96, 165, 250, 0.2);
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.04);
+    }
+    
+    .upload-form .form-group .form-control select {
+        background: transparent;
+        color: #ffffff;
+        border: none;
+        width: 100%;
+        padding: 4px 0;
+        font-size: 0.95rem;
+        font-family: var(--font);
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.3)' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 4px center;
+        padding-right: 28px;
+    }
+    
+    .upload-form .form-group .form-control select option {
+        background: #1a1a3e;
+        color: #ffffff;
+        padding: 10px 14px;
+    }
+    
+    .upload-form .form-group .form-control select option:hover,
+    .upload-form .form-group .form-control select option:checked {
+        background: rgba(96, 165, 250, 0.2);
+        color: #60a5fa;
+    }
+    
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #4ade80, #22c55e);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 20px rgba(34, 197, 94, 0.15);
+        margin-top: 8px;
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 35px rgba(34, 197, 94, 0.25);
+    }
+    
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+    
+    /* --- Últimos archivos --- */
+    .empty-files {
+        text-align: center;
+        padding: 32px 0;
+        color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .empty-files .icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 8px;
+    }
+    
+    .empty-files p {
+        font-size: 0.9rem;
+    }
+    
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+        .upload-form {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        .upload-form .form-group-full {
+            grid-column: 1;
+        }
+        .drop-zone {
+            padding: 32px 20px;
+        }
+        .drop-zone .icon {
+            font-size: 3.5rem;
+        }
+        .drop-zone h3 {
+            font-size: 1rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .drop-zone {
+            padding: 24px 16px;
+        }
+        .drop-zone .icon {
+            font-size: 2.8rem;
+        }
+        .drop-zone h3 {
+            font-size: 0.9rem;
+        }
+        .drop-zone .btn-select {
+            padding: 10px 20px;
+            font-size: 0.8rem;
+        }
+        .btn-submit {
+            padding: 12px;
+            font-size: 0.9rem;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- ============================================
+HEADER
+============================================ -->
 <div class="page-header animate-fade-in">
     <h1 class="page-title">📤 Subir Archivos</h1>
     <p class="page-subtitle">Procesa automáticamente tus facturas y boletas desde PDF</p>
 </div>
 
-<!-- Drop Zone -->
+<!-- ============================================
+DROP ZONE
+============================================ -->
 <div class="drop-zone animate-fade-in animate-fade-in-delay-1" id="drop-zone">
     <span class="icon">📂</span>
     <h3>Arrastra tus archivos PDF aquí</h3>
     <p>o haz clic para seleccionar</p>
-    <button class="btn btn-primary" style="margin-top:16px;">
+    <button class="btn-select" onclick="document.getElementById('fileInput').click()">
         <i class="fas fa-cloud-upload-alt"></i> Seleccionar Archivos
     </button>
     <input type="file" id="fileInput" accept=".pdf" multiple style="display:none;">
 </div>
 
-<!-- Formulario -->
+<!-- ============================================
+FORMULARIO
+============================================ -->
 <div class="grid-2 mt-3 animate-fade-in animate-fade-in-delay-2">
+    <!-- Formulario -->
     <div class="glass-card">
         <div class="card-title">📋 Datos del Documento</div>
         
-        <div class="form-group">
-            <label>Tipo de Documento</label>
-            <select class="form-control">
-                <option>Boleta</option>
-                <option>Factura</option>
-                <option>Percepción</option>
-            </select>
+        <div class="upload-form">
+            <!-- Tipo de Documento -->
+            <div class="form-group form-group-full">
+                <label>Tipo de Documento</label>
+                <div class="form-control">
+                    <select>
+                        <option value="boleta">🧾 Boleta</option>
+                        <option value="factura">📄 Factura</option>
+                        <option value="percepcion">📋 Percepción</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Mes -->
+            <div class="form-group">
+                <label>Mes</label>
+                <div class="form-control">
+                    <select>
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5" selected>Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Año -->
+            <div class="form-group">
+                <label>Año</label>
+                <div class="form-control">
+                    <select>
+                        <option value="2026" selected>2026</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+            </div>
         </div>
         
-        <div class="form-group">
-            <label>Mes</label>
-            <select class="form-control">
-                <option>Enero</option>
-                <option>Febrero</option>
-                <option>Marzo</option>
-                <option>Abril</option>
-                <option>Mayo</option>
-                <option>Junio</option>
-                <option>Julio</option>
-                <option>Agosto</option>
-                <option>Septiembre</option>
-                <option>Octubre</option>
-                <option>Noviembre</option>
-                <option>Diciembre</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>Año</label>
-            <select class="form-control">
-                <option>2026</option>
-                <option>2025</option>
-                <option>2024</option>
-            </select>
-        </div>
-        
-        <button class="btn btn-success" style="width:100%;justify-content:center;margin-top:8px;">
+        <button class="btn-submit" onclick="subirArchivos()">
             <i class="fas fa-upload"></i> Subir y Procesar
         </button>
     </div>
     
+    <!-- Últimos archivos -->
     <div class="glass-card">
         <div class="card-title">📁 Últimos archivos procesados</div>
-        <p class="text-muted text-sm">No hay archivos procesados recientemente</p>
+        <div class="empty-files">
+            <span class="icon">📭</span>
+            <p>No hay archivos procesados recientemente</p>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
+    // ============================================
+    // DRAG & DROP - UPLOAD MODULE
+    // ============================================
+    
     document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar UploadModule
-        if (typeof UploadModule !== 'undefined') {
-            UploadModule.init('drop-zone', 'fileInput');
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('fileInput');
+        
+        if (dropZone && fileInput) {
+            // Prevenir comportamientos por defecto
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
             
-            // Configurar callback cuando se seleccionan archivos
-            UploadModule.setOnFilesSelected(function(files) {
-                console.log('Archivos seleccionados:', files);
-                // Aquí puedes agregar lógica para subir los archivos
-                if (typeof NotificationsModule !== 'undefined') {
-                    NotificationsModule.success('Archivos listos para procesar');
-                }
+            // Highlight al arrastrar
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.add('dragover');
+                });
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.remove('dragover');
+                });
+            });
+            
+            // Drop
+            dropZone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+            
+            // Click
+            dropZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+                fileInput.value = ''; // Reset
             });
         }
     });
+    
+    // ============================================
+    // MANEJAR ARCHIVOS
+    // ============================================
+    
+    function handleFiles(files) {
+        const validFiles = [];
+        const errors = [];
+        
+        Array.from(files).forEach(file => {
+            // Validar tipo
+            if (file.type !== 'application/pdf') {
+                errors.push(`❌ ${file.name} no es un PDF válido`);
+                return;
+            }
+            
+            // Validar tamaño (50MB)
+            if (file.size > 52428800) {
+                errors.push(`❌ ${file.name} excede el tamaño máximo (50MB)`);
+                return;
+            }
+            
+            validFiles.push(file);
+        });
+        
+        // Mostrar errores
+        if (errors.length > 0) {
+            if (typeof NotificationsModule !== 'undefined') {
+                errors.forEach(error => NotificationsModule.error(error));
+            } else {
+                alert(errors.join('\n'));
+            }
+        }
+        
+        // Archivos válidos
+        if (validFiles.length > 0) {
+            const message = `✅ ${validFiles.length} archivo(s) seleccionado(s) correctamente`;
+            if (typeof NotificationsModule !== 'undefined') {
+                NotificationsModule.success(message);
+            } else {
+                alert(message);
+            }
+            console.log('Archivos válidos:', validFiles);
+        }
+    }
+    
+    // ============================================
+    // SUBIR ARCHIVOS
+    // ============================================
+    
+    function subirArchivos() {
+        // Aquí iría la lógica de subida
+        if (typeof NotificationsModule !== 'undefined') {
+            NotificationsModule.info('📤 Procesando archivos...', { duration: 3000 });
+        } else {
+            alert('📤 Procesando archivos...');
+        }
+        
+        // Simular procesamiento
+        setTimeout(() => {
+            if (typeof NotificationsModule !== 'undefined') {
+                NotificationsModule.success('✅ Archivos procesados correctamente');
+            }
+        }, 2000);
+    }
+    
+    // ============================================
+    // KEYBOARD SHORTCUTS
+    // ============================================
+    
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter para subir
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            subirArchivos();
+        }
+    });
+    
+    // Exponer función globalmente
+    window.subirArchivos = subirArchivos;
 </script>
 {% endblock %}

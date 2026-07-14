@@ -2,33 +2,190 @@
 
 {% block title %}Ver Datos - Sistema RUS{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* ============================================
+       VER DATOS - ESTILOS ESPECÍFICOS
+       ============================================ */
+    
+    .records-counter {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 0 4px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .records-counter .count {
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 0.85rem;
+    }
+    
+    .records-counter .count strong {
+        color: #ffffff;
+        font-weight: 600;
+    }
+    
+    .badge-glass {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.6rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+    
+    .badge-glass.factura {
+        background: rgba(96, 165, 250, 0.12);
+        color: #60a5fa;
+        border: 1px solid rgba(96, 165, 250, 0.08);
+    }
+    
+    .badge-glass.boleta {
+        background: rgba(74, 222, 128, 0.12);
+        color: #4ade80;
+        border: 1px solid rgba(74, 222, 128, 0.08);
+    }
+    
+    .badge-glass.percepcion {
+        background: rgba(251, 191, 36, 0.12);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.08);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 48px 0;
+        color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .empty-state .icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 12px;
+    }
+    
+    .empty-state p {
+        font-size: 0.95rem;
+    }
+    
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+    }
+    
+    .pagination-wrapper .btn-page {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 8px 16px;
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: var(--font);
+        text-decoration: none;
+        min-width: 40px;
+        text-align: center;
+    }
+    
+    .pagination-wrapper .btn-page:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.8);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .pagination-wrapper .btn-page.active {
+        background: rgba(96, 165, 250, 0.12);
+        color: #60a5fa;
+        border-color: rgba(96, 165, 250, 0.15);
+    }
+    
+    .pagination-wrapper .btn-page.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    
+    .pagination-wrapper .ellipsis {
+        color: rgba(255, 255, 255, 0.15);
+        padding: 8px 4px;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* --- Filtros activos --- */
+    .filters-active {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+    
+    .filter-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        background: rgba(96, 165, 250, 0.06);
+        border: 1px solid rgba(96, 165, 250, 0.08);
+        border-radius: 20px;
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .filter-tag .remove {
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.2);
+        transition: color 0.3s ease;
+    }
+    
+    .filter-tag .remove:hover {
+        color: #f87171;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<!-- ============================================
+HEADER
+============================================ -->
 <div class="page-header animate-fade-in">
     <h1 class="page-title">📋 Ver Datos</h1>
     <p class="page-subtitle">Visualización y filtrado de transacciones</p>
 </div>
 
-<!-- Filtros -->
+<!-- ============================================
+FILTROS
+============================================ -->
 <div class="filters-bar animate-fade-in animate-fade-in-delay-1" id="filters-form">
     <label for="filtro_tipo">Tipo:</label>
-    <select id="filtro_tipo" name="tipo">
-        <option value="todos" {% if tipo_actual == 'todos' %}selected{% endif %}>Todos</option>
-        <option value="facturas" {% if tipo_actual == 'facturas' %}selected{% endif %}>Facturas</option>
-        <option value="boletas" {% if tipo_actual == 'boletas' %}selected{% endif %}>Boletas</option>
-        <option value="percepciones" {% if tipo_actual == 'percepciones' %}selected{% endif %}>Percepciones</option>
+    <select id="filtro_tipo" name="tipo" onchange="aplicarFiltros()">
+        <option value="todos" {% if tipo_actual == 'todos' %}selected{% endif %}>📋 Todos</option>
+        <option value="facturas" {% if tipo_actual == 'facturas' %}selected{% endif %}>📄 Facturas</option>
+        <option value="boletas" {% if tipo_actual == 'boletas' %}selected{% endif %}>🧾 Boletas</option>
+        <option value="percepciones" {% if tipo_actual == 'percepciones' %}selected{% endif %}>📋 Percepciones</option>
     </select>
     
     <label for="filtro_anio">Año:</label>
-    <select id="filtro_anio" name="anio">
-        <option value="">Todos</option>
+    <select id="filtro_anio" name="anio" onchange="aplicarFiltros()">
+        <option value="">📅 Todos</option>
         {% for a in años_disponibles %}
         <option value="{{ a }}" {% if a == anio_actual %}selected{% endif %}>{{ a }}</option>
         {% endfor %}
     </select>
     
     <label for="filtro_mes">Mes:</label>
-    <select id="filtro_mes" name="mes">
-        <option value="">Todos</option>
+    <select id="filtro_mes" name="mes" onchange="aplicarFiltros()">
+        <option value="">📆 Todos</option>
         {% for m in range(1, 13) %}
         <option value="{{ m }}" {% if m == mes_actual %}selected{% endif %}>
             {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][m-1] }}
@@ -36,16 +193,53 @@
         {% endfor %}
     </select>
     
-    <button class="btn-filter" onclick="aplicarFiltros()">🔍 Aplicar Filtros</button>
-    <button class="btn-filter" onclick="limpiarFiltros()">✕ Limpiar</button>
+    <button class="btn-filter" onclick="aplicarFiltros()">
+        <i class="fas fa-search"></i> Aplicar Filtros
+    </button>
+    <button class="btn-filter" onclick="limpiarFiltros()">
+        <i class="fas fa-undo"></i> Limpiar
+    </button>
 </div>
 
-<!-- Tabla -->
+<!-- ============================================
+FILTROS ACTIVOS (indicadores)
+============================================ -->
+{% if mes_actual or anio_actual or (tipo_actual and tipo_actual != 'todos') %}
+<div class="filters-active animate-fade-in animate-fade-in-delay-1" style="margin-bottom:16px;">
+    {% if tipo_actual and tipo_actual != 'todos' %}
+    <span class="filter-tag">
+        📋 {{ tipo_actual|capitalize }}
+        <span class="remove" onclick="document.getElementById('filtro_tipo').value='todos';aplicarFiltros()">✕</span>
+    </span>
+    {% endif %}
+    {% if anio_actual %}
+    <span class="filter-tag">
+        📅 {{ anio_actual }}
+        <span class="remove" onclick="document.getElementById('filtro_anio').value='';aplicarFiltros()">✕</span>
+    </span>
+    {% endif %}
+    {% if mes_actual %}
+    <span class="filter-tag">
+        📆 {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][mes_actual-1] }}
+        <span class="remove" onclick="document.getElementById('filtro_mes').value='';aplicarFiltros()">✕</span>
+    </span>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- ============================================
+TABLA DE DATOS
+============================================ -->
 <div class="glass-card animate-fade-in animate-fade-in-delay-2">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
-        <span class="text-muted text-sm">
-            Mostrando <strong class="text-white">{{ items|length }}</strong> de <strong class="text-white">{{ total_items }}</strong> registros
+    <div class="records-counter">
+        <span class="count">
+            Mostrando <strong>{{ items|length }}</strong> de <strong>{{ total_items }}</strong> registros
         </span>
+        {% if total_items > 0 %}
+        <span class="count" style="font-size:0.75rem;color:rgba(255,255,255,0.2);">
+            Página {{ page }} de {{ total_pages }}
+        </span>
+        {% endif %}
     </div>
     
     <div class="table-wrapper">
@@ -72,16 +266,20 @@
                         <span class="badge-glass percepcion">📋 Percepción</span>
                         {% endif %}
                     </td>
-                    <td><strong>{{ item.numero }}</strong></td>
-                    <td>{{ item.fecha.strftime('%d/%m/%Y') if item.fecha else '-' }}</td>
-                    <td>S/ {{ "{:,.2f}".format(item.monto) }}</td>
-                    <td>{{ item.proveedor_cliente or '-' }}</td>
-                    <td>{{ item.descripcion or '-' }}</td>
+                    <td><strong style="color:rgba(255,255,255,0.9);">{{ item.numero }}</strong></td>
+                    <td style="color:rgba(255,255,255,0.6);">{{ item.fecha.strftime('%d/%m/%Y') if item.fecha else '-' }}</td>
+                    <td style="color:#60a5fa;font-weight:600;">S/ {{ "{:,.2f}".format(item.monto) }}</td>
+                    <td style="color:rgba(255,255,255,0.6);">{{ item.proveedor_cliente or '-' }}</td>
+                    <td style="color:rgba(255,255,255,0.4);font-size:0.85rem;">{{ item.descripcion or '-' }}</td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="6" style="text-align:center;color:rgba(255,255,255,0.2);padding:48px 0;">
-                        No hay registros para mostrar
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <span class="icon">📭</span>
+                            <p>No hay registros para mostrar</p>
+                            <p style="font-size:0.8rem;margin-top:4px;">Prueba ajustando los filtros o subiendo documentos</p>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -90,83 +288,141 @@
     </div>
 </div>
 
-<!-- Paginación -->
+<!-- ============================================
+PAGINACIÓN
+============================================ -->
 {% if total_pages > 1 %}
-<div style="display:flex;justify-content:center;gap:8px;margin-top:24px;flex-wrap:wrap;">
+<div class="pagination-wrapper">
     {% if page > 1 %}
-    <a href="#" onclick="cambiarPagina({{ page - 1 }})" class="btn-filter">◀ Anterior</a>
+    <a href="#" onclick="cambiarPagina({{ page - 1 }})" class="btn-page">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    {% else %}
+    <span class="btn-page disabled">
+        <i class="fas fa-chevron-left"></i>
+    </span>
     {% endif %}
     
     {% set start_page = [page - 2, 1]|max %}
     {% set end_page = [page + 2, total_pages]|min %}
     
     {% if start_page > 1 %}
-    <a href="#" onclick="cambiarPagina(1)" class="btn-filter">1</a>
+    <a href="#" onclick="cambiarPagina(1)" class="btn-page">1</a>
     {% if start_page > 2 %}
-    <span style="color:rgba(255,255,255,0.15);padding:8px;">…</span>
+    <span class="ellipsis">…</span>
     {% endif %}
     {% endif %}
     
     {% for p in range(start_page, end_page + 1) %}
-    <a href="#" onclick="cambiarPagina({{ p }})" class="btn-filter {% if p == page %}active{% endif %}">{{ p }}</a>
+    <a href="#" onclick="cambiarPagina({{ p }})" class="btn-page {% if p == page %}active{% endif %}">{{ p }}</a>
     {% endfor %}
     
     {% if end_page < total_pages %}
     {% if end_page < total_pages - 1 %}
-    <span style="color:rgba(255,255,255,0.15);padding:8px;">…</span>
+    <span class="ellipsis">…</span>
     {% endif %}
-    <a href="#" onclick="cambiarPagina({{ total_pages }})" class="btn-filter">{{ total_pages }}</a>
+    <a href="#" onclick="cambiarPagina({{ total_pages }})" class="btn-page">{{ total_pages }}</a>
     {% endif %}
     
     {% if page < total_pages %}
-    <a href="#" onclick="cambiarPagina({{ page + 1 }})" class="btn-filter">Siguiente ▶</a>
+    <a href="#" onclick="cambiarPagina({{ page + 1 }})" class="btn-page">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+    {% else %}
+    <span class="btn-page disabled">
+        <i class="fas fa-chevron-right"></i>
+    </span>
     {% endif %}
+</div>
+{% endif %}
+
+<!-- ============================================
+RESUMEN RÁPIDO
+============================================ -->
+{% if total_items > 0 %}
+<div style="display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap;padding:12px 0;border-top:1px solid rgba(255,255,255,0.03);">
+    <span style="color:rgba(255,255,255,0.2);font-size:0.75rem;">
+        📄 Facturas: <strong style="color:rgba(255,255,255,0.5);">{{ items|selectattr('tipo', 'equalto', 'Factura')|list|length }}</strong>
+    </span>
+    <span style="color:rgba(255,255,255,0.2);font-size:0.75rem;">
+        🧾 Boletas: <strong style="color:rgba(255,255,255,0.5);">{{ items|selectattr('tipo', 'equalto', 'Boleta')|list|length }}</strong>
+    </span>
+    <span style="color:rgba(255,255,255,0.2);font-size:0.75rem;">
+        📋 Percepciones: <strong style="color:rgba(255,255,255,0.5);">{{ items|selectattr('tipo', 'equalto', 'Percepción')|list|length }}</strong>
+    </span>
 </div>
 {% endif %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Función para aplicar filtros usando FiltersModule
+    // ============================================
+    // FUNCIONES DE FILTROS
+    // ============================================
+    
     function aplicarFiltros() {
         const tipo = document.getElementById('filtro_tipo').value;
         const anio = document.getElementById('filtro_anio').value;
         const mes = document.getElementById('filtro_mes').value;
         
-        const params = {};
-        if (tipo && tipo !== 'todos') params.tipo = tipo;
-        if (anio) params.anio = anio;
-        if (mes) params.mes = mes;
+        let url = '/ver_datos?';
+        if (tipo && tipo !== 'todos') url += 'tipo=' + encodeURIComponent(tipo) + '&';
+        if (anio) url += 'anio=' + encodeURIComponent(anio) + '&';
+        if (mes) url += 'mes=' + encodeURIComponent(mes) + '&';
         
-        if (typeof FiltersModule !== 'undefined') {
-            FiltersModule.applyFilters('/ver_datos', params);
-        } else {
-            // Fallback
-            let url = '/ver_datos?';
-            if (tipo && tipo !== 'todos') url += 'tipo=' + tipo + '&';
-            if (anio) url += 'anio=' + anio + '&';
-            if (mes) url += 'mes=' + mes + '&';
-            window.location.href = url;
+        // Eliminar el último '&' o '?' si existe
+        if (url.endsWith('&') || url.endsWith('?')) {
+            url = url.slice(0, -1);
         }
+        
+        console.log('🔍 Aplicando filtros:', url);
+        window.location.href = url;
     }
-
+    
     function limpiarFiltros() {
         document.getElementById('filtro_tipo').value = 'todos';
         document.getElementById('filtro_anio').value = '';
         document.getElementById('filtro_mes').value = '';
         aplicarFiltros();
     }
-
+    
     function cambiarPagina(page) {
-        if (typeof PaginationModule !== 'undefined') {
-            PaginationModule.goToPage(page);
-        } else {
-            const url = new URL(window.location.href);
-            url.searchParams.set('page', page);
-            window.location.href = url.toString();
-        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', page);
+        console.log('📄 Cambiando a página:', page);
+        window.location.href = url.toString();
     }
-
+    
+    // ============================================
+    // KEYBOARD SHORTCUTS
+    // ============================================
+    
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter para aplicar filtros
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            aplicarFiltros();
+        }
+        // Escape para limpiar filtros
+        if (e.key === 'Escape') {
+            const activeElement = document.activeElement;
+            if (activeElement && activeElement.tagName === 'SELECT') {
+                limpiarFiltros();
+            }
+        }
+    });
+    
+    // ============================================
+    // DEBUG - Mostrar estado actual
+    // ============================================
+    
+    console.log('📊 Ver Datos - Estado:');
+    console.log('  - Tipo actual:', '{{ tipo_actual }}');
+    console.log('  - Mes actual:', {{ mes_actual|default('null') }});
+    console.log('  - Año actual:', {{ anio_actual|default('null') }});
+    console.log('  - Total registros:', {{ total_items }});
+    console.log('  - Años disponibles:', {{ años_disponibles|tojson|safe }});
+    
     // Exponer funciones globalmente
     window.aplicarFiltros = aplicarFiltros;
     window.limpiarFiltros = limpiarFiltros;

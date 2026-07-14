@@ -5,15 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema RUS{% endblock %}</title>
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- ============================================
+    PRELOAD - Recursos críticos primero
+    ============================================ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
     
-    <!-- Font Awesome -->
+    <!-- ============================================
+    CSS CRÍTICO - Estilos mínimos para evitar FOUC
+    ============================================ -->
+    <style>
+        /* --- Estilos base para evitar FOUC --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(ellipse at 0% 0%, #0a0a1e, #12122a, #1a1a3e);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: rgba(255, 255, 255, 0.92);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        body.loaded {
+            opacity: 1;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 32px 44px 44px;
+            min-height: 100vh;
+            transition: margin-left 0.4s ease, padding 0.4s ease;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px 32px;
+            }
+        }
+    </style>
+    
+    <!-- ============================================
+    FONTS Y CSS PRINCIPAL
+    ============================================ -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <!-- CSS Principal -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
     
+    <!-- ============================================
+    SIDEBAR STYLES
+    ============================================ -->
     <style>
         /* ============================================
            SIDEBAR - ESTILOS DIRECTOS
@@ -42,7 +99,6 @@
         .sidebar::-webkit-scrollbar-track { background: transparent; }
         .sidebar::-webkit-scrollbar-thumb { background: rgba(96,165,250,0.15); border-radius: 10px; }
         
-        /* --- Brand --- */
         .sidebar-brand {
             text-align: center;
             padding: 8px 0 20px;
@@ -85,32 +141,21 @@
             margin-top: 4px;
         }
         
-        /* --- Navegación --- */
-        .sidebar-nav { 
-            list-style: none; 
-            padding: 0; 
-            margin: 0; 
-            flex: 1; 
-        }
+        .sidebar-nav { list-style: none; padding: 0; margin: 0; flex: 1; }
         
-        /* ============================================
-           SECCIONES DEL MENÚ - AHORA VISIBLES
-           ============================================ */
         .sidebar-nav .nav-section {
             font-size: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 3px;
-            color: rgba(255, 255, 255, 0.25);  /* ← MÁS VISIBLE */
+            color: rgba(255,255,255,0.2);
             padding: 18px 16px 8px;
             font-weight: 700;
             display: block;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
             margin-bottom: 4px;
         }
         
-        .sidebar-nav li { 
-            margin-bottom: 2px; 
-        }
+        .sidebar-nav li { margin-bottom: 2px; }
         
         .sidebar-nav a {
             display: flex;
@@ -136,10 +181,7 @@
             transition: all 0.3s ease;
         }
         
-        .sidebar-nav a .nav-text { 
-            flex: 1; 
-            transition: all 0.3s ease; 
-        }
+        .sidebar-nav a .nav-text { flex: 1; transition: all 0.3s ease; }
         
         .sidebar-nav a:hover {
             background: rgba(255,255,255,0.04);
@@ -176,7 +218,6 @@
             box-shadow: 0 0 30px rgba(96,165,250,0.2);
         }
         
-        /* --- Footer --- */
         .sidebar-footer {
             text-align: center;
             padding-top: 18px;
@@ -192,7 +233,6 @@
             font-weight: 600;
         }
         
-        /* --- Toggle móvil --- */
         .sidebar-toggle {
             display: none;
             position: fixed;
@@ -209,10 +249,7 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(16px);
         }
-        .sidebar-toggle:hover { 
-            background: rgba(255,255,255,0.08); 
-            transform: scale(1.05); 
-        }
+        .sidebar-toggle:hover { background: rgba(255,255,255,0.08); transform: scale(1.05); }
         
         .sidebar-overlay {
             display: none;
@@ -223,18 +260,9 @@
             backdrop-filter: blur(4px);
         }
         
-        /* --- Responsive --- */
         @media (max-width: 768px) {
-            .sidebar-toggle { 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-            }
-            .sidebar { 
-                transform: translateX(-100%); 
-                width: 300px; 
-                padding: 24px 18px; 
-            }
+            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+            .sidebar { transform: translateX(-100%); width: 300px; padding: 24px 18px; }
             .sidebar.open { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
             .main-content { margin-left: 0; padding: 20px 16px 32px; }
@@ -252,15 +280,21 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Toggle Móvil -->
+    <!-- ============================================
+    TOGGLE MÓVIL
+    ============================================ -->
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menú">
         <i class="fas fa-bars"></i>
     </button>
     
-    <!-- Overlay -->
+    <!-- ============================================
+    OVERLAY
+    ============================================ -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar -->
+    <!-- ============================================
+    SIDEBAR
+    ============================================ -->
     <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menú principal">
         <a href="{{ url_for('main.index') }}" class="sidebar-brand" title="Ir al inicio">
             <span class="logo-icon">🏢</span>
@@ -325,44 +359,133 @@
         </ul>
         
         <div class="sidebar-footer">
-            <span class="version">v3.2 · Flask</span>
+            <span class="version">v3.5 · Flask</span>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main-content">
+    <!-- ============================================
+    MAIN CONTENT
+    ============================================ -->
+    <main class="main-content" id="mainContent">
         {% block content %}{% endblock %}
     </main>
 
     <!-- ============================================
-    SCRIPTS - CARGA MODULAR
+    SCRIPTS (con loading diferido)
     ============================================ -->
     
-    <!-- 1. Configuración Global -->
-    <script src="{{ url_for('static', filename='js/config/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/config/settings.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/utils/dom.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/utils/format.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/utils/api.js') }}" defer></script>
     
-    <!-- 2. Utilidades -->
-    <script src="{{ url_for('static', filename='js/utils/dom.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/utils/format.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/utils/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modules/notifications.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/modules/sidebar.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/modules/filters.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/modules/pagination.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/modules/upload.js') }}" defer></script>
     
-    <!-- 3. Módulos principales -->
-    <script src="{{ url_for('static', filename='js/modules/notifications.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modules/sidebar.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modules/filters.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modules/pagination.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modules/upload.js') }}"></script>
-    
-    <!-- 4. Módulos opcionales (solo si Plotly está presente) -->
     {% if request.endpoint == 'main.reportes' %}
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/modules/charts.js') }}"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
+    <script src="{{ url_for('static', filename='js/modules/charts.js') }}" defer></script>
     {% endif %}
     
-    <!-- 5. Punto de entrada (app.js) -->
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
     
-    <!-- 6. Scripts específicos de la página -->
     {% block extra_js %}{% endblock %}
+    
+    <!-- ============================================
+    SCRIPT DE OPTIMIZACIÓN DE CARGA
+    ============================================ -->
+    <script>
+        (function() {
+            'use strict';
+            
+            function showContent() {
+                const mainContent = document.getElementById('mainContent');
+                const body = document.body;
+                
+                if (mainContent) {
+                    mainContent.classList.add('visible');
+                }
+                
+                if (body) {
+                    body.classList.add('loaded');
+                }
+            }
+            
+            // ============================================
+            // MOSTRAR CONTENIDO INMEDIATAMENTE
+            // ============================================
+            
+            // Si el DOM ya está cargado, mostrar inmediatamente
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                setTimeout(showContent, 30);
+            } else {
+                // Esperar a que el DOM esté listo
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(showContent, 30);
+                });
+            }
+            
+            // Fallback: mostrar después de 300ms máximo
+            setTimeout(showContent, 300);
+            
+            // ============================================
+            // CONFIGURAR SIDEBAR TOGGLE
+            // ============================================
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                const sidebar = document.getElementById('sidebar');
+                const toggle = document.getElementById('sidebarToggle');
+                const overlay = document.getElementById('sidebarOverlay');
+                
+                if (!sidebar || !toggle) return;
+                
+                function isMobile() {
+                    return window.innerWidth <= 768;
+                }
+                
+                function toggleSidebar() {
+                    if (!isMobile()) return;
+                    sidebar.classList.toggle('open');
+                    if (overlay) overlay.classList.toggle('active');
+                    
+                    const icon = toggle.querySelector('i');
+                    if (sidebar.classList.contains('open')) {
+                        icon.className = 'fas fa-times';
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        icon.className = 'fas fa-bars';
+                        document.body.style.overflow = '';
+                    }
+                }
+                
+                toggle.addEventListener('click', toggleSidebar);
+                
+                if (overlay) {
+                    overlay.addEventListener('click', toggleSidebar);
+                }
+                
+                document.querySelectorAll('.sidebar a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (isMobile() && sidebar.classList.contains('open')) {
+                            toggleSidebar();
+                        }
+                    });
+                });
+                
+                window.addEventListener('resize', function() {
+                    if (!isMobile() && sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        if (overlay) overlay.classList.remove('active');
+                        toggle.querySelector('i').className = 'fas fa-bars';
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+        })();
+    </script>
 </body>
 </html>
