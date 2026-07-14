@@ -14,7 +14,6 @@
     <!-- CSS Principal -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
     
-    <!-- Estilos del Sidebar (directo en head para evitar problemas de carga) -->
     <style>
         /* ============================================
            SIDEBAR - ESTILOS DIRECTOS
@@ -43,6 +42,7 @@
         .sidebar::-webkit-scrollbar-track { background: transparent; }
         .sidebar::-webkit-scrollbar-thumb { background: rgba(96,165,250,0.15); border-radius: 10px; }
         
+        /* --- Brand --- */
         .sidebar-brand {
             text-align: center;
             padding: 8px 0 20px;
@@ -85,17 +85,32 @@
             margin-top: 4px;
         }
         
-        .sidebar-nav { list-style: none; padding: 0; margin: 0; flex: 1; }
+        /* --- Navegación --- */
+        .sidebar-nav { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            flex: 1; 
+        }
+        
+        /* ============================================
+           SECCIONES DEL MENÚ - AHORA VISIBLES
+           ============================================ */
         .sidebar-nav .nav-section {
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 3px;
-            color: rgba(255,255,255,0.06);
-            padding: 16px 16px 8px;
+            color: rgba(255, 255, 255, 0.25);  /* ← MÁS VISIBLE */
+            padding: 18px 16px 8px;
             font-weight: 700;
             display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            margin-bottom: 4px;
         }
-        .sidebar-nav li { margin-bottom: 2px; }
+        
+        .sidebar-nav li { 
+            margin-bottom: 2px; 
+        }
         
         .sidebar-nav a {
             display: flex;
@@ -121,7 +136,10 @@
             transition: all 0.3s ease;
         }
         
-        .sidebar-nav a .nav-text { flex: 1; transition: all 0.3s ease; }
+        .sidebar-nav a .nav-text { 
+            flex: 1; 
+            transition: all 0.3s ease; 
+        }
         
         .sidebar-nav a:hover {
             background: rgba(255,255,255,0.04);
@@ -158,6 +176,7 @@
             box-shadow: 0 0 30px rgba(96,165,250,0.2);
         }
         
+        /* --- Footer --- */
         .sidebar-footer {
             text-align: center;
             padding-top: 18px;
@@ -173,6 +192,7 @@
             font-weight: 600;
         }
         
+        /* --- Toggle móvil --- */
         .sidebar-toggle {
             display: none;
             position: fixed;
@@ -189,7 +209,10 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(16px);
         }
-        .sidebar-toggle:hover { background: rgba(255,255,255,0.08); transform: scale(1.05); }
+        .sidebar-toggle:hover { 
+            background: rgba(255,255,255,0.08); 
+            transform: scale(1.05); 
+        }
         
         .sidebar-overlay {
             display: none;
@@ -200,9 +223,18 @@
             backdrop-filter: blur(4px);
         }
         
+        /* --- Responsive --- */
         @media (max-width: 768px) {
-            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
-            .sidebar { transform: translateX(-100%); width: 300px; padding: 24px 18px; }
+            .sidebar-toggle { 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+            }
+            .sidebar { 
+                transform: translateX(-100%); 
+                width: 300px; 
+                padding: 24px 18px; 
+            }
             .sidebar.open { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
             .main-content { margin-left: 0; padding: 20px 16px 32px; }

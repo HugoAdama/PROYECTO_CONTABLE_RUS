@@ -1,45 +1,52 @@
 /* ============================================
-   SIDEBAR - MENÚ LATERAL
+   SIDEBAR - MENÚ LATERAL PREMIUM
    ============================================ */
 
 .sidebar {
     position: fixed;
     left: 0;
     top: 0;
-    width: var(--sidebar-width);
+    width: 280px;
     height: 100vh;
     background: linear-gradient(175deg, rgba(8, 8, 30, 0.97), rgba(16, 16, 45, 0.98));
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    border-right: 1px solid var(--glass-border);
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
     padding: 28px 20px 24px;
     overflow-y: auto;
-    z-index: var(--z-sidebar);
-    transition: transform var(--transition-slow);
+    z-index: 1000;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-sidebar);
+    box-shadow: 8px 0 60px rgba(0, 0, 0, 0.4);
 }
 
 /* --- Scrollbar --- */
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
 .sidebar::-webkit-scrollbar-thumb {
     background: rgba(96, 165, 250, 0.15);
     border-radius: 10px;
 }
 
-/* --- Brand --- */
+/* ============================================
+   BRAND - LOGO CLICKEABLE
+   ============================================ */
+
 .sidebar-brand {
     text-align: center;
     padding: 8px 0 20px;
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     margin-bottom: 24px;
     flex-shrink: 0;
     cursor: pointer;
     text-decoration: none;
     display: block;
-    transition: transform var(--transition-fast);
+    transition: transform 0.3s ease;
 }
 
 .sidebar-brand:hover {
@@ -50,12 +57,13 @@
     font-size: 3rem;
     display: block;
     margin-bottom: 8px;
+    animation: floatGlow 4s ease-in-out infinite;
 }
 
 .sidebar-brand h2 {
-    font-size: var(--font-size-xl);
+    font-size: 1.4rem;
     font-weight: 900;
-    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -74,7 +82,22 @@
     margin-top: 4px;
 }
 
-/* --- Navegación --- */
+/* --- Línea decorativa --- */
+.sidebar-brand::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 30%;
+    width: 40%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.15), transparent);
+    border-radius: 2px;
+}
+
+/* ============================================
+   NAVEGACIÓN - SECCIONES
+   ============================================ */
+
 .sidebar-nav {
     list-style: none;
     padding: 0;
@@ -83,14 +106,20 @@
 }
 
 .sidebar-nav .nav-section {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.06);
-    padding: 16px 16px 8px;
+    color: rgba(255, 255, 255, 0.25);
+    padding: 18px 16px 8px;
     font-weight: 700;
     display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    margin-bottom: 4px;
 }
+
+/* ============================================
+   NAVEGACIÓN - ITEMS CON ANIMACIÓN
+   ============================================ */
 
 .sidebar-nav li {
     margin-bottom: 2px;
@@ -110,8 +139,14 @@
 .sidebar-nav li:nth-child(10) { animation-delay: 0.50s; }
 
 @keyframes slideInNav {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .sidebar-nav a {
@@ -119,12 +154,12 @@
     align-items: center;
     gap: 16px;
     padding: 12px 18px;
-    border-radius: var(--radius-sm);
+    border-radius: 12px;
     color: rgba(255, 255, 255, 0.35);
     text-decoration: none;
-    font-size: var(--font-size-sm);
+    font-size: 0.95rem;
     font-weight: 500;
-    transition: all var(--transition-fast);
+    transition: all 0.3s ease;
     position: relative;
     border: 1px solid transparent;
 }
@@ -135,41 +170,44 @@
     font-size: 1.15rem;
     flex-shrink: 0;
     color: rgba(255, 255, 255, 0.2);
-    transition: all var(--transition-fast);
+    transition: all 0.3s ease;
 }
 
 .sidebar-nav a .nav-text {
     flex: 1;
-    transition: all var(--transition-fast);
+    transition: all 0.3s ease;
 }
 
+/* --- Hover --- */
 .sidebar-nav a:hover {
-    background: var(--glass-bg);
+    background: rgba(255, 255, 255, 0.04);
     color: rgba(255, 255, 255, 0.8);
     transform: translateX(4px);
-    border-color: var(--glass-border);
+    border-color: rgba(255, 255, 255, 0.03);
 }
 
 .sidebar-nav a:hover i {
-    color: var(--primary);
+    color: #60a5fa;
     transform: scale(1.1);
 }
 
+/* --- Active (página actual) --- */
 .sidebar-nav a.active {
-    background: var(--glass-active);
-    color: var(--primary);
+    background: rgba(96, 165, 250, 0.06);
+    color: #60a5fa;
     border: 1px solid rgba(96, 165, 250, 0.04);
-    box-shadow: var(--shadow-glow);
+    box-shadow: 0 4px 30px rgba(96, 165, 250, 0.03);
 }
 
 .sidebar-nav a.active i {
-    color: var(--primary);
+    color: #60a5fa;
 }
 
 .sidebar-nav a.active .nav-text {
-    color: var(--primary);
+    color: #60a5fa;
 }
 
+/* --- Barra lateral de indicador --- */
 .sidebar-nav a.active::before {
     content: '';
     position: absolute;
@@ -178,16 +216,35 @@
     transform: translateY(-50%);
     width: 4px;
     height: 24px;
-    background: linear-gradient(180deg, var(--primary), var(--secondary));
+    background: linear-gradient(180deg, #60a5fa, #a78bfa);
     border-radius: 0 6px 6px 0;
     box-shadow: 0 0 30px rgba(96, 165, 250, 0.2);
 }
 
-/* --- Footer --- */
+/* --- Efecto de brillo al pasar el mouse --- */
+.sidebar-nav a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(circle at 30% 50%, rgba(96, 165, 250, 0.02), transparent);
+    pointer-events: none;
+}
+
+.sidebar-nav a:hover::after {
+    opacity: 1;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
 .sidebar-footer {
     text-align: center;
     padding-top: 18px;
-    border-top: 1px solid var(--glass-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
     flex-shrink: 0;
     margin-top: auto;
 }
@@ -200,22 +257,26 @@
     font-weight: 600;
 }
 
-/* --- Toggle móvil --- */
+/* ============================================
+   TOGGLE MÓVIL
+   ============================================ */
+
 .sidebar-toggle {
     display: none;
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: calc(var(--z-sidebar) + 1);
+    z-index: 1001;
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--glass-border);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     color: #fff;
     padding: 14px 18px;
-    border-radius: var(--radius-md);
+    border-radius: 14px;
     font-size: 1.3rem;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.3s ease;
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 .sidebar-toggle:hover {
@@ -228,21 +289,25 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: var(--z-overlay);
+    z-index: 999;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
-/* --- Responsive sidebar --- */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 768px) {
     .sidebar-toggle {
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: center;
     }
     
     .sidebar {
         transform: translateX(-100%);
-        width: var(--sidebar-width-mobile);
+        width: 300px;
         padding: 24px 18px;
     }
     
@@ -253,6 +318,10 @@
     .sidebar-overlay.active {
         display: block;
     }
+    
+    .main-content {
+        margin-left: 0;
+    }
 }
 
 @media (max-width: 480px) {
@@ -262,7 +331,7 @@
     }
     
     .sidebar-brand h2 {
-        font-size: var(--font-size-lg);
+        font-size: 1.2rem;
     }
     
     .sidebar-brand .logo-icon {
@@ -271,11 +340,35 @@
     
     .sidebar-nav a {
         padding: 10px 14px;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
     }
     
     .sidebar-nav a i {
         font-size: 1rem;
         width: 20px;
+    }
+}
+
+/* ============================================
+   ANIMACIONES GLOBALES
+   ============================================ */
+
+@keyframes floatGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.05));
+    }
+    50% {
+        filter: drop-shadow(0 0 40px rgba(96, 165, 250, 0.12));
+    }
+}
+
+@keyframes slideInNav {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
