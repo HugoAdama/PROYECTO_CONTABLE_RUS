@@ -10,14 +10,13 @@
     ============================================ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
     
     <!-- ============================================
     CSS CRÍTICO - Estilos mínimos para evitar FOUC
     ============================================ -->
     <style>
-        /* --- Estilos base para evitar FOUC --- */
         * {
             margin: 0;
             padding: 0;
@@ -26,22 +25,133 @@
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(ellipse at 0% 0%, #0a0a1e, #12122a, #1a1a3e);
-            background-attachment: fixed;
+            font-size: 18px;
+            line-height: 1.7;
+            background: #0a0a1e;
             min-height: 100vh;
             color: rgba(255, 255, 255, 0.92);
             opacity: 0;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.3s ease;
+            overflow-x: hidden;
         }
         
         body.loaded {
             opacity: 1;
         }
         
+        /* ============================================
+           🆕 FONDO CON ONDAS DE LUZ - MÁS VISIBLES
+           ============================================ */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(96, 165, 250, 0.20) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(167, 139, 250, 0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(244, 114, 182, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 0%, rgba(96, 165, 250, 0.10) 0%, transparent 50%);
+            animation: waveBackground 15s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        
+        @keyframes waveBackground {
+            0% {
+                background-position: 0% 0%, 100% 0%, 50% 100%, 50% 0%;
+                background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+                opacity: 0.8;
+            }
+            25% {
+                background-position: 30% 20%, 70% 80%, 20% 50%, 80% 30%;
+                background-size: 120% 120%, 110% 110%, 130% 130%, 100% 100%;
+                opacity: 1;
+            }
+            50% {
+                background-position: 60% 80%, 20% 30%, 80% 20%, 30% 70%;
+                background-size: 110% 110%, 130% 130%, 120% 120%, 100% 100%;
+                opacity: 1;
+            }
+            75% {
+                background-position: 80% 20%, 30% 60%, 60% 80%, 20% 40%;
+                background-size: 130% 130%, 120% 120%, 110% 110%, 100% 100%;
+                opacity: 1;
+            }
+            100% {
+                background-position: 10% 90%, 90% 10%, 50% 80%, 50% 20%;
+                background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+                opacity: 0.8;
+            }
+        }
+        
+        /* ============================================
+           🆕 CAPA DE ONDAS DE LUZ ADICIONAL
+           ============================================ */
+        .light-waves {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .light-wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            border-radius: 50%;
+            opacity: 0.10;
+            animation: waveMove 20s ease-in-out infinite;
+        }
+        
+        .light-wave:nth-child(1) {
+            background: radial-gradient(ellipse at 30% 40%, rgba(96, 165, 250, 0.30), transparent 60%);
+            top: -50%;
+            left: -50%;
+            animation-duration: 18s;
+            animation-delay: 0s;
+        }
+        
+        .light-wave:nth-child(2) {
+            background: radial-gradient(ellipse at 70% 60%, rgba(167, 139, 250, 0.25), transparent 60%);
+            bottom: -50%;
+            right: -50%;
+            animation-duration: 22s;
+            animation-delay: -6s;
+        }
+        
+        .light-wave:nth-child(3) {
+            background: radial-gradient(ellipse at 50% 80%, rgba(244, 114, 182, 0.20), transparent 60%);
+            top: -30%;
+            left: -30%;
+            animation-duration: 25s;
+            animation-delay: -12s;
+        }
+        
+        @keyframes waveMove {
+            0%, 100% {
+                transform: translate(0%, 0%) scale(1) rotate(0deg);
+            }
+            25% {
+                transform: translate(10%, -10%) scale(1.1) rotate(5deg);
+            }
+            50% {
+                transform: translate(-10%, 10%) scale(1.2) rotate(-5deg);
+            }
+            75% {
+                transform: translate(5%, -5%) scale(1.05) rotate(3deg);
+            }
+        }
+        
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
         .main-content {
-            margin-left: 280px;
+            margin-left: 290px;
             padding: 32px 44px 44px;
             min-height: 100vh;
+            position: relative;
+            z-index: 1;
             transition: margin-left 0.4s ease, padding 0.4s ease;
             opacity: 0;
             transform: translateY(10px);
@@ -57,53 +167,335 @@
             .main-content {
                 margin-left: 0;
                 padding: 20px 16px 32px;
+                padding-top: 80px;
             }
+        }
+        
+        /* ============================================
+           🆕 TIPOGRAFÍA MEJORADA - SENIOR-FRIENDLY
+           ============================================ */
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 60px rgba(96, 165, 250, 0.1);
+        }
+        
+        h1 .icon-title {
+            margin-right: 12px;
+        }
+        
+        h1 .subtitle {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+            letter-spacing: 0;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+        
+        h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+        
+        p, li, .text-body {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+        }
+        
+        .text-muted {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .text-large {
+            font-size: 1.3rem;
+        }
+        
+        .text-small {
+            font-size: 0.95rem;
+        }
+        
+        /* ============================================
+           🆕 ENCABEZADO DE PÁGINA MEJORADO
+           ============================================ */
+        .page-header {
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .page-header .header-left {
+            flex: 1;
+        }
+        
+        .page-header .header-left h1 {
+            margin-bottom: 4px;
+        }
+        
+        .page-header .header-left p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0;
+        }
+        
+        .page-header .header-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        /* ============================================
+           EFECTO GLASS MEJORADO
+           ============================================ */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 24px 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+            animation: glassShine 12s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.10);
+            box-shadow: 0 16px 60px rgba(0, 0, 0, 0.25);
+        }
+        
+        .glass-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes glassShine {
+            0% {
+                transform: translate(-10%, -10%) rotate(0deg) scale(1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(10%, 10%) rotate(10deg) scale(1.2);
+                opacity: 0.7;
+            }
+        }
+        
+        /* ============================================
+           🆕 BOTONES MEJORADOS - SENIOR-FRIENDLY
+           ============================================ */
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.85), rgba(59, 130, 246, 0.85));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: white;
+            box-shadow: 0 4px 25px rgba(96, 165, 250, 0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 45px rgba(96, 165, 250, 0.35);
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .btn-sm {
+            padding: 10px 18px;
+            font-size: 0.95rem;
+            border-radius: 10px;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        
+        .btn-success {
+            background: rgba(74, 222, 128, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.15);
+        }
+        
+        .btn-danger {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.15);
+        }
+        
+        /* ============================================
+           🆕 TARJETAS DE MÉTRICAS - SENIOR-FRIENDLY
+           ============================================ */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .metric-card {
+            padding: 20px 24px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.10);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-card .metric-icon {
+            font-size: 2.6rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        
+        .metric-card .metric-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .metric-card .metric-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        
+        .metric-card .metric-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
         }
     </style>
     
     <!-- ============================================
     FONTS Y CSS PRINCIPAL
     ============================================ -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
     
     <!-- ============================================
-    SIDEBAR STYLES
+    SIDEBAR - CON SECCIONES CLARAS Y CONTRASTE
     ============================================ -->
     <style>
-        /* ============================================
-           SIDEBAR - ESTILOS DIRECTOS
-           ============================================ */
-        
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
-            width: 280px;
+            width: 290px;
             height: 100vh;
-            background: linear-gradient(175deg, rgba(8,8,30,0.97), rgba(16,16,45,0.98));
+            background: rgba(8, 8, 30, 0.97);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            border-right: 1px solid rgba(255,255,255,0.04);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
             padding: 28px 20px 24px;
             overflow-y: auto;
             z-index: 1000;
-            transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: 8px 0 60px rgba(0,0,0,0.4);
+            box-shadow: 8px 0 60px rgba(0, 0, 0, 0.5);
         }
         
         .sidebar::-webkit-scrollbar { width: 4px; }
         .sidebar::-webkit-scrollbar-track { background: transparent; }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(96,165,250,0.15); border-radius: 10px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(96, 165, 250, 0.2); border-radius: 10px; }
         
         .sidebar-brand {
             text-align: center;
             padding: 8px 0 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 20px;
             flex-shrink: 0;
             cursor: pointer;
             text-decoration: none;
@@ -114,13 +506,13 @@
         .sidebar-brand:hover { transform: scale(1.02); }
         
         .sidebar-brand .logo-icon {
-            font-size: 3rem;
+            font-size: 3.2rem;
             display: block;
             margin-bottom: 8px;
         }
         
         .sidebar-brand h2 {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 900;
             background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
             -webkit-background-clip: text;
@@ -133,39 +525,49 @@
         
         .sidebar-brand .brand-sub {
             display: block;
-            color: rgba(255,255,255,0.08);
-            font-size: 0.55rem;
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 0.7rem;
             font-weight: 600;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 6px;
         }
         
-        .sidebar-nav { list-style: none; padding: 0; margin: 0; flex: 1; }
+        .sidebar-nav { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            flex: 1;
+        }
         
         .sidebar-nav .nav-section {
-            font-size: 0.6rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.2);
-            padding: 18px 16px 8px;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 16px 16px 8px;
             font-weight: 700;
             display: block;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            margin-bottom: 4px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 6px;
+            margin-top: 6px;
         }
         
-        .sidebar-nav li { margin-bottom: 2px; }
+        .sidebar-nav .nav-section:first-of-type {
+            margin-top: 0;
+        }
+        
+        .sidebar-nav li { margin-bottom: 3px; }
         
         .sidebar-nav a {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 12px 18px;
-            border-radius: 12px;
-            color: rgba(255,255,255,0.35);
+            gap: 18px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            color: rgba(255, 255, 255, 0.5);
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             font-weight: 500;
             transition: all 0.3s ease;
             position: relative;
@@ -173,21 +575,25 @@
         }
         
         .sidebar-nav a i {
-            width: 24px;
+            width: 26px;
             text-align: center;
-            font-size: 1.15rem;
+            font-size: 1.3rem;
             flex-shrink: 0;
-            color: rgba(255,255,255,0.2);
+            color: rgba(255, 255, 255, 0.25);
             transition: all 0.3s ease;
         }
         
-        .sidebar-nav a .nav-text { flex: 1; transition: all 0.3s ease; }
+        .sidebar-nav a .nav-text { 
+            flex: 1; 
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
         
         .sidebar-nav a:hover {
-            background: rgba(255,255,255,0.04);
-            color: rgba(255,255,255,0.8);
-            transform: translateX(4px);
-            border-color: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.85);
+            transform: translateX(6px);
+            border-color: rgba(255, 255, 255, 0.05);
         }
         
         .sidebar-nav a:hover i {
@@ -196,14 +602,21 @@
         }
         
         .sidebar-nav a.active {
-            background: rgba(96,165,250,0.06);
+            background: rgba(96, 165, 250, 0.08);
             color: #60a5fa;
-            border: 1px solid rgba(96,165,250,0.04);
-            box-shadow: 0 4px 30px rgba(96,165,250,0.03);
+            border: 1px solid rgba(96, 165, 250, 0.08);
+            box-shadow: 0 4px 30px rgba(96, 165, 250, 0.05);
         }
         
-        .sidebar-nav a.active i { color: #60a5fa; }
-        .sidebar-nav a.active .nav-text { color: #60a5fa; }
+        .sidebar-nav a.active i { 
+            color: #60a5fa;
+            text-shadow: 0 0 30px rgba(96, 165, 250, 0.15);
+        }
+        
+        .sidebar-nav a.active .nav-text { 
+            color: #60a5fa;
+            font-weight: 600;
+        }
         
         .sidebar-nav a.active::before {
             content: '';
@@ -211,24 +624,25 @@
             left: -20px;
             top: 50%;
             transform: translateY(-50%);
-            width: 4px;
-            height: 24px;
+            width: 5px;
+            height: 30px;
             background: linear-gradient(180deg, #60a5fa, #a78bfa);
-            border-radius: 0 6px 6px 0;
-            box-shadow: 0 0 30px rgba(96,165,250,0.2);
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 0 40px rgba(96, 165, 250, 0.2);
         }
         
         .sidebar-footer {
             text-align: center;
-            padding-top: 18px;
-            border-top: 1px solid rgba(255,255,255,0.02);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
             flex-shrink: 0;
             margin-top: auto;
         }
+        
         .sidebar-footer .version {
-            color: rgba(255,255,255,0.04);
-            font-size: 0.55rem;
-            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.08);
+            font-size: 0.6rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
             font-weight: 600;
         }
@@ -239,47 +653,89 @@
             top: 20px;
             left: 20px;
             z-index: 1001;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #fff;
-            padding: 14px 18px;
-            border-radius: 14px;
-            font-size: 1.3rem;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 1.4rem;
             cursor: pointer;
             transition: all 0.3s ease;
             backdrop-filter: blur(16px);
         }
-        .sidebar-toggle:hover { background: rgba(255,255,255,0.08); transform: scale(1.05); }
+        
+        .sidebar-toggle:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            transform: scale(1.05);
+        }
         
         .sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 999;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
         }
         
         @media (max-width: 768px) {
-            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
-            .sidebar { transform: translateX(-100%); width: 300px; padding: 24px 18px; }
+            .sidebar-toggle { 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+            }
+            .sidebar { 
+                transform: translateX(-100%); 
+                width: 310px; 
+                padding: 24px 18px; 
+            }
             .sidebar.open { transform: translateX(0); }
             .sidebar-overlay.active { display: block; }
-            .main-content { margin-left: 0; padding: 20px 16px 32px; }
+            .main-content { 
+                margin-left: 0; 
+                padding: 20px 16px 32px;
+                padding-top: 80px;
+            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.3rem; }
+            p, li { font-size: 1rem; }
+            .sidebar-nav a { font-size: 1rem; padding: 12px 16px; }
+            .metric-card .metric-value { font-size: 1.8rem; }
+            .page-header { padding: 20px 24px; flex-direction: column; align-items: stretch; }
+            .page-header .header-actions { justify-content: stretch; }
+            .page-header .header-actions .btn { flex: 1; justify-content: center; }
         }
         
         @media (max-width: 480px) {
-            .sidebar { width: 280px; padding: 20px 14px; }
-            .sidebar-brand h2 { font-size: 1.2rem; }
-            .sidebar-brand .logo-icon { font-size: 2.5rem; }
-            .sidebar-nav a { padding: 10px 14px; font-size: 0.9rem; }
-            .sidebar-nav a i { font-size: 1rem; width: 20px; }
+            .sidebar { width: 280px; padding: 18px 14px; }
+            .sidebar-brand h2 { font-size: 1.3rem; }
+            .sidebar-brand .logo-icon { font-size: 2.8rem; }
+            .sidebar-nav a { padding: 10px 14px; font-size: 0.95rem; gap: 14px; }
+            .sidebar-nav a i { font-size: 1.1rem; width: 22px; }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.3rem; }
+            h3 { font-size: 1.1rem; }
+            .metric-card { padding: 14px 16px; flex-direction: column; text-align: center; gap: 6px; }
+            .metric-card .metric-icon { font-size: 2rem; }
+            .metric-card .metric-value { font-size: 1.6rem; }
+            .glass-card { padding: 16px 18px; border-radius: 14px; }
+            .btn { padding: 12px 18px; font-size: 1rem; width: 100%; justify-content: center; }
         }
     </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <!-- ============================================
+    🆕 ONDAS DE LUZ (CAPA 1)
+    ============================================ -->
+    <div class="light-waves">
+        <div class="light-wave"></div>
+        <div class="light-wave"></div>
+        <div class="light-wave"></div>
+    </div>
+    
     <!-- ============================================
     TOGGLE MÓVIL
     ============================================ -->
@@ -293,7 +749,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ============================================
-    SIDEBAR
+    SIDEBAR - CON SECCIONES CLARAS
     ============================================ -->
     <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menú principal">
         <a href="{{ url_for('main.index') }}" class="sidebar-brand" title="Ir al inicio">
@@ -303,7 +759,7 @@
         </a>
         
         <ul class="sidebar-nav">
-            <li><span class="nav-section">Principal</span></li>
+            <li><span class="nav-section">✦ Principal</span></li>
             <li>
                 <a href="{{ url_for('main.index') }}" class="{% if request.endpoint == 'main.index' %}active{% endif %}">
                     <i class="fas fa-home"></i>
@@ -323,7 +779,7 @@
                 </a>
             </li>
             
-            <li><span class="nav-section">Análisis</span></li>
+            <li><span class="nav-section">✦ Análisis</span></li>
             <li>
                 <a href="{{ url_for('main.reportes') }}" class="{% if request.endpoint == 'main.reportes' %}active{% endif %}">
                     <i class="fas fa-chart-bar"></i>
@@ -337,7 +793,7 @@
                 </a>
             </li>
             
-            <li><span class="nav-section">Sistema</span></li>
+            <li><span class="nav-section">✦ Sistema</span></li>
             <li>
                 <a href="{{ url_for('main.backup') }}" class="{% if request.endpoint == 'main.backup' %}active{% endif %}">
                     <i class="fas fa-database"></i>
@@ -371,7 +827,7 @@
     </main>
 
     <!-- ============================================
-    SCRIPTS (con loading diferido)
+    SCRIPTS
     ============================================ -->
     
     <script src="{{ url_for('static', filename='js/config/settings.js') }}" defer></script>
@@ -395,44 +851,34 @@
     {% block extra_js %}{% endblock %}
     
     <!-- ============================================
-    SCRIPT DE OPTIMIZACIÓN DE CARGA
+    SCRIPT DE OPTIMIZACIÓN Y PARTÍCULAS
     ============================================ -->
     <script>
         (function() {
             'use strict';
             
+            // ============================================
+            // 1. MOSTRAR CONTENIDO
+            // ============================================
+            
             function showContent() {
                 const mainContent = document.getElementById('mainContent');
                 const body = document.body;
-                
-                if (mainContent) {
-                    mainContent.classList.add('visible');
-                }
-                
-                if (body) {
-                    body.classList.add('loaded');
-                }
+                if (mainContent) mainContent.classList.add('visible');
+                if (body) body.classList.add('loaded');
             }
             
-            // ============================================
-            // MOSTRAR CONTENIDO INMEDIATAMENTE
-            // ============================================
-            
-            // Si el DOM ya está cargado, mostrar inmediatamente
             if (document.readyState === 'complete' || document.readyState === 'interactive') {
                 setTimeout(showContent, 30);
             } else {
-                // Esperar a que el DOM esté listo
                 document.addEventListener('DOMContentLoaded', function() {
                     setTimeout(showContent, 30);
                 });
             }
-            
-            // Fallback: mostrar después de 300ms máximo
             setTimeout(showContent, 300);
             
             // ============================================
-            // CONFIGURAR SIDEBAR TOGGLE
+            // 2. SIDEBAR TOGGLE
             // ============================================
             
             document.addEventListener('DOMContentLoaded', function() {
@@ -450,7 +896,6 @@
                     if (!isMobile()) return;
                     sidebar.classList.toggle('open');
                     if (overlay) overlay.classList.toggle('active');
-                    
                     const icon = toggle.querySelector('i');
                     if (sidebar.classList.contains('open')) {
                         icon.className = 'fas fa-times';
@@ -462,10 +907,7 @@
                 }
                 
                 toggle.addEventListener('click', toggleSidebar);
-                
-                if (overlay) {
-                    overlay.addEventListener('click', toggleSidebar);
-                }
+                if (overlay) overlay.addEventListener('click', toggleSidebar);
                 
                 document.querySelectorAll('.sidebar a').forEach(function(link) {
                     link.addEventListener('click', function() {
@@ -484,6 +926,97 @@
                     }
                 });
             });
+            
+            // ============================================
+            // 3. SISTEMA DE NOTIFICACIONES GLOBAL
+            // ============================================
+            
+            window.mostrarNotificacion = function(mensaje, tipo = 'info') {
+                const colores = {
+                    success: '#4ade80',
+                    error: '#f87171',
+                    warning: '#fbbf24',
+                    info: '#60a5fa'
+                };
+                const iconos = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
+
+                let container = document.getElementById('toast-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'toast-container';
+                    container.style.cssText = `
+                        position: fixed;
+                        top: 24px;
+                        right: 24px;
+                        z-index: 9999;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 12px;
+                        max-width: 420px;
+                        width: 100%;
+                        pointer-events: none;
+                    `;
+                    document.body.appendChild(container);
+                }
+
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    background: rgba(15, 23, 42, 0.95);
+                    backdrop-filter: blur(24px);
+                    border: 1px solid ${colores[tipo] || colores.info};
+                    border-radius: 16px;
+                    padding: 18px 22px;
+                    color: white;
+                    font-size: 1.1rem;
+                    font-weight: 500;
+                    box-shadow: 0 12px 50px rgba(0,0,0,0.4);
+                    animation: slideIn 0.3s ease;
+                    pointer-events: auto;
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+                `;
+                toast.innerHTML = `
+                    <span style="font-size:24px;">${iconos[tipo] || 'ℹ️'}</span>
+                    <span style="flex:1;">${mensaje}</span>
+                    <button onclick="this.parentElement.remove()" style="
+                        background:none;
+                        border:none;
+                        color:rgba(255,255,255,0.4);
+                        font-size:20px;
+                        cursor:pointer;
+                        padding:0 6px;
+                    ">✕</button>
+                `;
+                container.appendChild(toast);
+
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateX(100px)';
+                        toast.style.transition = 'all 0.3s ease';
+                        setTimeout(() => toast.remove(), 300);
+                    }
+                }, 4000);
+            };
+            
+            // ============================================
+            // 4. ANIMACIONES ADICIONALES
+            // ============================================
+            
+            const styleAnim = document.createElement('style');
+            styleAnim.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(styleAnim);
             
         })();
     </script>

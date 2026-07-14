@@ -1,699 +1,543 @@
 {% extends "base.html" %}
 
-{% block title %}Gestión de Carpetas - Sistema RUS{% endblock %}
+{% block title %}Gestión de Carpetas{% endblock %}
 
 {% block extra_css %}
 <style>
     /* ============================================
-       GESTIÓN DE CARPETAS - REDISEÑO COMPLETO
+       ESTILOS ESPECÍFICOS DE CARPETAS
        ============================================ */
     
-    /* --- Tarjetas de estadísticas --- */
-    .carpetas-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 18px;
-        margin-bottom: 28px;
+    .carpetas-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-    
-    .carpetas-stat-card {
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 18px;
-        padding: 24px 28px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        text-align: center;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        cursor: default;
+
+    .carpetas-header {
+        padding: 24px 30px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
     }
-    
-    .carpetas-stat-card:hover {
-        background: rgba(255, 255, 255, 0.06);
-        transform: translateY(-4px);
-        border-color: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+
+    .carpetas-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
     }
-    
-    .carpetas-stat-card .stat-icon {
-        font-size: 2.6rem;
-        display: block;
-        margin-bottom: 8px;
-        transition: transform 0.4s ease;
+
+    .carpetas-header p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 5px 0 0 0;
     }
-    
-    .carpetas-stat-card:hover .stat-icon {
-        transform: scale(1.1) rotate(-3deg);
-    }
-    
-    .carpetas-stat-card .stat-number {
-        font-size: 2.4rem;
-        font-weight: 800;
-        color: #fff;
-        line-height: 1.2;
-        letter-spacing: -0.5px;
-    }
-    
-    .carpetas-stat-card .stat-label {
-        color: rgba(255, 255, 255, 0.35);
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 600;
-        margin-top: 4px;
-    }
-    
-    .carpetas-stat-card .stat-sub {
-        color: rgba(255, 255, 255, 0.15);
-        font-size: 0.8rem;
-        margin-top: 4px;
-    }
-    
-    /* --- Colores de borde --- */
-    .carpetas-stat-card.carpetas::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #60a5fa, #a78bfa);
-        border-radius: 0 0 4px 4px;
-    }
-    .carpetas-stat-card.archivos::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #4ade80, #22c55e);
-        border-radius: 0 0 4px 4px;
-    }
-    .carpetas-stat-card.facturas::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #fbbf24, #f59e0b);
-        border-radius: 0 0 4px 4px;
-    }
-    .carpetas-stat-card.boletas::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #a78bfa, #8b5cf6);
-        border-radius: 0 0 4px 4px;
-    }
-    .carpetas-stat-card.percepciones::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #f472b6, #ec4899);
-        border-radius: 0 0 4px 4px;
-    }
-    
-    /* ============================================
-       MESES ACTIVOS
-       ============================================ */
-    
-    .meses-section {
-        margin-bottom: 24px;
-        padding: 16px 20px;
-        background: rgba(255, 255, 255, 0.02);
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-    
-    .meses-section .meses-label {
-        color: rgba(255, 255, 255, 0.2);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 600;
-        display: block;
-        margin-bottom: 10px;
-    }
-    
-    .meses-tags {
+
+    .header-buttons {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
     }
-    
-    .mes-tag {
-        padding: 6px 18px;
-        background: rgba(96, 165, 250, 0.08);
-        border: 1px solid rgba(96, 165, 250, 0.1);
-        border-radius: 24px;
-        font-size: 0.95rem;
-        color: rgba(255, 255, 255, 0.6);
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-    
-    .mes-tag:hover {
-        background: rgba(96, 165, 250, 0.12);
-        border-color: rgba(96, 165, 250, 0.15);
-        color: #fff;
-        transform: translateY(-2px);
-    }
-    
-    .mes-tag .tag-icon {
-        margin-right: 6px;
-    }
-    
-    /* ============================================
-       ESTRUCTURA DE CARPETAS
-       ============================================ */
-    
-    .tree-container {
-        background: rgba(255, 255, 255, 0.02);
-        border-radius: 16px;
-        padding: 24px 28px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        overflow-x: auto;
-        font-size: 1rem;
-    }
-    
-    .tree-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 5px 0;
-        transition: all 0.2s ease;
-        border-radius: 6px;
-        padding-left: 0;
-    }
-    
-    .tree-item:hover {
-        background: rgba(255, 255, 255, 0.02);
-    }
-    
-    .tree-item .tree-icon {
-        font-size: 1.2rem;
-        width: 28px;
-        text-align: center;
-        flex-shrink: 0;
-    }
-    
-    .tree-item .tree-name {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.95rem;
-        font-weight: 500;
-        word-break: break-all;
-    }
-    
-    .tree-item .tree-name.folder {
-        color: #60a5fa;
-        font-weight: 600;
-    }
-    
-    .tree-item .tree-name.file {
-        color: rgba(255, 255, 255, 0.45);
-        font-size: 0.85rem;
-    }
-    
-    .tree-indent-1 { padding-left: 20px; }
-    .tree-indent-2 { padding-left: 40px; }
-    .tree-indent-3 { padding-left: 60px; }
-    .tree-indent-4 { padding-left: 80px; }
-    
-    /* ============================================
-       BOTONES DE ACCIÓN - CON ANIMACIONES
-       ============================================ */
-    
-    .action-buttons {
-        display: flex;
-        gap: 18px;
-        flex-wrap: wrap;
-        margin-top: 28px;
-    }
-    
-    .action-buttons .btn {
-        flex: 1;
-        min-width: 200px;
-        justify-content: center;
-        padding: 16px 28px;
-        font-size: 1.1rem;
-        border-radius: 14px;
-        font-weight: 600;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        cursor: pointer;
+
+    .btn {
+        padding: 12px 24px;
         border: none;
-        font-family: var(--font);
+        border-radius: 12px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
+        font-family: inherit;
     }
-    
-    .action-buttons .btn:active {
-        transform: scale(0.97);
+
+    .btn-primary {
+        background: linear-gradient(135deg, rgba(96, 165, 250, 0.85), rgba(59, 130, 246, 0.85));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: white;
+        box-shadow: 0 4px 20px rgba(96, 165, 250, 0.25);
     }
-    
-    /* --- Botón Organizar --- */
-    .btn-organize {
-        background: linear-gradient(135deg, #60a5fa, #3b82f6);
-        color: #fff;
-        box-shadow: 0 4px 25px rgba(59, 130, 246, 0.2);
+
+    .btn-primary:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(96, 165, 250, 0.35);
     }
-    
-    .btn-organize:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 40px rgba(59, 130, 246, 0.35);
-        color: #fff;
+
+    .btn-primary:active {
+        transform: scale(0.98);
     }
-    
-    .btn-organize:active {
-        transform: translateY(0) scale(0.97);
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
-    .btn-organize .btn-spinner {
-        display: none;
-        width: 20px;
-        height: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
     }
-    
-    .btn-organize.loading .btn-spinner {
-        display: inline-block;
+
+    /* Métricas */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
     }
-    
-    .btn-organize.loading .btn-text {
-        opacity: 0.7;
-    }
-    
-    .btn-organize .btn-icon {
-        transition: transform 0.4s ease;
-    }
-    
-    .btn-organize:hover .btn-icon {
-        transform: rotate(20deg);
-    }
-    
-    /* --- Botón Estadísticas --- */
-    .btn-stats {
-        background: rgba(255, 255, 255, 0.04);
+
+    .metric-card {
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: all 0.3s ease;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .metric-icon {
+        font-size: 28px;
+        line-height: 1;
+    }
+
+    .metric-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .metric-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.2;
+    }
+
+    .metric-label {
+        font-size: 13px;
         color: rgba(255, 255, 255, 0.6);
     }
-    
-    .btn-stats:hover {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+
+    /* Lista de carpetas */
+    .carpetas-list {
+        padding: 20px 24px;
+        margin-bottom: 30px;
     }
-    
-    .btn-stats .btn-icon {
-        transition: transform 0.4s ease;
+
+    .carpetas-list h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0 0 15px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    
-    .btn-stats:hover .btn-icon {
-        transform: scale(1.15);
+
+    .carpeta-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        transition: background 0.15s;
+        color: #ffffff;
+        font-size: 15px;
+        animation: slideInLeft 0.4s ease both;
     }
-    
-    /* --- Animaciones --- */
-    @keyframes spin {
-        to { transform: rotate(360deg); }
+
+    .carpeta-item:nth-child(1) { animation-delay: 0.02s; }
+    .carpeta-item:nth-child(2) { animation-delay: 0.04s; }
+    .carpeta-item:nth-child(3) { animation-delay: 0.06s; }
+    .carpeta-item:nth-child(4) { animation-delay: 0.08s; }
+    .carpeta-item:nth-child(5) { animation-delay: 0.10s; }
+
+    .carpeta-item:hover {
+        background: rgba(255, 255, 255, 0.04);
     }
-    
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
+
+    .carpeta-item .icono {
+        font-size: 20px;
+        width: 30px;
+        text-align: center;
     }
-    
-    .btn-organize.success {
-        background: linear-gradient(135deg, #4ade80, #22c55e);
-        box-shadow: 0 4px 25px rgba(34, 197, 94, 0.2);
+
+    .carpeta-item .nombre {
+        flex: 1;
+        font-weight: 500;
     }
-    
-    .btn-organize.success .btn-icon {
-        animation: pulse 0.5s ease 2;
+
+    .carpeta-item .badge {
+        background: rgba(96, 165, 250, 0.15);
+        color: #60a5fa;
+        padding: 2px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
     }
-    
-    /* ============================================
-       RESPONSIVE
-       ============================================ */
-    
+
+    .carpeta-item .tipo-tag {
+        font-size: 12px;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+
+    .tipo-facturas { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+    .tipo-boletas { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+    .tipo-percepciones { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 16px;
+    }
+
+    .empty-state .icon-grande {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    /* Resumen por mes */
+    .resumen-table {
+        padding: 20px 24px;
+    }
+
+    .resumen-table h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0 0 15px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .resumen-table table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #ffffff;
+        font-size: 14px;
+    }
+
+    .resumen-table th {
+        text-align: left;
+        padding: 10px 12px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+        font-size: 13px;
+    }
+
+    .resumen-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .resumen-table tr:hover td {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .badge-total {
+        background: rgba(96, 165, 250, 0.15);
+        color: #60a5fa;
+        padding: 2px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
     @media (max-width: 768px) {
-        .carpetas-stats {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        .carpetas-stat-card {
-            padding: 16px 18px;
-        }
-        .carpetas-stat-card .stat-number {
-            font-size: 1.8rem;
-        }
-        .carpetas-stat-card .stat-label {
-            font-size: 0.7rem;
-        }
-        .carpetas-stat-card .stat-icon {
-            font-size: 2rem;
-        }
-        .tree-container {
-            padding: 16px 18px;
-            font-size: 0.85rem;
-        }
-        .tree-item .tree-name {
-            font-size: 0.8rem;
-        }
-        .tree-indent-3 { padding-left: 40px; }
-        .tree-indent-4 { padding-left: 55px; }
-        .action-buttons .btn {
-            min-width: 150px;
-            padding: 14px 20px;
-            font-size: 0.95rem;
-        }
-        .mes-tag {
-            font-size: 0.85rem;
-            padding: 4px 14px;
-        }
+        .carpetas-container { padding: 12px; }
+        .carpetas-header { padding: 16px 20px; flex-direction: column; align-items: stretch; }
+        .carpetas-header h1 { font-size: 22px; }
+        .header-buttons { justify-content: stretch; }
+        .header-buttons .btn { flex: 1; justify-content: center; }
+        .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .metric-card { padding: 14px; }
+        .metric-value { font-size: 20px; }
+        .carpetas-list { padding: 14px 16px; }
+        .carpeta-item { font-size: 14px; flex-wrap: wrap; }
+        .resumen-table { padding: 14px 16px; overflow-x: auto; }
+        .resumen-table table { font-size: 13px; }
+        .resumen-table th, .resumen-table td { padding: 8px 10px; }
     }
-    
+
     @media (max-width: 480px) {
-        .carpetas-stats {
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .carpetas-stat-card {
-            padding: 14px 16px;
-        }
-        .carpetas-stat-card .stat-number {
-            font-size: 1.4rem;
-        }
-        .carpetas-stat-card .stat-label {
-            font-size: 0.6rem;
-        }
-        .carpetas-stat-card .stat-icon {
-            font-size: 1.6rem;
-        }
-        .tree-container {
-            padding: 12px 14px;
-            font-size: 0.7rem;
-        }
-        .tree-item .tree-name {
-            font-size: 0.7rem;
-        }
-        .tree-indent-2 { padding-left: 25px; }
-        .tree-indent-3 { padding-left: 35px; }
-        .tree-indent-4 { padding-left: 45px; }
-        .action-buttons {
-            flex-direction: column;
-        }
-        .action-buttons .btn {
-            min-width: unset;
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 0.9rem;
-        }
-        .meses-section {
-            padding: 12px 16px;
-        }
-        .mes-tag {
-            font-size: 0.75rem;
-            padding: 4px 12px;
-        }
+        .metrics-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+        .metric-card { padding: 12px; flex-direction: column; text-align: center; gap: 4px; }
+        .metric-icon { font-size: 24px; }
+        .metric-value { font-size: 18px; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- ============================================
-HEADER
-============================================ -->
-<div class="page-header animate-fade-in">
-    <h1 class="page-title">📁 Gestión de Carpetas</h1>
-    <p class="page-subtitle">Organiza y administra tus documentos por mes y año</p>
-</div>
+<div class="carpetas-container">
+    <!-- ==================== ENCABEZADO ==================== -->
+    <div class="carpetas-header glass-card">
+        <div>
+            <h1>📁 Gestión de Carpetas</h1>
+            <p>Organiza y administra tus documentos por mes y año</p>
+        </div>
+        <div class="header-buttons">
+            <button class="btn btn-primary" id="btnOrganizar">
+                🔄 Organizar Automático
+            </button>
+            <button class="btn btn-secondary" id="btnEstadisticas">
+                📊 Ver Estadísticas
+            </button>
+        </div>
+    </div>
 
-<!-- ============================================
-ESTADÍSTICAS DE CARPETAS
-============================================ -->
-<div class="carpetas-stats animate-fade-in animate-fade-in-delay-1">
-    <div class="carpetas-stat-card carpetas">
-        <span class="stat-icon">📁</span>
-        <div class="stat-number">{{ total_carpetas }}</div>
-        <div class="stat-label">Carpetas</div>
-        <div class="stat-sub">{{ total_meses_activos }} meses activos</div>
+    <!-- ==================== MÉTRICAS ==================== -->
+    <div class="metrics-grid">
+        <div class="metric-card glass-card">
+            <span class="metric-icon">📂</span>
+            <div class="metric-info">
+                <span class="metric-value">{{ total_carpetas }}</span>
+                <span class="metric-label">Carpetas</span>
+            </div>
+        </div>
+        <div class="metric-card glass-card">
+            <span class="metric-icon">📄</span>
+            <div class="metric-info">
+                <span class="metric-value">{{ total_documentos }}</span>
+                <span class="metric-label">Documentos Totales</span>
+            </div>
+        </div>
+        <div class="metric-card glass-card">
+            <span class="metric-icon">💾</span>
+            <div class="metric-info">
+                <span class="metric-value">{{ total_mb }}</span>
+                <span class="metric-label">Espacio Usado</span>
+            </div>
+        </div>
+        <div class="metric-card glass-card">
+            <span class="metric-icon">📊</span>
+            <div class="metric-info">
+                <span class="metric-value">{{ tipos }}</span>
+                <span class="metric-label">Tipos de Documentos</span>
+            </div>
+        </div>
     </div>
-    <div class="carpetas-stat-card archivos">
-        <span class="stat-icon">📄</span>
-        <div class="stat-number">{{ total_archivos }}</div>
-        <div class="stat-label">Archivos</div>
-        <div class="stat-sub">{{ "%.1f"|format(total_mb) }} MB usados</div>
-    </div>
-    <div class="carpetas-stat-card facturas">
-        <span class="stat-icon">📄</span>
-        <div class="stat-number">{{ total_facturas }}</div>
-        <div class="stat-label">Facturas</div>
-        <div class="stat-sub">documentos</div>
-    </div>
-    <div class="carpetas-stat-card boletas">
-        <span class="stat-icon">🧾</span>
-        <div class="stat-number">{{ total_boletas }}</div>
-        <div class="stat-label">Boletas</div>
-        <div class="stat-sub">documentos</div>
-    </div>
-    <div class="carpetas-stat-card percepciones">
-        <span class="stat-icon">📋</span>
-        <div class="stat-number">{{ total_percepciones }}</div>
-        <div class="stat-label">Percepciones</div>
-        <div class="stat-sub">documentos</div>
-    </div>
-</div>
 
-<!-- ============================================
-MESES CON DOCUMENTOS
-============================================ -->
-{% if meses_activos %}
-<div class="meses-section animate-fade-in animate-fade-in-delay-1">
-    <span class="meses-label">📅 Meses con documentos</span>
-    <div class="meses-tags">
-        {% for mes in meses_activos %}
-        <span class="mes-tag">
-            <span class="tag-icon">📅</span> {{ mes }}
-        </span>
-        {% endfor %}
+    <!-- ==================== LISTA DE CARPETAS ==================== -->
+    <div class="carpetas-list glass-card">
+        <h3>📂 Estructura de Carpetas</h3>
+        {% if arbol and arbol|length > 0 %}
+            {% for item in arbol %}
+            <div class="carpeta-item">
+                <span class="icono">
+                    {% if item.tipo == 'facturas' %}📄
+                    {% elif item.tipo == 'boletas' %}🧾
+                    {% else %}📋{% endif %}
+                </span>
+                <span class="nombre">{{ item.nombre }}</span>
+                <span class="tipo-tag tipo-{{ item.tipo }}">{{ item.tipo }}</span>
+                <span class="badge">{{ item.cantidad }} docs</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <span class="icon-grande">📭</span>
+                <p>No hay carpetas con documentos</p>
+                <p style="font-size:14px; margin-top:5px;">Sube tus primeros PDFs desde la sección "Subir Archivos"</p>
+            </div>
+        {% endif %}
     </div>
-</div>
-{% endif %}
 
-<!-- ============================================
-ESTRUCTURA DE CARPETAS
-============================================ -->
-<div class="glass-card animate-fade-in animate-fade-in-delay-2">
-    <div class="card-title">📂 Estructura de Carpetas</div>
-    
-    <div class="tree-container">
-        <!-- data/ -->
-        <div class="tree-item">
-            <span class="tree-icon">📁</span>
-            <span class="tree-name folder">data/</span>
-        </div>
-        
-        <!-- boletas/ -->
-        <div class="tree-item tree-indent-1">
-            <span class="tree-icon">📁</span>
-            <span class="tree-name folder">boletas/</span>
-        </div>
-        
-        <!-- 2026_05/ -->
-        <div class="tree-item tree-indent-2">
-            <span class="tree-icon">📁</span>
-            <span class="tree-name folder">2026_05/</span>
-        </div>
-        
-        <!-- Archivos de boletas -->
-        <div class="tree-item tree-indent-3">
-            <span class="tree-icon">📄</span>
-            <span class="tree-name file">20260712_175746_PDF-BOLETAEB01-302.pdf</span>
-        </div>
-        <div class="tree-item tree-indent-3">
-            <span class="tree-icon">📄</span>
-            <span class="tree-name file">20260712_175746_PDF-BOLETAEB01-303.pdf</span>
-        </div>
-        <div class="tree-item tree-indent-3">
-            <span class="tree-icon">📄</span>
-            <span class="tree-name file">20260712_175746_PDF-BOLETAEB01-304.pdf</span>
-        </div>
-        
-        <!-- facturas/ -->
-        <div class="tree-item tree-indent-1" style="margin-top:4px;">
-            <span class="tree-icon">📁</span>
-            <span class="tree-name folder">facturas/</span>
-        </div>
-        
-        <!-- 2026_05/ -->
-        <div class="tree-item tree-indent-2">
-            <span class="tree-icon">📁</span>
-            <span class="tree-name folder">2026_05/</span>
-        </div>
-        
-        <!-- Archivos de facturas -->
-        <div class="tree-item tree-indent-3">
-            <span class="tree-icon">📄</span>
-            <span class="tree-name file">20260712_180533_20101796532-01-F033-00.pdf</span>
-        </div>
-        <div class="tree-item tree-indent-3">
-            <span class="tree-icon">📄</span>
-            <span class="tree-name file">20260712_180534_20101796532-01-F033-00.pdf</span>
-        </div>
-        <div class="tree-item tree-indent-3">
-            <span class="tree-icon">📄</span>
-            <span class="tree-name file">20260712-180534_20101796532-01-F033-00.pdf</span>
-        </div>
-        
-        <!-- percepciones/ -->
-        <div class="tree-item tree-indent-1" style="margin-top:4px;">
-            <span class="tree-icon">📁</span>
-            <span class="tree-name folder">percepciones/</span>
-        </div>
-        
-        <!-- 2026_05/ -->
-        <div class="tree-item tree-indent-2">
-            <span class="tree-icon">📁</span>
-            <span class="tree-name folder">2026_05/</span>
-        </div>
-        
-        <!-- Archivos de percepciones -->
-        <div class="tree-item tree-indent-3">
-            <span class="tree-icon">📄</span>
-            <span class="tree-name file">20260712_181603_20101796532-40-P003-00.pdf</span>
+    <!-- ==================== RESUMEN POR MES ==================== -->
+    <div class="resumen-table glass-card">
+        <h3>📈 Resumen por Mes</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Facturas</th>
+                        <th>Boletas</th>
+                        <th>Percepciones</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if total_documentos > 0 %}
+                        {% set meses_dict = {} %}
+                        {% for item in arbol %}
+                            {% set parts = item.nombre.split('_') %}
+                            {% if parts|length == 2 %}
+                                {% set anio = parts[0] %}
+                                {% set mes_num = parts[1] %}
+                                {% set key = anio ~ '_' ~ mes_num %}
+                                {% if key not in meses_dict %}
+                                    {% set _ = meses_dict.update({key: {'anio': anio, 'mes': mes_num, 'facturas': 0, 'boletas': 0, 'percepciones': 0}}) %}
+                                {% endif %}
+                                {% if item.tipo == 'facturas' %}
+                                    {% set _ = meses_dict.update({key: meses_dict[key]|merge({'facturas': item.cantidad})}) %}
+                                {% elif item.tipo == 'boletas' %}
+                                    {% set _ = meses_dict.update({key: meses_dict[key]|merge({'boletas': item.cantidad})}) %}
+                                {% elif item.tipo == 'percepciones' %}
+                                    {% set _ = meses_dict.update({key: meses_dict[key]|merge({'percepciones': item.cantidad})}) %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% set nombre_meses = {
+                            '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
+                            '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto',
+                            '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'
+                        } %}
+                        
+                        {% for key, data in meses_dict|dictsort(reverse=true) %}
+                            {% set total_mes = data.facturas + data.boletas + data.percepciones %}
+                            <tr>
+                                <td><strong>{{ nombre_meses[data.mes] }} {{ data.anio }}</strong></td>
+                                <td>{{ data.facturas }}</td>
+                                <td>{{ data.boletas }}</td>
+                                <td>{{ data.percepciones }}</td>
+                                <td><span class="badge-total">{{ total_mes }}</span></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">
+                                No hay documentos registrados
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
-
-<!-- ============================================
-BOTONES DE ACCIÓN CON ANIMACIONES
-============================================ -->
-<div class="action-buttons animate-fade-in animate-fade-in-delay-3">
-    <button class="btn btn-organize" id="btnOrganizar" onclick="organizarAutomatico(this)">
-        <span class="btn-icon">🔄</span>
-        <span class="btn-text">Organizar Automático</span>
-        <span class="btn-spinner"></span>
-    </button>
-    <button class="btn btn-stats" id="btnEstadisticas" onclick="verEstadisticas(this)">
-        <span class="btn-icon">📊</span>
-        <span class="btn-text">Ver Estadísticas</span>
-    </button>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
     // ============================================
-    // ORGANIZAR AUTOMÁTICO - CON ANIMACIONES Y FEEDBACK
+    // BOTONES CON ANIMACIONES Y NOTIFICACIONES
     // ============================================
     
-    function organizarAutomatico(btn) {
-        // Prevenir múltiples clics
-        if (btn.classList.contains('loading')) return;
+    document.addEventListener('DOMContentLoaded', function() {
         
-        // Estado: Cargando
-        btn.classList.add('loading');
-        btn.querySelector('.btn-text').textContent = 'Organizando...';
-        
-        // Notificación de inicio
-        if (typeof NotificationsModule !== 'undefined') {
-            NotificationsModule.info('🔄 Organizando carpetas automáticamente...', { duration: 3000 });
+        // ==========================================
+        // BOTÓN: ORGANIZAR AUTOMÁTICO
+        // ==========================================
+        const btnOrganizar = document.getElementById('btnOrganizar');
+        if (btnOrganizar) {
+            btnOrganizar.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Animación de carga
+                const originalText = btnOrganizar.innerHTML;
+                btnOrganizar.innerHTML = '⏳ Organizando...';
+                btnOrganizar.disabled = true;
+                btnOrganizar.style.opacity = '0.7';
+                
+                // Mostrar notificación
+                if (window.mostrarNotificacion) {
+                    window.mostrarNotificacion('🔄 Organizando carpetas automáticamente...', 'info');
+                }
+                
+                // Llamar a la API
+                fetch('/api/organizar-carpetas', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Restaurar botón
+                    btnOrganizar.innerHTML = originalText;
+                    btnOrganizar.disabled = false;
+                    btnOrganizar.style.opacity = '1';
+                    
+                    if (data.success) {
+                        if (window.mostrarNotificacion) {
+                            window.mostrarNotificacion('✅ Carpetas organizadas correctamente', 'success');
+                        }
+                        // Recargar después de 1.5 segundos
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        if (window.mostrarNotificacion) {
+                            window.mostrarNotificacion('❌ Error: ' + (data.message || 'Error desconocido'), 'error');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    btnOrganizar.innerHTML = originalText;
+                    btnOrganizar.disabled = false;
+                    btnOrganizar.style.opacity = '1';
+                    
+                    if (window.mostrarNotificacion) {
+                        window.mostrarNotificacion('❌ Error al conectar con el servidor', 'error');
+                    }
+                });
+            });
         }
         
-        // Simular proceso (2 segundos)
-        setTimeout(function() {
-            // Estado: Éxito
-            btn.classList.remove('loading');
-            btn.classList.add('success');
-            btn.querySelector('.btn-text').textContent = '✅ ¡Organizado!';
-            
-            // Notificación de éxito
-            if (typeof NotificationsModule !== 'undefined') {
-                NotificationsModule.success('✅ Carpetas organizadas correctamente');
-            }
-            
-            // Restaurar después de 2 segundos
-            setTimeout(function() {
-                btn.classList.remove('success');
-                btn.querySelector('.btn-text').textContent = 'Organizar Automático';
-            }, 2500);
-            
-        }, 2000);
-    }
-    
-    // ============================================
-    // VER ESTADÍSTICAS - CON ANIMACIONES Y FEEDBACK
-    // ============================================
-    
-    function verEstadisticas(btn) {
-        // Deshabilitar botón temporalmente
-        btn.disabled = true;
-        btn.style.opacity = '0.6';
-        
-        // Notificación de inicio
-        if (typeof NotificationsModule !== 'undefined') {
-            NotificationsModule.info('📊 Cargando estadísticas detalladas...', { duration: 2000 });
+        // ==========================================
+        // BOTÓN: VER ESTADÍSTICAS
+        // ==========================================
+        const btnEstadisticas = document.getElementById('btnEstadisticas');
+        if (btnEstadisticas) {
+            btnEstadisticas.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (window.mostrarNotificacion) {
+                    window.mostrarNotificacion('📊 Cargando estadísticas...', 'info');
+                }
+                
+                // Navegar a reportes
+                window.location.href = '/reportes';
+            });
         }
         
-        // Cambiar texto temporalmente
-        const originalText = btn.querySelector('.btn-text').textContent;
-        btn.querySelector('.btn-text').textContent = 'Cargando...';
+        // ==========================================
+        // TAMBIÉN SOPORTAR ONCLICK LEGACY
+        // ==========================================
+        // Si hay botones con onclick, también funcionan
+        window.organizarAutomatico = function() {
+            document.getElementById('btnOrganizar')?.click();
+        };
         
-        // Simular carga (1.5 segundos)
-        setTimeout(function() {
-            // Mostrar estadísticas en consola (simulado)
-            console.log('📊 Estadísticas de carpetas:');
-            console.log('  - Total carpetas: {{ total_carpetas }}');
-            console.log('  - Total archivos: {{ total_archivos }}');
-            console.log('  - Total MB: {{ "%.1f"|format(total_mb) }}');
-            console.log('  - Meses activos: {{ meses_activos|join(", ") }}');
-            
-            // Notificación de éxito
-            if (typeof NotificationsModule !== 'undefined') {
-                NotificationsModule.success('📊 Estadísticas actualizadas');
-            }
-            
-            // Restaurar botón
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.querySelector('.btn-text').textContent = originalText;
-            
-        }, 1500);
-    }
-    
-    // ============================================
-    // TOOLTIP PARA BOTONES (feedback adicional)
-    // ============================================
-    
-    document.querySelectorAll('.action-buttons .btn').forEach(function(btn) {
-        btn.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
-        });
-        btn.addEventListener('mouseleave', function() {
-            if (!this.classList.contains('loading')) {
-                this.style.transform = '';
-            }
-        });
+        window.verEstadisticas = function() {
+            document.getElementById('btnEstadisticas')?.click();
+        };
+        
     });
 </script>
 {% endblock %}

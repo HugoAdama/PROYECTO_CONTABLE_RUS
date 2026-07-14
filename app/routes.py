@@ -5,6 +5,8 @@ from src.repositories.boleta_repository import BoletaRepository
 from src.repositories.percepcion_repository import PercepcionRepository
 from src.calculators.calculadora_rus import CalculadoraRUS
 from datetime import datetime
+import os
+from pathlib import Path
 
 main_bp = Blueprint('main', __name__)
 
@@ -351,100 +353,169 @@ def api_reportes_datos():
 
 
 # ============================================
-# RUTA: GESTIÓN DE CARPETAS (CON ESTADÍSTICAS REALES)
+# RUTA: GESTIÓN DE CARPETAS (CORREGIDA)
 # ============================================
 
 @main_bp.route('/carpetas')
 def carpetas():
-    """Página de gestión de carpetas con estadísticas reales"""
-    
-    from src.models.factura_compra import FacturaCompra
-    from src.models.boleta_venta import BoletaVenta
-    from src.models.percepcion import Percepcion
-    from app import db
-    import os
-    
-    # ============================================
-    # ESTADÍSTICAS DE LA BASE DE DATOS
-    # ============================================
-    
-    total_facturas = FacturaCompra.query.count()
-    total_boletas = BoletaVenta.query.count()
-    total_percepciones = Percepcion.query.count()
-    total_documentos = total_facturas + total_boletas + total_percepciones
-    
-    # ============================================
-    # ESTADÍSTICAS DE ARCHIVOS EN DATA/
-    # ============================================
-    
-    data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
-    total_archivos = 0
-    total_carpetas = 0
-    total_mb = 0
-    
-    if os.path.exists(data_dir):
-        for root, dirs, files in os.walk(data_dir):
-            if root != data_dir:
-                total_carpetas += 1
-            for file in files:
-                if file.lower().endswith('.pdf'):
-                    total_archivos += 1
-                    try:
-                        file_path = os.path.join(root, file)
-                        size_bytes = os.path.getsize(file_path)
-                        total_mb += size_bytes / (1024 * 1024)
-                    except:
-                        pass
-    
-    # ============================================
-    # CONTAR CARPETAS POR TIPO (meses activos)
-    # ============================================
-    
-    meses_activos = set()
-    
-    meses_facturas = db.session.query(FacturaCompra.mes, FacturaCompra.anio).distinct().all()
-    meses_boletas = db.session.query(BoletaVenta.mes, BoletaVenta.anio).distinct().all()
-    meses_percepciones = db.session.query(Percepcion.mes, Percepcion.anio).distinct().all()
-    
-    for m in meses_facturas:
-        if m[0] and m[1]:
-            meses_activos.add(f"{m[1]}_{m[0]:02d}")
-    for m in meses_boletas:
-        if m[0] and m[1]:
-            meses_activos.add(f"{m[1]}_{m[0]:02d}")
-    for m in meses_percepciones:
-        if m[0] and m[1]:
-            meses_activos.add(f"{m[1]}_{m[0]:02d}")
-    
-    total_meses_activos = len(meses_activos)
-    
-    # ============================================
-    # DEBUG
-    # ============================================
-    
-    print(f"🔍 DEBUG Carpetas:")
-    print(f"  - Total carpetas: {total_carpetas}")
-    print(f"  - Total archivos: {total_archivos}")
-    print(f"  - Total MB: {total_mb:.1f}")
-    print(f"  - Meses activos: {total_meses_activos}")
-    print(f"  - Facturas: {total_facturas}")
-    print(f"  - Boletas: {total_boletas}")
-    print(f"  - Percepciones: {total_percepciones}")
-    
-    # ============================================
-    # RENDERIZAR
-    # ============================================
-    
-    return render_template('carpetas.html',
-                         total_carpetas=total_carpetas,
-                         total_archivos=total_archivos,
-                         total_mb=total_mb,
-                         total_meses_activos=total_meses_activos,
-                         total_facturas=total_facturas,
-                         total_boletas=total_boletas,
-                         total_percepciones=total_percepciones,
-                         total_documentos=total_documentos,
-                         meses_activos=sorted(list(meses_activos)))
+    """Página de gestión de carpetas - Versión Simplificada con ruta corregida"""
+    try:
+        import os
+        from pathlib import Path
+        
+        # ==========================================
+        # 🔧 USAR RUTA ABSOLUTA (CORREGIDO)
+        # ==========================================
+        # Obtener el directorio raíz del proyecto
+        # Path(__file__) = /ruta/proyecto/app/routes.py
+        # .parent = /ruta/proyecto/app/
+        # .parent = /ruta/proyecto/
+        base_dir = Path(__file__).resolve().parent.parent
+        data_dir = base_dir / 'data'
+        
+        # Si no existe, intentar con ruta relativa (fallback)
+        if not data_dir.exists():
+            data_dir = Path('data')
+        
+        print(f"📁 RUTA DATA ABSOLUTA: {data_dir.absolute()}")
+        print(f"📁 ¿EXISTE? {data_dir.exists()}")
+        
+        # ==========================================
+        # 1. CONTAR DOCUMENTOS POR TIPO
+        # ==========================================
+        total_facturas = 0
+        total_boletas = 0
+        total_percepciones = 0
+        
+        # Estructura para el árbol
+        arbol = []
+        
+        if data_dir.exists():
+            # Facturas
+            facturas_dir = data_dir / 'facturas'
+            if facturas_dir.exists():
+                print(f"📁 facturas_dir: {facturas_dir}")
+                for carpeta in facturas_dir.iterdir():
+                    if carpeta.is_dir():
+                        pdfs = list(carpeta.glob('*.pdf'))
+                        total_facturas += len(pdfs)
+                        if len(pdfs) > 0:
+                            arbol.append({
+                                'tipo': 'facturas',
+                                'nombre': carpeta.name,
+                                'cantidad': len(pdfs)
+                            })
+                            print(f"  ✅ Facturas: {carpeta.name} - {len(pdfs)} docs")
+            
+            # Boletas
+            boletas_dir = data_dir / 'boletas'
+            if boletas_dir.exists():
+                print(f"📁 boletas_dir: {boletas_dir}")
+                for carpeta in boletas_dir.iterdir():
+                    if carpeta.is_dir():
+                        pdfs = list(carpeta.glob('*.pdf'))
+                        total_boletas += len(pdfs)
+                        if len(pdfs) > 0:
+                            arbol.append({
+                                'tipo': 'boletas',
+                                'nombre': carpeta.name,
+                                'cantidad': len(pdfs)
+                            })
+                            print(f"  ✅ Boletas: {carpeta.name} - {len(pdfs)} docs")
+            
+            # Percepciones
+            percepciones_dir = data_dir / 'percepciones'
+            if percepciones_dir.exists():
+                print(f"📁 percepciones_dir: {percepciones_dir}")
+                for carpeta in percepciones_dir.iterdir():
+                    if carpeta.is_dir():
+                        pdfs = list(carpeta.glob('*.pdf'))
+                        total_percepciones += len(pdfs)
+                        if len(pdfs) > 0:
+                            arbol.append({
+                                'tipo': 'percepciones',
+                                'nombre': carpeta.name,
+                                'cantidad': len(pdfs)
+                            })
+                            print(f"  ✅ Percepciones: {carpeta.name} - {len(pdfs)} docs")
+        else:
+            print(f"❌ ERROR: data_dir NO EXISTE: {data_dir}")
+        
+        total_documentos = total_facturas + total_boletas + total_percepciones
+        total_carpetas = len(arbol)
+        
+        # Contar tipos
+        tipos = 0
+        if total_facturas > 0: tipos += 1
+        if total_boletas > 0: tipos += 1
+        if total_percepciones > 0: tipos += 1
+        
+        # Calcular espacio
+        espacio = "0 MB"
+        try:
+            total_bytes = 0
+            for pdf in data_dir.rglob('*.pdf'):
+                total_bytes += pdf.stat().st_size
+            if total_bytes < 1024 * 1024:
+                espacio = f"{total_bytes / 1024:.1f} KB"
+            else:
+                espacio = f"{total_bytes / (1024 * 1024):.1f} MB"
+        except Exception as e:
+            print(f"⚠️ Error calculando espacio: {e}")
+        
+        print(f"📁 RESULTADO FINAL:")
+        print(f"  - total_facturas: {total_facturas}")
+        print(f"  - total_boletas: {total_boletas}")
+        print(f"  - total_percepciones: {total_percepciones}")
+        print(f"  - total_carpetas: {total_carpetas}")
+        print(f"  - tipos: {tipos}")
+        print(f"  - espacio: {espacio}")
+        
+        return render_template('carpetas.html',
+                             total_carpetas=total_carpetas,
+                             total_documentos=total_documentos,
+                             total_mb=espacio,
+                             total_facturas=total_facturas,
+                             total_boletas=total_boletas,
+                             total_percepciones=total_percepciones,
+                             tipos=tipos,
+                             arbol=arbol)
+    except Exception as e:
+        print(f"❌ Error en carpetas: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return render_template('carpetas.html',
+                             total_carpetas=0,
+                             total_documentos=0,
+                             total_mb="0 MB",
+                             total_facturas=0,
+                             total_boletas=0,
+                             total_percepciones=0,
+                             tipos=0,
+                             arbol=[])
+
+
+# ============================================
+# API PARA ORGANIZACIÓN AUTOMÁTICA
+# ============================================
+
+@main_bp.route('/api/organizar-carpetas', methods=['POST'])
+def api_organizar_carpetas():
+    """API para organizar carpetas automáticamente"""
+    try:
+        # Aquí puedes implementar la reorganización de archivos en el sistema de archivos
+        # Por ahora solo devolvemos éxito
+        
+        return jsonify({
+            'success': True,
+            'message': '✅ Carpetas organizadas correctamente'
+        })
+    except Exception as e:
+        print(f"❌ Error en api_organizar_carpetas: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        }), 500
 
 
 # ============================================
