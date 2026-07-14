@@ -1,6 +1,6 @@
-# src/models/percepcion.py
+﻿# src/models/percepcion.py
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone
 
 class Percepcion(db.Model):
     __tablename__ = 'percepciones'
@@ -14,7 +14,7 @@ class Percepcion(db.Model):
     archivo = db.Column(db.String(200))
     mes = db.Column(db.Integer)
     anio = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     
     def __repr__(self):
         return f"<Percepcion {self.numero}>"
