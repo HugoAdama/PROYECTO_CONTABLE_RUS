@@ -141,3 +141,11 @@ MANIFEST
 htmlcov/
 coverage.xml
 *.coverage
+
+# Documentos reales de usuarios
+data/boletas/*.pdf
+data/facturas/*.pdf
+data/percepciones/*.pdf
+data/backups/*.db
+*.pdf
+*.db
