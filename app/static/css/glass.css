@@ -1,195 +1,90 @@
 /* ============================================
-   LIQUID GLASS - SISTEMA DE CONTROL FINANCIERO RUS
-   Versión: 3.9 - Julio 2026
-   Estilos mejorados para Senior-Friendly
+   GLASS.CSS - PUNTO DE ENTRADA
+   Sistema de Control Financiero RUS v3.9.1
+   
+   🏗️ ARQUITECTURA ATOMICA:
+   1. Settings - Configuración global
+   2. Tools - Herramientas y mixins
+   3. Generic - Estilos base
+   4. Elements - Elementos HTML puros
+   5. Components - Componentes reutilizables
+   6. Layouts - Estructuras de página
+   7. Pages - Estilos por página
+   8. Utilities - Clases utilitarias
+   9. Animations - Animaciones
    ============================================ */
 
 /* ============================================
-   IMPORTACIÓN DE MÓDULOS
+   1. SETTINGS - Configuración global
    ============================================ */
-
-@import url('base/variables.css');
-@import url('base/reset.css');
-@import url('base/typography.css');
-@import url('base/layout.css');
-
-@import url('components/sidebar.css');
-@import url('components/cards.css');
-@import url('components/tables.css');
-@import url('components/buttons.css');
-@import url('components/forms.css');
-@import url('components/charts.css');
-
-@import url('pages/dashboard.css');
-@import url('pages/reports.css');
-
-@import url('utils/animations.css');
-@import url('utils/responsive.css');
+@import url('1-settings/variables.css');
+@import url('1-settings/colors.css');
+@import url('1-settings/typography.css');
 
 /* ============================================
-   🆕 TIPOGRAFÍA SENIOR-FRIENDLY (GLOBAL)
+   2. TOOLS - Herramientas y mixins
+   (Preparado para futuras extensiones)
    ============================================ */
-
-body {
-    font-size: 18px;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.92);
-}
-
-h1 { font-size: 2.6rem; font-weight: 800; }
-h2 { font-size: 2rem; font-weight: 700; }
-h3 { font-size: 1.6rem; font-weight: 600; }
-h4 { font-size: 1.3rem; font-weight: 600; }
-
-p, li, .text-body {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.text-small { font-size: 0.95rem; }
-.text-large { font-size: 1.3rem; }
-.text-muted { color: rgba(255, 255, 255, 0.5); }
+/* @import url('2-tools/mixins.css'); */
+/* @import url('2-tools/functions.css'); */
 
 /* ============================================
-   🆕 TARJETAS DE MÉTRICAS
+   3. GENERIC - Estilos base
    ============================================ */
-
-.metric-card {
-    padding: 20px 24px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: all 0.3s ease;
-}
-
-.metric-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.10);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
-
-.metric-card .metric-icon {
-    font-size: 2.6rem;
-    line-height: 1;
-    flex-shrink: 0;
-}
-
-.metric-card .metric-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.metric-card .metric-value {
-    font-size: 2.2rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #60a5fa, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
-}
-
-.metric-card .metric-label {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: 500;
-}
+@import url('3-generic/reset.css');
+@import url('3-generic/box-sizing.css');
 
 /* ============================================
-   🆕 TABLAS - SENIOR-FRIENDLY
+   4. ELEMENTS - Elementos HTML puros
    ============================================ */
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1.05rem;
-    color: #ffffff;
-}
-
-.table thead th {
-    padding: 14px 16px;
-    text-align: left;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.06);
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.table tbody td {
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    font-size: 1.05rem;
-}
-
-.table tbody tr:hover td {
-    background: rgba(255, 255, 255, 0.03);
-}
+@import url('4-elements/body.css');
+@import url('4-elements/headings.css');
+@import url('4-elements/links.css');
 
 /* ============================================
-   🆕 BADGES - SENIOR-FRIENDLY
+   5. COMPONENTS - Componentes reutilizables
    ============================================ */
-
-.badge {
-    display: inline-block;
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.badge-primary {
-    background: rgba(96, 165, 250, 0.15);
-    color: #60a5fa;
-}
-
-.badge-success {
-    background: rgba(74, 222, 128, 0.15);
-    color: #4ade80;
-}
-
-.badge-warning {
-    background: rgba(251, 191, 36, 0.15);
-    color: #fbbf24;
-}
-
-.badge-danger {
-    background: rgba(248, 113, 113, 0.15);
-    color: #f87171;
-}
+@import url('5-components/buttons.css');
+@import url('5-components/cards.css');
+@import url('5-components/badges.css');
+@import url('5-components/tables.css');
 
 /* ============================================
-   🆕 RESPONSIVE
+   6. LAYOUTS - Estructuras de página
    ============================================ */
+@import url('6-layouts/header.css');
 
-@media (max-width: 768px) {
-    body { font-size: 16px; }
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.6rem; }
-    h3 { font-size: 1.3rem; }
-    p, li { font-size: 1rem; }
-    .metric-card .metric-value { font-size: 1.8rem; }
-    .metric-card .metric-icon { font-size: 2.2rem; }
-    .btn { padding: 12px 20px; font-size: 1rem; }
-    .table { font-size: 0.95rem; }
-    .glass-card { padding: 18px 20px; }
-}
+/* ============================================
+   7. PAGES - Estilos por página
+   ============================================ */
+@import url('7-pages/dashboard.css');
+@import url('7-pages/reports.css');
+@import url('7-pages/config.css');
+@import url('7-pages/upload.css');
+@import url('7-pages/backups.css');
+@import url('7-pages/historial.css');
 
-@media (max-width: 480px) {
-    body { font-size: 15px; }
-    h1 { font-size: 1.6rem; }
-    h2 { font-size: 1.3rem; }
-    h3 { font-size: 1.1rem; }
-    .metric-card { padding: 14px 16px; flex-direction: column; text-align: center; gap: 6px; }
-    .metric-card .metric-value { font-size: 1.6rem; }
-    .metric-card .metric-icon { font-size: 2rem; }
-    .btn { padding: 10px 16px; font-size: 0.95rem; width: 100%; justify-content: center; }
-    .table { font-size: 0.85rem; }
-    .table thead th, .table tbody td { padding: 10px 12px; }
-    .glass-card { padding: 14px 16px; border-radius: 14px; }
-}
+/* ============================================
+   8. UTILITIES - Clases utilitarias
+   ============================================ */
+@import url('8-utilities/spacing.css');
+@import url('8-utilities/flex.css');
+@import url('8-utilities/text.css');
+@import url('8-utilities/display.css');
+@import url('8-utilities/borders.css');
+
+/* ============================================
+   9. ANIMATIONS - Animaciones
+   ============================================ */
+@import url('9-animations/entries.css');
+@import url('9-animations/transitions.css');
+@import url('9-animations/keyframes.css');
+
+/* ============================================
+   NOTAS:
+   - Los archivos en 2-tools están comentados porque
+     actualmente no se utilizan mixins o funciones CSS.
+   - Los archivos de páginas adicionales (dashboard, reports, etc.)
+     se importan pero deben existir en la carpeta 7-pages/.
+   - Si un archivo no existe, el navegador lo ignorará.
+   ============================================ */

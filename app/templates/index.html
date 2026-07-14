@@ -2,210 +2,185 @@
 
 {% block title %}Dashboard - Sistema RUS{% endblock %}
 
+{% block extra_css %}
+<style>
+    .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+    }
+    .stat-card {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        text-align: center;
+        transition: all var(--transition-base);
+    }
+    .stat-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--border-hover);
+        box-shadow: var(--shadow-md);
+    }
+    .stat-card .stat-value {
+        font-size: var(--font-2xl);
+        font-weight: var(--font-weight-extrabold);
+        background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .stat-card .stat-label {
+        font-size: var(--font-body);
+        color: var(--text-secondary);
+        font-weight: var(--font-weight-medium);
+        margin-top: var(--spacing-xs);
+    }
+    .stat-card .stat-change {
+        font-size: var(--font-small);
+        font-weight: var(--font-weight-semibold);
+        margin-top: var(--spacing-xs);
+    }
+    .stat-card .stat-change.positive { color: var(--color-success); }
+    .stat-card .stat-change.negative { color: var(--color-danger); }
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: var(--spacing-lg);
+    }
+    @media (max-width: 768px) {
+        .dashboard-grid { grid-template-columns: 1fr; }
+        .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+        .dashboard-stats { grid-template-columns: 1fr; }
+        .stat-card .stat-value { font-size: var(--font-xl); }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- ============================================
-HEADER
-============================================ -->
-<div class="page-header animate-fade-in">
-    <h1 class="page-title">📊 Dashboard</h1>
-    <p class="page-subtitle">Resumen financiero de tu negocio en el Régimen RUS</p>
-</div>
+<div class="dashboard-container" style="max-width:1400px; margin:0 auto; padding:20px;">
+    
+    <!-- ENCABEZADO -->
+    <div class="page-header fade-in-up">
+        <div class="header-left">
+            <h1>
+                <span class="icon-title">📊</span>
+                Dashboard
+                <span class="subtitle">Resumen financiero de tu negocio en el Régimen RUS</span>
+            </h1>
+        </div>
+    </div>
 
-<!-- ============================================
-TARJETAS DE ESTADÍSTICAS
-============================================ -->
-<div class="stats-grid">
-    <!-- Ventas -->
-    <div class="stat-card animate-fade-in animate-fade-in-delay-1">
-        <div class="stat-icon">💰</div>
-        <div class="stat-info">
-            <span class="stat-label">Ventas</span>
-            <span class="stat-value">S/ {{ "{:,.2f}".format(total_ventas) }}</span>
-            <span class="stat-badge green">+{{ variacion_ventas }}%</span>
+    <!-- ESTADÍSTICAS -->
+    <div class="dashboard-stats">
+        <div class="stat-card fade-in-up stagger-1">
+            <div class="stat-value">S/ {{ "%.2f"|format(total_ventas) }}</div>
+            <div class="stat-label">Ventas</div>
+            <div class="stat-change positive">+{{ variacion_ventas }}%</div>
+        </div>
+        <div class="stat-card fade-in-up stagger-2">
+            <div class="stat-value">S/ {{ "%.2f"|format(total_compras) }}</div>
+            <div class="stat-label">Compras</div>
+            <div class="stat-change negative">{{ variacion_compras }}%</div>
+        </div>
+        <div class="stat-card fade-in-up stagger-3">
+            <div class="stat-value">S/ {{ "%.2f"|format(utilidad) }}</div>
+            <div class="stat-label">Utilidad</div>
+            <div class="stat-change {% if utilidad >= 0 %}positive{% else %}negative{% endif %}">
+                {{ "%.1f"|format(porcentaje_utilidad) }}%
+            </div>
+        </div>
+        <div class="stat-card fade-in-up stagger-4">
+            <div class="stat-value" style="background: linear-gradient(135deg, var(--color-success), var(--color-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                {{ estado_rus }}
+            </div>
+            <div class="stat-label">Estado RUS</div>
+            <div style="font-size:var(--font-small); color:var(--text-secondary);">S/ {{ impuesto_mensual }}</div>
         </div>
     </div>
-    
-    <!-- Compras -->
-    <div class="stat-card animate-fade-in animate-fade-in-delay-2">
-        <div class="stat-icon">🛒</div>
-        <div class="stat-info">
-            <span class="stat-label">Compras</span>
-            <span class="stat-value">S/ {{ "{:,.2f}".format(total_compras) }}</span>
-            <span class="stat-badge red">{{ variacion_compras }}%</span>
-        </div>
-    </div>
-    
-    <!-- Utilidad -->
-    <div class="stat-card animate-fade-in animate-fade-in-delay-3">
-        <div class="stat-icon">📈</div>
-        <div class="stat-info">
-            <span class="stat-label">Utilidad</span>
-            <span class="stat-value {% if utilidad < 0 %}text-danger{% else %}text-success{% endif %}">
-                S/ {{ "{:,.2f}".format(utilidad) }}
-            </span>
-            {% if utilidad >= 0 %}
-            <span class="stat-badge green">+{{ "%.1f"|format(porcentaje_utilidad) }}%</span>
-            {% else %}
-            <span class="stat-badge red">Pérdida</span>
-            {% endif %}
-        </div>
-    </div>
-    
-    <!-- Estado RUS -->
-    <div class="stat-card animate-fade-in animate-fade-in-delay-4">
-        <div class="stat-icon">🏛️</div>
-        <div class="stat-info">
-            <span class="stat-label">Estado RUS</span>
-            <span class="stat-value {% if estado_rus == 'normal' %}text-success{% elif estado_rus == 'alerta' %}text-warning{% else %}text-danger{% endif %}">
-                {{ estado_rus|upper }}
-            </span>
-            <span class="stat-badge gray">S/ {{ impuesto_mensual }}</span>
-        </div>
-    </div>
-</div>
 
-<!-- ============================================
-MÉTRICAS ADICIONALES
-============================================ -->
-<div class="grid-3 animate-fade-in animate-fade-in-delay-5">
-    <!-- Total Documentos -->
-    <div class="glass-card">
-        <div class="card-title">📄 Total Documentos</div>
-        <div class="card-value">{{ total_documentos }}</div>
-        <span class="text-muted text-sm">Facturas: {{ total_facturas }} | Boletas: {{ total_boletas }} | Percepciones: {{ total_percepciones_count }}</span>
-    </div>
-    
-    <!-- Último Mes -->
-    <div class="glass-card">
-        <div class="card-title">📅 Último Mes</div>
-        <div class="card-value">{{ ultimo_mes.nombre_mes if ultimo_mes else 'Sin datos' }} {{ ultimo_mes.anio if ultimo_mes else '' }}</div>
-        <span class="text-muted text-sm">Ventas: S/ {{ "{:,.2f}".format(total_ventas) }}</span>
-    </div>
-    
-    <!-- Alertas -->
-    <div class="glass-card">
-        <div class="card-title">⚡ Alertas</div>
-        <div style="display:flex;align-items:center;gap:12px;margin-top:4px;">
-            <span style="font-size:2.5rem;">
-                {% if estado_rus == 'normal' %}✅{% elif estado_rus == 'alerta' %}⚠️{% else %}🚨{% endif %}
-            </span>
-            <span class="text-muted text-md">
-                {% if estado_rus == 'normal' %}¡Todo en orden!{% elif estado_rus == 'alerta' %}Cuidado, cerca del límite{% else %}¡Excediste el límite!{% endif %}
-            </span>
-        </div>
-    </div>
-</div>
+    <!-- GRID PRINCIPAL -->
+    <div class="dashboard-grid">
+        <!-- Columna Izquierda -->
+        <div>
+            <!-- Total Documentos -->
+            <div class="glass-card fade-in-up stagger-2" style="margin-bottom:var(--spacing-lg);">
+                <h3>📄 Total Documentos</h3>
+                <div style="display:flex; gap:var(--spacing-lg); flex-wrap:wrap; margin-top:var(--spacing-sm);">
+                    <div>
+                        <span style="font-size:var(--font-2xl); font-weight:var(--font-weight-extrabold); color:var(--color-primary);">{{ total_documentos }}</span>
+                        <span style="color:var(--text-secondary); margin-left:var(--spacing-sm);">documentos</span>
+                    </div>
+                    <div style="display:flex; gap:var(--spacing-md); flex-wrap:wrap;">
+                        <span class="badge badge-primary">Facturas: {{ total_facturas }}</span>
+                        <span class="badge badge-success">Boletas: {{ total_boletas }}</span>
+                        <span class="badge badge-warning">Percepciones: {{ total_percepciones_count }}</span>
+                    </div>
+                </div>
+            </div>
 
-<!-- ============================================
-ÚLTIMAS FACTURAS Y BOLETAS
-============================================ -->
-<div class="grid-2 mt-3 animate-fade-in animate-fade-in-delay-3">
-    <!-- Últimas Facturas -->
-    <div class="glass-card">
-        <div class="card-title">📄 Últimas Facturas</div>
-        {% if facturas %}
-        <div class="table-wrapper">
-            <table class="table-glass">
-                <thead>
-                    <tr>
-                        <th>Número</th>
-                        <th>Monto</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for f in facturas[:5] %}
-                    <tr>
-                        <td><span class="badge-glass factura">{{ f.numero }}</span></td>
-                        <td>S/ {{ "{:,.2f}".format(f.monto) }}</td>
-                        <td>{{ f.fecha_emision.strftime('%d/%m/%Y') }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <!-- Últimas Boletas -->
+            <div class="glass-card fade-in-up stagger-3" style="margin-bottom:var(--spacing-lg);">
+                <h3>🧾 Últimas Boletas</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr><th>Número</th><th>Monto</th><th>Fecha</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for b in boletas[:5] %}
+                            <tr>
+                                <td>{{ b.numero }}</td>
+                                <td>S/ {{ "%.2f"|format(b.monto) }}</td>
+                                <td>{{ b.fecha_emision.strftime('%d/%m/%Y') }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center" style="color:var(--text-muted); padding:var(--spacing-lg);">No hay boletas registradas</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        {% else %}
-        <p class="text-muted text-sm">No hay facturas para mostrar</p>
-        {% endif %}
-    </div>
-    
-    <!-- Últimas Boletas -->
-    <div class="glass-card">
-        <div class="card-title">🧾 Últimas Boletas</div>
-        {% if boletas %}
-        <div class="table-wrapper">
-            <table class="table-glass">
-                <thead>
-                    <tr>
-                        <th>Número</th>
-                        <th>Monto</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for b in boletas[:5] %}
-                    <tr>
-                        <td><span class="badge-glass boleta">{{ b.numero }}</span></td>
-                        <td>S/ {{ "{:,.2f}".format(b.monto) }}</td>
-                        <td>{{ b.fecha_emision.strftime('%d/%m/%Y') }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p class="text-muted text-sm">No hay boletas para mostrar</p>
-        {% endif %}
-    </div>
-</div>
 
-<!-- ============================================
-DESGLOSE DE IMPUESTOS Y RESUMEN
-============================================ -->
-<div class="grid-2 mt-3 animate-fade-in animate-fade-in-delay-4">
-    <!-- Desglose de Impuestos -->
-    <div class="glass-card">
-        <div class="card-title">🏛️ Desglose de Impuestos RUS</div>
-        <div class="stat-row">
-            <span class="text-muted">Ventas del Mes</span>
-            <span class="text-white font-semibold">S/ {{ "{:,.2f}".format(total_ventas) }}</span>
-        </div>
-        <div class="stat-row">
-            <span class="text-muted">Impuesto a Pagar</span>
-            <span class="text-white font-semibold">S/ {{ "{:,.2f}".format(impuesto_mensual) }}</span>
-        </div>
-        <div class="stat-row">
-            <span class="text-muted">Régimen</span>
-            <span>
-                {% if total_ventas <= 5000 %}
-                <span class="badge-glass" style="background:rgba(74,222,128,0.12);color:#4ade80;">MENOS DE S/5,000</span>
-                {% elif total_ventas <= 8000 %}
-                <span class="badge-glass" style="background:rgba(251,191,36,0.12);color:#fbbf24;">ENTRE S/5,000 Y S/8,000</span>
+        <!-- Columna Derecha -->
+        <div>
+            <!-- Último Mes -->
+            <div class="glass-card fade-in-up stagger-3" style="margin-bottom:var(--spacing-lg);">
+                <h3>📅 Último Mes</h3>
+                {% if ultimo_mes %}
+                <div style="font-size:var(--font-xl); font-weight:var(--font-weight-bold); color:var(--text-primary);">
+                    {{ ultimo_mes.nombre_mes }} {{ ultimo_mes.anio }}
+                </div>
+                <div style="color:var(--text-secondary);">
+                    Ventas: S/ {{ "%.2f"|format(ventas_ultimo_mes) }}
+                </div>
                 {% else %}
-                <span class="badge-glass" style="background:rgba(248,113,113,0.12);color:#f87171;">MÁS DE S/8,000</span>
+                <div style="color:var(--text-muted);">No hay datos disponibles</div>
                 {% endif %}
-            </span>
-        </div>
-    </div>
-    
-    <!-- Resumen de Transacciones -->
-    <div class="glass-card">
-        <div class="card-title">📊 Resumen de Transacciones</div>
-        <div class="stat-row">
-            <span>📄 Facturas</span>
-            <span class="font-bold">{{ total_facturas }}</span>
-        </div>
-        <div class="stat-row">
-            <span>🧾 Boletas</span>
-            <span class="font-bold">{{ total_boletas }}</span>
-        </div>
-        <div class="stat-row">
-            <span>📋 Percepciones</span>
-            <span class="font-bold">{{ total_percepciones_count }}</span>
-        </div>
-        <div class="stat-row total">
-            <span class="font-semibold">📦 Total Documentos</span>
-            <span class="font-bold text-white">{{ total_documentos }}</span>
+            </div>
+
+            <!-- Desglose de Impuestos -->
+            <div class="glass-card fade-in-up stagger-4">
+                <h3>📊 Desglose de Impuestos RUS</h3>
+                <div style="display:grid; gap:var(--spacing-sm); margin-top:var(--spacing-sm);">
+                    <div style="display:flex; justify-content:space-between; padding:var(--spacing-sm) 0; border-bottom:1px solid var(--border-color);">
+                        <span style="color:var(--text-secondary);">Ventas del Mes</span>
+                        <span style="font-weight:var(--font-weight-semibold);">S/ {{ "%.2f"|format(ventas_ultimo_mes) }}</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; padding:var(--spacing-sm) 0; border-bottom:1px solid var(--border-color);">
+                        <span style="color:var(--text-secondary);">Impuesto a Pagar</span>
+                        <span style="font-weight:var(--font-weight-semibold); color:var(--color-warning);">S/ {{ impuesto_mensual }}</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; padding:var(--spacing-sm) 0;">
+                        <span style="color:var(--text-secondary);">Régimen</span>
+                        <span style="font-weight:var(--font-weight-bold); color:var(--color-primary);">{{ estado_rus }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

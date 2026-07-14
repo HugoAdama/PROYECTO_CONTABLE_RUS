@@ -1,0 +1,37 @@
+/* ============================================
+   ELEMENTS: HEADINGS
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+h1, .h1 {
+    font-size: var(--font-h1);
+    font-weight: var(--font-weight-extrabold);
+    color: var(--text-primary);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+    margin-bottom: var(--spacing-sm);
+}
+
+h2, .h2 {
+    font-size: var(--font-h2);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-sm);
+}
+
+h3, .h3 {
+    font-size: var(--font-h3);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+    margin-bottom: var(--spacing-sm);
+}
+
+h4, .h4 {
+    font-size: var(--font-h4);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+    margin-bottom: var(--spacing-sm);
+}

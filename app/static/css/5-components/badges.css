@@ -1,0 +1,38 @@
+/* ============================================
+   COMPONENTS: BADGES
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+.badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-small);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4;
+}
+
+.badge-primary {
+    background: var(--color-primary-100);
+    color: var(--color-primary);
+}
+
+.badge-success {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.badge-warning {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.badge-danger {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+
+.badge-info {
+    background: var(--color-info-bg);
+    color: var(--color-info);
+}

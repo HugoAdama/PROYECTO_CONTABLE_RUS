@@ -1,0 +1,53 @@
+/* ============================================
+   LAYOUTS: HEADER (PAGE HEADER)
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+.page-header {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    transition: all var(--transition-base);
+}
+
+.page-header:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.page-header .header-left {
+    flex: 1;
+    min-width: 200px;
+}
+
+.page-header .header-left h1 {
+    margin: 0 0 var(--spacing-xs) 0;
+}
+
+.page-header .header-left .icon-title {
+    margin-right: var(--spacing-sm);
+}
+
+.page-header .header-left .subtitle {
+    display: block;
+    font-size: var(--font-body);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+}
+
+.page-header .header-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    align-items: center;
+}

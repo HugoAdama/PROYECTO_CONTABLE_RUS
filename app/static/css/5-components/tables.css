@@ -1,0 +1,41 @@
+/* ============================================
+   COMPONENTS: TABLES
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-body);
+    color: var(--text-primary);
+}
+
+.table thead th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+    font-size: var(--font-small);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+.table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: var(--font-body);
+}
+
+.table tbody tr:hover td {
+    background: var(--bg-card);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}

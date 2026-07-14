@@ -1,0 +1,48 @@
+/* ============================================
+   ELEMENTS: BODY
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-body);
+    line-height: var(--line-height-relaxed);
+    color: var(--text-body);
+    background-color: var(--bg-body);
+    min-height: 100vh;
+    min-height: 100dvh;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.loaded {
+    opacity: 1;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary-200);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+}
+
+/* ===== SELECTION ===== */
+::selection {
+    background: var(--color-primary-100);
+    color: var(--text-primary);
+}

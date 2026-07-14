@@ -2,82 +2,186 @@
 
 {% block title %}Historial - Sistema RUS{% endblock %}
 
+{% block extra_css %}
+<style>
+    .historial-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .filtros-historial {
+        display: flex;
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin-bottom: var(--spacing-lg);
+    }
+    .filtros-historial .form-group {
+        margin-bottom: 0;
+        min-width: 140px;
+    }
+    .filtros-historial .form-group label {
+        font-size: var(--font-small);
+        text-transform: uppercase;
+        letter-spacing: var(--letter-spacing-wide);
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-xs);
+    }
+    .historial-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-bottom: 1px solid var(--border-color);
+        transition: all var(--transition-fast);
+    }
+    .historial-item:hover {
+        background: var(--bg-card);
+        border-radius: var(--radius-sm);
+    }
+    .historial-item .icono-accion {
+        font-size: 1.5rem;
+        width: 40px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+    .historial-item .info-accion { flex: 1; }
+    .historial-item .info-accion .accion-titulo {
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+    }
+    .historial-item .info-accion .accion-detalle {
+        font-size: var(--font-small);
+        color: var(--text-secondary);
+    }
+    .historial-item .fecha-accion {
+        font-size: var(--font-small);
+        color: var(--text-secondary);
+        flex-shrink: 0;
+    }
+    .historial-item .estado-accion {
+        padding: 4px 14px;
+        border-radius: var(--radius-full);
+        font-size: var(--font-tiny);
+        font-weight: var(--font-weight-semibold);
+        flex-shrink: 0;
+    }
+    .estado-completado { background: var(--color-success-bg); color: var(--color-success); }
+    .estado-error { background: var(--color-danger-bg); color: var(--color-danger); }
+    .estado-advertencia { background: var(--color-warning-bg); color: var(--color-warning); }
+    .paginacion-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md) 0;
+        border-top: 1px solid var(--border-color);
+        margin-top: var(--spacing-md);
+    }
+    @media (max-width: 768px) {
+        .filtros-historial { flex-direction: column; align-items: stretch; }
+        .filtros-historial .form-group { min-width: auto; }
+        .historial-item { flex-wrap: wrap; }
+        .historial-item .fecha-accion { width: 100%; font-size: var(--font-tiny); }
+        .paginacion-info { flex-direction: column; text-align: center; }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="page-header animate-fade-in">
-    <h1 class="page-title">📜 Historial</h1>
-    <p class="page-subtitle">Registro de todas las actividades del sistema</p>
-</div>
-
-<!-- Filtros -->
-<div class="filters-bar animate-fade-in animate-fade-in-delay-1">
-    <label for="accion">Acción:</label>
-    <select id="accion">
-        <option>Todas</option>
-        <option>Subida</option>
-        <option>Backup</option>
-        <option>Alerta</option>
-    </select>
+<div class="historial-container">
     
-    <label for="desde">Desde:</label>
-    <input type="date" class="form-control" style="width:auto;padding:8px 12px;">
-    
-    <label for="hasta">Hasta:</label>
-    <input type="date" class="form-control" style="width:auto;padding:8px 12px;">
-    
-    <button class="btn-filter"><i class="fas fa-filter"></i> Filtrar</button>
-</div>
-
-<!-- Tabla de Historial -->
-<div class="glass-card animate-fade-in animate-fade-in-delay-2">
-    <div class="table-wrapper">
-        <table class="table-glass">
-            <thead>
-                <tr>
-                    <th>Acción</th>
-                    <th>Detalle</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span class="badge-glass" style="background:rgba(96,165,250,0.1);color:#60a5fa;">Subida</span></td>
-                    <td>Archivo procesado: factura_001.pdf</td>
-                    <td>12/07/2026 14:30</td>
-                    <td><span class="badge-glass" style="background:rgba(74,222,128,0.1);color:#4ade80;">COMPLETADO</span></td>
-                </tr>
-                <tr>
-                    <td><span class="badge-glass" style="background:rgba(251,191,36,0.1);color:#fbbf24;">Backup</span></td>
-                    <td>Backup creado: backup_20260712_120514.db</td>
-                    <td>12/07/2026 12:05</td>
-                    <td><span class="badge-glass" style="background:rgba(74,222,128,0.1);color:#4ade80;">COMPLETADO</span></td>
-                </tr>
-                <tr>
-                    <td><span class="badge-glass" style="background:rgba(251,191,36,0.1);color:#fbbf24;">Alerta</span></td>
-                    <td>Límite RUS cercano - Ventas: 7,850.00</td>
-                    <td>11/07/2026 18:20</td>
-                    <td><span class="badge-glass" style="background:rgba(251,191,36,0.1);color:#fbbf24;">ADVERTENCIA</span></td>
-                </tr>
-                <tr>
-                    <td><span class="badge-glass" style="background:rgba(96,165,250,0.1);color:#60a5fa;">Subida</span></td>
-                    <td>Archivo procesado: boleta_002.pdf</td>
-                    <td>11/07/2026 10:15</td>
-                    <td><span class="badge-glass" style="background:rgba(74,222,128,0.1);color:#4ade80;">COMPLETADO</span></td>
-                </tr>
-                <tr>
-                    <td><span class="badge-glass" style="background:rgba(96,165,250,0.1);color:#60a5fa;">Subida</span></td>
-                    <td>Archivo procesado: factura_003.pdf</td>
-                    <td>10/07/2026 16:45</td>
-                    <td><span class="badge-glass" style="background:rgba(248,113,113,0.1);color:#f87171;">ERROR</span></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="page-header fade-in-up">
+        <div class="header-left">
+            <h1>
+                <span class="icon-title">📜</span>
+                Historial
+                <span class="subtitle">Registro de todas las actividades del sistema</span>
+            </h1>
+        </div>
     </div>
-    
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:8px;">
-        <span class="text-muted text-sm">Mostrando 1-5 de 5 registros</span>
-        <div style="display:flex;gap:8px;">
-            <button class="btn-filter btn-sm">10 filas</button>
+
+    <div class="glass-card fade-in-up stagger-1">
+        <form class="filtros-historial">
+            <div class="form-group">
+                <label for="filtro-accion">Acción</label>
+                <select id="filtro-accion" class="form-control">
+                    <option value="todas">Todas</option>
+                    <option value="subida">Subida</option>
+                    <option value="backup">Backup</option>
+                    <option value="alerta">Alerta</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="filtro-desde">Desde</label>
+                <input type="date" id="filtro-desde" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="filtro-hasta">Hasta</label>
+                <input type="date" id="filtro-hasta" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary" style="align-self:flex-end;">🔍 Filtrar</button>
+            <button type="reset" class="btn btn-secondary" style="align-self:flex-end;"><span class="icon">🗑️</span> Limpiar</button>
+        </form>
+    </div>
+
+    <div class="glass-card fade-in-up stagger-2">
+        <div id="historialList">
+            <div class="historial-item">
+                <span class="icono-accion">📤</span>
+                <div class="info-accion">
+                    <div class="accion-titulo">Subida</div>
+                    <div class="accion-detalle">Archivo procesado: factura_001.pdf</div>
+                </div>
+                <span class="fecha-accion">12/07/2026 14:30</span>
+                <span class="estado-accion estado-completado">COMPLETADO</span>
+            </div>
+            <div class="historial-item">
+                <span class="icono-accion">💾</span>
+                <div class="info-accion">
+                    <div class="accion-titulo">Backup</div>
+                    <div class="accion-detalle">Backup creado: backup_20260712_120514.db</div>
+                </div>
+                <span class="fecha-accion">12/07/2026 12:05</span>
+                <span class="estado-accion estado-completado">COMPLETADO</span>
+            </div>
+            <div class="historial-item">
+                <span class="icono-accion">⚠️</span>
+                <div class="info-accion">
+                    <div class="accion-titulo">Alerta</div>
+                    <div class="accion-detalle">Límite RUS cercano - Ventas: S/ 7,850.00</div>
+                </div>
+                <span class="fecha-accion">11/07/2026 18:20</span>
+                <span class="estado-accion estado-advertencia">ADVERTENCIA</span>
+            </div>
+            <div class="historial-item">
+                <span class="icono-accion">📤</span>
+                <div class="info-accion">
+                    <div class="accion-titulo">Subida</div>
+                    <div class="accion-detalle">Archivo procesado: boleta_002.pdf</div>
+                </div>
+                <span class="fecha-accion">11/07/2026 10:15</span>
+                <span class="estado-accion estado-completado">COMPLETADO</span>
+            </div>
+            <div class="historial-item">
+                <span class="icono-accion">📤</span>
+                <div class="info-accion">
+                    <div class="accion-titulo">Subida</div>
+                    <div class="accion-detalle">Archivo procesado: factura_003.pdf</div>
+                </div>
+                <span class="fecha-accion">10/07/2026 16:45</span>
+                <span class="estado-accion estado-error">ERROR</span>
+            </div>
+        </div>
+
+        <div class="paginacion-info">
+            <span style="color:var(--text-secondary);">Mostrando 1-5 de 5 registros</span>
+            <div style="display:flex; gap:var(--spacing-sm);">
+                <button class="btn btn-sm btn-secondary" disabled>Anterior</button>
+                <button class="btn btn-sm btn-primary">1</button>
+                <button class="btn btn-sm btn-secondary" disabled>Siguiente</button>
+            </div>
         </div>
     </div>
 </div>

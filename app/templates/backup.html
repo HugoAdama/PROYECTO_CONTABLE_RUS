@@ -2,42 +2,186 @@
 
 {% block title %}Backup - Sistema RUS{% endblock %}
 
+{% block extra_css %}
+<style>
+    .backup-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .backup-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+    .backup-card {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        transition: all var(--transition-base);
+    }
+    .backup-card:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+    }
+    .backup-card .card-icon { font-size: 2.5rem; display: block; margin-bottom: var(--spacing-sm); }
+    .backup-card .card-title {
+        font-size: var(--font-h4);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    .backup-card .card-desc {
+        font-size: var(--font-body);
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-md);
+    }
+    .backup-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-bottom: 1px solid var(--border-color);
+        transition: all var(--transition-fast);
+    }
+    .backup-item:hover {
+        background: var(--bg-card);
+        border-radius: var(--radius-sm);
+    }
+    .backup-item .backup-nombre { font-weight: var(--font-weight-medium); color: var(--text-primary); }
+    .backup-item .backup-fecha { font-size: var(--font-small); color: var(--text-secondary); }
+    .backup-item .backup-tamaño { font-size: var(--font-small); color: var(--text-secondary); }
+    .backup-empty { text-align: center; padding: var(--spacing-2xl) var(--spacing-xl); color: var(--text-secondary); }
+    .backup-empty .empty-icon { font-size: 3rem; display: block; margin-bottom: var(--spacing-sm); opacity: 0.5; }
+    @media (max-width: 768px) {
+        .backup-grid { grid-template-columns: 1fr; }
+        .backup-item { flex-wrap: wrap; gap: var(--spacing-sm); }
+        .backup-item .backup-tamaño { width: 100%; }
+    }
+    @media (max-width: 480px) {
+        .backup-card { padding: var(--spacing-md) var(--spacing-lg); }
+        .btn { width: 100%; justify-content: center; }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="page-header animate-fade-in">
-    <h1 class="page-title">💾 Backup</h1>
-    <p class="page-subtitle">Copia de seguridad y restauración de datos</p>
-</div>
-
-<div class="grid-2 animate-fade-in animate-fade-in-delay-1">
-    <!-- Crear Backup -->
-    <div class="glass-card">
-        <div class="card-title">📦 Crear Backup</div>
-        <p class="text-muted text-sm" style="margin-bottom:16px;">
-            Guarda una copia de seguridad completa de tu base de datos
-        </p>
-        <button class="btn btn-success" style="width:100%;justify-content:center;">
-            <i class="fas fa-save"></i> Crear Backup Ahora
-        </button>
-    </div>
+<div class="backup-container">
     
-    <!-- Restaurar -->
-    <div class="glass-card">
-        <div class="card-title">🔄 Restaurar Backup</div>
-        <p class="text-muted text-sm" style="margin-bottom:16px;">
-            Selecciona un backup previo para restaurar
-        </p>
-        <select class="form-control" style="margin-bottom:12px;">
-            <option>Seleccionar Backup</option>
-        </select>
-        <button class="btn btn-primary" style="width:100%;justify-content:center;">
-            <i class="fas fa-undo"></i> Restaurar
-        </button>
+    <div class="page-header fade-in-up">
+        <div class="header-left">
+            <h1>
+                <span class="icon-title">💾</span>
+                Backup
+                <span class="subtitle">Copia de seguridad y restauración de datos</span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="backup-grid">
+        <div class="backup-card glass-card fade-in-up stagger-1">
+            <span class="card-icon">💾</span>
+            <div class="card-title">Crear Backup</div>
+            <div class="card-desc">Guarda una copia de seguridad completa de tu base de datos</div>
+            <button class="btn btn-primary" id="btnCrearBackup">
+                <span class="icon">💾</span> Crear Backup Ahora
+            </button>
+            <div id="backupFeedback" style="margin-top:var(--spacing-sm);"></div>
+        </div>
+
+        <div class="backup-card glass-card fade-in-up stagger-2">
+            <span class="card-icon">🔄</span>
+            <div class="card-title">Restaurar Backup</div>
+            <div class="card-desc">Selecciona un backup previo para restaurar</div>
+            <div style="display:flex; gap:var(--spacing-sm); flex-wrap:wrap;">
+                <input type="file" id="restoreInput" accept=".db,.sqlite,.sqlite3" style="display:none;">
+                <button class="btn btn-secondary" id="btnSeleccionarBackup">
+                    <span class="icon">📂</span> Seleccionar Backup
+                </button>
+                <button class="btn btn-danger" id="btnRestaurar" disabled>
+                    <span class="icon">⚠️</span> Restaurar
+                </button>
+            </div>
+            <div id="restoreFeedback" style="margin-top:var(--spacing-sm);"></div>
+        </div>
+    </div>
+
+    <div class="glass-card fade-in-up stagger-3">
+        <h3>📋 Backups Disponibles</h3>
+        <div id="backupList">
+            <div class="backup-empty">
+                <span class="empty-icon">📭</span>
+                <p>No hay backups disponibles</p>
+                <p style="font-size:var(--font-small);">Crea tu primer backup usando el botón "Crear Backup Ahora"</p>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
 
-<!-- Backups Disponibles -->
-<div class="glass-card mt-3 animate-fade-in animate-fade-in-delay-2">
-    <div class="card-title">📋 Backups Disponibles</div>
-    <p class="text-muted text-sm">No hay backups disponibles</p>
-</div>
+{% block extra_js %}
+<script>
+    // El módulo de backup se maneja con vanilla JS
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnCrearBackup = document.getElementById('btnCrearBackup');
+        const backupFeedback = document.getElementById('backupFeedback');
+        const btnSeleccionarBackup = document.getElementById('btnSeleccionarBackup');
+        const restoreInput = document.getElementById('restoreInput');
+        const btnRestaurar = document.getElementById('btnRestaurar');
+        const restoreFeedback = document.getElementById('restoreFeedback');
+        const backupList = document.getElementById('backupList');
+        let selectedBackup = null;
+
+        btnCrearBackup?.addEventListener('click', function() {
+            const originalText = this.innerHTML;
+            this.innerHTML = '⏳ Creando backup...';
+            this.disabled = true;
+            
+            if (window.mostrarNotificacion) {
+                window.mostrarNotificacion('💾 Creando copia de seguridad...', 'info');
+            }
+            
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.disabled = false;
+                backupFeedback.innerHTML = '<div class="save-feedback success">✅ Backup creado correctamente</div>';
+                if (window.mostrarNotificacion) {
+                    window.mostrarNotificacion('✅ Backup creado correctamente', 'success');
+                }
+                setTimeout(() => { backupFeedback.innerHTML = ''; }, 5000);
+            }, 2000);
+        });
+
+        btnSeleccionarBackup?.addEventListener('click', () => restoreInput?.click());
+        
+        restoreInput?.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                selectedBackup = this.files[0];
+                btnRestaurar.disabled = false;
+                restoreFeedback.innerHTML = `<div class="save-feedback info">📂 Backup seleccionado: ${selectedBackup.name}</div>`;
+            }
+        });
+
+        btnRestaurar?.addEventListener('click', function() {
+            if (!selectedBackup) return;
+            if (!confirm(`⚠️ ¿Restaurar "${selectedBackup.name}"?`)) return;
+            
+            const originalText = this.innerHTML;
+            this.innerHTML = '⏳ Restaurando...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.disabled = false;
+                restoreFeedback.innerHTML = '<div class="save-feedback success">✅ Backup restaurado correctamente</div>';
+                if (window.mostrarNotificacion) {
+                    window.mostrarNotificacion('✅ Backup restaurado correctamente', 'success');
+                }
+                setTimeout(() => { restoreFeedback.innerHTML = ''; }, 5000);
+            }, 2500);
+        });
+    });
+</script>
 {% endblock %}

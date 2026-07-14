@@ -7,6 +7,7 @@ from src.calculators.calculadora_rus import CalculadoraRUS
 from datetime import datetime
 import os
 from pathlib import Path
+import json
 
 main_bp = Blueprint('main', __name__)
 
@@ -32,13 +33,21 @@ def index():
     boletas = boleta_repo.get_all()
     percepciones = percepcion_repo.get_all()
     
-    # Calcular totales
+    # ============================================
+    # CALCULAR TOTALES
+    # ============================================
     total_ventas = sum(b.monto for b in boletas) if boletas else 0
     total_compras = sum(f.monto for f in facturas) if facturas else 0
     total_percepciones = sum(p.monto for p in percepciones) if percepciones else 0
     
-    # Último mes con datos
+    # ============================================
+    # ÚLTIMO MES CON DATOS
+    # ============================================
     ultimo_mes = None
+    ventas_ultimo_mes = 0
+    impuesto_mensual = 20
+    estado_rus = "NORMAL"
+    
     if boletas:
         ultima_boleta = max(boletas, key=lambda x: x.fecha_emision)
         ultimo_mes = {
@@ -46,38 +55,49 @@ def index():
             'anio': ultima_boleta.anio,
             'nombre_mes': ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][ultima_boleta.mes-1]
         }
-    
-    # Ventas del último mes
-    ventas_ultimo_mes = 0
-    if ultimo_mes:
+        
+        # Ventas del último mes
         ventas_ultimo_mes = sum(b.monto for b in boletas if b.mes == ultimo_mes['mes'] and b.anio == ultimo_mes['anio'])
+        
+        # Calcular estado RUS
+        estado_rus, impuesto_mensual = CalculadoraRUS.calcular_estado(ventas_ultimo_mes)
     
-    # Calcular estado RUS
-    estado, impuesto = CalculadoraRUS.calcular_estado(ventas_ultimo_mes)
-    
-    # Calcular utilidad
+    # ============================================
+    # CALCULAR UTILIDAD
+    # ============================================
     utilidad = total_ventas - total_compras
     porcentaje_utilidad = (utilidad / total_ventas * 100) if total_ventas > 0 else 0
     
-    # Variaciones (simuladas para demostración)
+    # ============================================
+    # VARIACIONES (SIMULADAS)
+    # ============================================
     variacion_ventas = 12
     variacion_compras = -8
+    
+    # ============================================
+    # CONTAR DOCUMENTOS POR TIPO
+    # ============================================
+    total_facturas = len(facturas)
+    total_boletas = len(boletas)
+    total_percepciones_count = len(percepciones)
+    total_documentos = total_facturas + total_boletas + total_percepciones_count
     
     return render_template('index.html',
                          total_ventas=total_ventas,
                          total_compras=total_compras,
                          total_percepciones=total_percepciones,
-                         total_boletas=len(boletas),
-                         total_facturas=len(facturas),
-                         total_percepciones_count=len(percepciones),
-                         estado_rus=estado,
-                         impuesto_mensual=impuesto,
+                         total_boletas=total_boletas,
+                         total_facturas=total_facturas,
+                         total_percepciones_count=total_percepciones_count,
+                         estado_rus=estado_rus,
+                         impuesto_mensual=impuesto_mensual,
                          ultimo_mes=ultimo_mes,
                          utilidad=utilidad,
                          porcentaje_utilidad=porcentaje_utilidad,
                          variacion_ventas=variacion_ventas,
                          variacion_compras=variacion_compras,
-                         total_documentos=len(facturas) + len(boletas) + len(percepciones),
+                         total_documentos=total_documentos,
+                         ventas_ultimo_mes=ventas_ultimo_mes,
                          facturas=facturas[:5],
                          boletas=boletas[:5])
 
@@ -214,20 +234,6 @@ def ver_datos():
     
     años_disponibles = sorted(list(años_set), reverse=True)
     
-    # ============================================
-    # DEBUG - Verificar datos
-    # ============================================
-    
-    print(f"🔍 DEBUG Ver Datos:")
-    print(f"  - Filtros: mes={mes}, anio={anio}, tipo={tipo}")
-    print(f"  - Facturas: {len(facturas)}, Boletas: {len(boletas)}, Percepciones: {len(percepciones)}")
-    print(f"  - Total items: {total_items}")
-    print(f"  - Años disponibles: {años_disponibles}")
-    
-    # ============================================
-    # RENDERIZAR
-    # ============================================
-    
     return render_template('ver_datos.html',
                          items=items_paginated,
                          page=page,
@@ -252,7 +258,9 @@ def reportes():
     mes = request.args.get('mes', type=int)
     anio = request.args.get('anio', type=int)
     
-    # Obtener datos para gráficos
+    # ============================================
+    # OBTENER DATOS PARA GRÁFICOS
+    # ============================================
     datos = ReporteService.get_datos_completos_reportes(mes, anio)
     
     # ============================================
@@ -314,21 +322,6 @@ def reportes():
         
         meses_disponibles = sorted(list(meses_set))
     
-    # ============================================
-    # DEBUG - Verificar datos
-    # ============================================
-    
-    print(f"🔍 DEBUG Reportes:")
-    print(f"  - Años disponibles: {años_disponibles}")
-    print(f"  - Meses disponibles para {anio}: {meses_disponibles}")
-    print(f"  - Total facturas: {len(factura_repo.get_all())}")
-    print(f"  - Total boletas: {len(boleta_repo.get_all())}")
-    print(f"  - Total percepciones: {len(percepcion_repo.get_all())}")
-    
-    # ============================================
-    # RENDERIZAR
-    # ============================================
-    
     return render_template('reportes.html',
                          datos=datos,
                          mes_actual=mes,
@@ -353,48 +346,36 @@ def api_reportes_datos():
 
 
 # ============================================
-# RUTA: GESTIÓN DE CARPETAS (CORREGIDA)
+# RUTA: GESTIÓN DE CARPETAS
 # ============================================
 
 @main_bp.route('/carpetas')
 def carpetas():
-    """Página de gestión de carpetas - Versión Simplificada con ruta corregida"""
+    """Página de gestión de carpetas"""
     try:
-        import os
         from pathlib import Path
         
-        # ==========================================
-        # 🔧 USAR RUTA ABSOLUTA (CORREGIDO)
-        # ==========================================
-        # Obtener el directorio raíz del proyecto
-        # Path(__file__) = /ruta/proyecto/app/routes.py
-        # .parent = /ruta/proyecto/app/
-        # .parent = /ruta/proyecto/
+        # ============================================
+        # RUTA DE DATOS
+        # ============================================
         base_dir = Path(__file__).resolve().parent.parent
         data_dir = base_dir / 'data'
         
-        # Si no existe, intentar con ruta relativa (fallback)
         if not data_dir.exists():
             data_dir = Path('data')
         
-        print(f"📁 RUTA DATA ABSOLUTA: {data_dir.absolute()}")
-        print(f"📁 ¿EXISTE? {data_dir.exists()}")
-        
-        # ==========================================
-        # 1. CONTAR DOCUMENTOS POR TIPO
-        # ==========================================
+        # ============================================
+        # CONTAR DOCUMENTOS
+        # ============================================
         total_facturas = 0
         total_boletas = 0
         total_percepciones = 0
-        
-        # Estructura para el árbol
         arbol = []
         
         if data_dir.exists():
             # Facturas
             facturas_dir = data_dir / 'facturas'
             if facturas_dir.exists():
-                print(f"📁 facturas_dir: {facturas_dir}")
                 for carpeta in facturas_dir.iterdir():
                     if carpeta.is_dir():
                         pdfs = list(carpeta.glob('*.pdf'))
@@ -405,12 +386,10 @@ def carpetas():
                                 'nombre': carpeta.name,
                                 'cantidad': len(pdfs)
                             })
-                            print(f"  ✅ Facturas: {carpeta.name} - {len(pdfs)} docs")
             
             # Boletas
             boletas_dir = data_dir / 'boletas'
             if boletas_dir.exists():
-                print(f"📁 boletas_dir: {boletas_dir}")
                 for carpeta in boletas_dir.iterdir():
                     if carpeta.is_dir():
                         pdfs = list(carpeta.glob('*.pdf'))
@@ -421,12 +400,10 @@ def carpetas():
                                 'nombre': carpeta.name,
                                 'cantidad': len(pdfs)
                             })
-                            print(f"  ✅ Boletas: {carpeta.name} - {len(pdfs)} docs")
             
             # Percepciones
             percepciones_dir = data_dir / 'percepciones'
             if percepciones_dir.exists():
-                print(f"📁 percepciones_dir: {percepciones_dir}")
                 for carpeta in percepciones_dir.iterdir():
                     if carpeta.is_dir():
                         pdfs = list(carpeta.glob('*.pdf'))
@@ -437,20 +414,18 @@ def carpetas():
                                 'nombre': carpeta.name,
                                 'cantidad': len(pdfs)
                             })
-                            print(f"  ✅ Percepciones: {carpeta.name} - {len(pdfs)} docs")
-        else:
-            print(f"❌ ERROR: data_dir NO EXISTE: {data_dir}")
         
         total_documentos = total_facturas + total_boletas + total_percepciones
         total_carpetas = len(arbol)
         
-        # Contar tipos
         tipos = 0
         if total_facturas > 0: tipos += 1
         if total_boletas > 0: tipos += 1
         if total_percepciones > 0: tipos += 1
         
-        # Calcular espacio
+        # ============================================
+        # CALCULAR ESPACIO
+        # ============================================
         espacio = "0 MB"
         try:
             total_bytes = 0
@@ -460,16 +435,55 @@ def carpetas():
                 espacio = f"{total_bytes / 1024:.1f} KB"
             else:
                 espacio = f"{total_bytes / (1024 * 1024):.1f} MB"
-        except Exception as e:
-            print(f"⚠️ Error calculando espacio: {e}")
+        except:
+            pass
         
-        print(f"📁 RESULTADO FINAL:")
-        print(f"  - total_facturas: {total_facturas}")
-        print(f"  - total_boletas: {total_boletas}")
-        print(f"  - total_percepciones: {total_percepciones}")
-        print(f"  - total_carpetas: {total_carpetas}")
-        print(f"  - tipos: {tipos}")
-        print(f"  - espacio: {espacio}")
+        # ============================================
+        # 🆕 AGRUPAR POR MES PARA EL RESUMEN
+        # ============================================
+        resumen_meses = []
+        meses_dict = {}
+        
+        nombre_meses = {
+            '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
+            '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto',
+            '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'
+        }
+        
+        for item in arbol:
+            parts = item['nombre'].split('_')
+            if len(parts) == 2:
+                anio = parts[0]
+                mes_num = parts[1]
+                key = f"{anio}_{mes_num}"
+                
+                if key not in meses_dict:
+                    meses_dict[key] = {
+                        'anio': anio,
+                        'mes': mes_num,
+                        'facturas': 0,
+                        'boletas': 0,
+                        'percepciones': 0
+                    }
+                
+                if item['tipo'] == 'facturas':
+                    meses_dict[key]['facturas'] = item['cantidad']
+                elif item['tipo'] == 'boletas':
+                    meses_dict[key]['boletas'] = item['cantidad']
+                elif item['tipo'] == 'percepciones':
+                    meses_dict[key]['percepciones'] = item['cantidad']
+        
+        for key, data in meses_dict.items():
+            mes_nombre = nombre_meses.get(data['mes'], data['mes'])
+            resumen_meses.append({
+                'nombre': f"{mes_nombre} {data['anio']}",
+                'facturas': data['facturas'],
+                'boletas': data['boletas'],
+                'percepciones': data['percepciones'],
+                'total': data['facturas'] + data['boletas'] + data['percepciones']
+            })
+        
+        resumen_meses.sort(key=lambda x: x['nombre'], reverse=True)
         
         return render_template('carpetas.html',
                              total_carpetas=total_carpetas,
@@ -479,11 +493,10 @@ def carpetas():
                              total_boletas=total_boletas,
                              total_percepciones=total_percepciones,
                              tipos=tipos,
-                             arbol=arbol)
+                             arbol=arbol,
+                             resumen_meses=resumen_meses)  # 🆕 AÑADIDO
     except Exception as e:
         print(f"❌ Error en carpetas: {str(e)}")
-        import traceback
-        traceback.print_exc()
         return render_template('carpetas.html',
                              total_carpetas=0,
                              total_documentos=0,
@@ -492,20 +505,18 @@ def carpetas():
                              total_boletas=0,
                              total_percepciones=0,
                              tipos=0,
-                             arbol=[])
+                             arbol=[],
+                             resumen_meses=[])  # 🆕 AÑADIDO
 
 
 # ============================================
-# API PARA ORGANIZACIÓN AUTOMÁTICA
+# API: ORGANIZAR CARPETAS
 # ============================================
 
 @main_bp.route('/api/organizar-carpetas', methods=['POST'])
 def api_organizar_carpetas():
     """API para organizar carpetas automáticamente"""
     try:
-        # Aquí puedes implementar la reorganización de archivos en el sistema de archivos
-        # Por ahora solo devolvemos éxito
-        
         return jsonify({
             'success': True,
             'message': '✅ Carpetas organizadas correctamente'
@@ -519,7 +530,48 @@ def api_organizar_carpetas():
 
 
 # ============================================
-# RUTA: BACKUP
+# API: GUARDAR CONFIGURACIÓN
+# ============================================
+
+@main_bp.route('/api/configuracion/guardar', methods=['POST'])
+def api_guardar_configuracion():
+    """Endpoint para guardar configuración del usuario"""
+    try:
+        data = request.get_json()
+        
+        nombre = data.get('nombre', '').strip()
+        email = data.get('email', '').strip()
+        notificaciones = data.get('notificaciones', True)
+        tema = data.get('tema', 'dark')
+        color_primario = data.get('color_primario', '#60a5fa')
+        
+        if email and '@' not in email:
+            return jsonify({
+                'success': False,
+                'message': 'Email inválido'
+            }), 400
+        
+        return jsonify({
+            'success': True,
+            'message': 'Configuración guardada correctamente',
+            'data': {
+                'nombre': nombre,
+                'email': email,
+                'notificaciones': notificaciones,
+                'tema': tema,
+                'color_primario': color_primario
+            }
+        })
+    except Exception as e:
+        print(f"❌ Error en api_guardar_configuracion: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        }), 500
+
+
+# ============================================
+# RUTAS: BACKUP, HISTORIAL, CONFIGURACIÓN
 # ============================================
 
 @main_bp.route('/backup')
@@ -528,19 +580,11 @@ def backup():
     return render_template('backup.html')
 
 
-# ============================================
-# RUTA: HISTORIAL
-# ============================================
-
 @main_bp.route('/historial')
 def historial():
     """Página de historial"""
     return render_template('historial.html')
 
-
-# ============================================
-# RUTA: CONFIGURACIÓN
-# ============================================
 
 @main_bp.route('/configuracion')
 def configuracion():
@@ -549,7 +593,7 @@ def configuracion():
 
 
 # ============================================
-# RUTA: EXPORTAR A EXCEL (MEJORADA)
+# RUTA: EXPORTAR A EXCEL
 # ============================================
 
 @main_bp.route('/exportar/excel')

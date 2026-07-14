@@ -1,348 +1,89 @@
 {% extends "base.html" %}
 
-{% block title %}Gestión de Carpetas{% endblock %}
+{% block title %}Gestión de Carpetas - Sistema RUS{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* ============================================
-       ESTILOS ESPECÍFICOS DE CARPETAS
-       ============================================ */
-    
     .carpetas-container {
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
-        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-
-    .carpetas-header {
-        padding: 24px 30px;
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    .carpetas-header h1 {
-        font-size: 28px;
-        font-weight: 700;
-        color: #ffffff;
-        margin: 0;
-    }
-
-    .carpetas-header p {
-        font-size: 16px;
-        color: rgba(255, 255, 255, 0.6);
-        margin: 5px 0 0 0;
-    }
-
-    .header-buttons {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .btn {
-        padding: 12px 24px;
-        border: none;
-        border-radius: 12px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        font-family: inherit;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, rgba(96, 165, 250, 0.85), rgba(59, 130, 246, 0.85));
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        color: white;
-        box-shadow: 0 4px 20px rgba(96, 165, 250, 0.25);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 12px 40px rgba(96, 165, 250, 0.35);
-    }
-
-    .btn-primary:active {
-        transform: scale(0.98);
-    }
-
-    .btn-secondary {
-        background: rgba(255, 255, 255, 0.08);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.15);
-        transform: translateY(-2px);
-    }
-
-    /* Métricas */
-    .metrics-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 15px;
-        margin-bottom: 30px;
-    }
-
-    .metric-card {
-        padding: 18px 20px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        transition: all 0.3s ease;
-    }
-
-    .metric-card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(255, 255, 255, 0.12);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .metric-icon {
-        font-size: 28px;
-        line-height: 1;
-    }
-
-    .metric-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .metric-value {
-        font-size: 24px;
-        font-weight: 700;
-        color: #ffffff;
-        line-height: 1.2;
-    }
-
-    .metric-label {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    /* Lista de carpetas */
-    .carpetas-list {
-        padding: 20px 24px;
-        margin-bottom: 30px;
-    }
-
-    .carpetas-list h3 {
-        font-size: 18px;
-        font-weight: 600;
-        color: #ffffff;
-        margin: 0 0 15px 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .carpeta-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 14px;
-        border-radius: 8px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        transition: background 0.15s;
-        color: #ffffff;
-        font-size: 15px;
-        animation: slideInLeft 0.4s ease both;
-    }
-
-    .carpeta-item:nth-child(1) { animation-delay: 0.02s; }
-    .carpeta-item:nth-child(2) { animation-delay: 0.04s; }
-    .carpeta-item:nth-child(3) { animation-delay: 0.06s; }
-    .carpeta-item:nth-child(4) { animation-delay: 0.08s; }
-    .carpeta-item:nth-child(5) { animation-delay: 0.10s; }
-
-    .carpeta-item:hover {
-        background: rgba(255, 255, 255, 0.04);
-    }
-
-    .carpeta-item .icono {
-        font-size: 20px;
-        width: 30px;
-        text-align: center;
-    }
-
-    .carpeta-item .nombre {
-        flex: 1;
-        font-weight: 500;
-    }
-
-    .carpeta-item .badge {
-        background: rgba(96, 165, 250, 0.15);
-        color: #60a5fa;
-        padding: 2px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
     .carpeta-item .tipo-tag {
-        font-size: 12px;
-        padding: 2px 10px;
-        border-radius: 20px;
-        font-weight: 500;
+        font-size: var(--font-small);
+        padding: 4px 12px;
+        border-radius: var(--radius-full);
+        font-weight: var(--font-weight-medium);
+        flex-shrink: 0;
     }
-
-    .tipo-facturas { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
-    .tipo-boletas { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
-    .tipo-percepciones { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
-
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-15px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 40px 20px;
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 16px;
-    }
-
-    .empty-state .icon-grande {
-        font-size: 48px;
-        display: block;
-        margin-bottom: 15px;
-    }
-
-    /* Resumen por mes */
-    .resumen-table {
-        padding: 20px 24px;
-    }
-
-    .resumen-table h3 {
-        font-size: 18px;
-        font-weight: 600;
-        color: #ffffff;
-        margin: 0 0 15px 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .resumen-table table {
-        width: 100%;
-        border-collapse: collapse;
-        color: #ffffff;
-        font-size: 14px;
-    }
-
-    .resumen-table th {
-        text-align: left;
-        padding: 10px 12px;
-        color: rgba(255, 255, 255, 0.5);
-        font-weight: 600;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.06);
-        font-size: 13px;
-    }
-
-    .resumen-table td {
-        padding: 10px 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .resumen-table tr:hover td {
-        background: rgba(255, 255, 255, 0.03);
-    }
-
+    .tipo-facturas { background: var(--color-primary-100); color: var(--color-primary); }
+    .tipo-boletas { background: var(--color-success-bg); color: var(--color-success); }
+    .tipo-percepciones { background: var(--color-warning-bg); color: var(--color-warning); }
     .badge-total {
-        background: rgba(96, 165, 250, 0.15);
-        color: #60a5fa;
-        padding: 2px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
+        background: var(--color-primary-100);
+        color: var(--color-primary);
+        padding: 4px 14px;
+        border-radius: var(--radius-full);
+        font-size: var(--font-small);
+        font-weight: var(--font-weight-semibold);
+        display: inline-block;
     }
-
+    .empty-state .empty-icon { font-size: 4rem; display: block; margin-bottom: var(--spacing-md); opacity: 0.5; }
     @media (max-width: 768px) {
-        .carpetas-container { padding: 12px; }
-        .carpetas-header { padding: 16px 20px; flex-direction: column; align-items: stretch; }
-        .carpetas-header h1 { font-size: 22px; }
-        .header-buttons { justify-content: stretch; }
-        .header-buttons .btn { flex: 1; justify-content: center; }
-        .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .metric-card { padding: 14px; }
-        .metric-value { font-size: 20px; }
-        .carpetas-list { padding: 14px 16px; }
-        .carpeta-item { font-size: 14px; flex-wrap: wrap; }
-        .resumen-table { padding: 14px 16px; overflow-x: auto; }
-        .resumen-table table { font-size: 13px; }
-        .resumen-table th, .resumen-table td { padding: 8px 10px; }
+        .carpeta-item { font-size: var(--font-small); flex-wrap: wrap; gap: var(--spacing-sm); }
+        .carpeta-item .badge,
+        .carpeta-item .tipo-tag { font-size: var(--font-tiny); padding: 2px 10px; }
     }
-
     @media (max-width: 480px) {
-        .metrics-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-        .metric-card { padding: 12px; flex-direction: column; text-align: center; gap: 4px; }
-        .metric-icon { font-size: 24px; }
-        .metric-value { font-size: 18px; }
+        .carpeta-item { font-size: var(--font-small); padding: 10px 12px; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="carpetas-container">
-    <!-- ==================== ENCABEZADO ==================== -->
-    <div class="carpetas-header glass-card">
-        <div>
-            <h1>📁 Gestión de Carpetas</h1>
-            <p>Organiza y administra tus documentos por mes y año</p>
+    
+    <div class="page-header fade-in-up">
+        <div class="header-left">
+            <h1>
+                <span class="icon-title">📁</span>
+                Gestión de Carpetas
+                <span class="subtitle">Organiza y administra tus documentos por mes y año</span>
+            </h1>
         </div>
-        <div class="header-buttons">
+        <div class="header-actions">
             <button class="btn btn-primary" id="btnOrganizar">
-                🔄 Organizar Automático
+                <span class="icon">🔄</span> Organizar Automático
             </button>
             <button class="btn btn-secondary" id="btnEstadisticas">
-                📊 Ver Estadísticas
+                <span class="icon">📊</span> Ver Estadísticas
             </button>
         </div>
     </div>
 
-    <!-- ==================== MÉTRICAS ==================== -->
     <div class="metrics-grid">
-        <div class="metric-card glass-card">
+        <div class="metric-card fade-in-up stagger-1">
             <span class="metric-icon">📂</span>
             <div class="metric-info">
                 <span class="metric-value">{{ total_carpetas }}</span>
                 <span class="metric-label">Carpetas</span>
             </div>
         </div>
-        <div class="metric-card glass-card">
+        <div class="metric-card fade-in-up stagger-2">
             <span class="metric-icon">📄</span>
             <div class="metric-info">
                 <span class="metric-value">{{ total_documentos }}</span>
                 <span class="metric-label">Documentos Totales</span>
             </div>
         </div>
-        <div class="metric-card glass-card">
+        <div class="metric-card fade-in-up stagger-3">
             <span class="metric-icon">💾</span>
             <div class="metric-info">
                 <span class="metric-value">{{ total_mb }}</span>
                 <span class="metric-label">Espacio Usado</span>
             </div>
         </div>
-        <div class="metric-card glass-card">
+        <div class="metric-card fade-in-up stagger-4">
             <span class="metric-icon">📊</span>
             <div class="metric-info">
                 <span class="metric-value">{{ tipos }}</span>
@@ -351,86 +92,57 @@
         </div>
     </div>
 
-    <!-- ==================== LISTA DE CARPETAS ==================== -->
-    <div class="carpetas-list glass-card">
+    <div class="glass-card fade-in-up stagger-2" style="margin-bottom:var(--spacing-xl);">
         <h3>📂 Estructura de Carpetas</h3>
         {% if arbol and arbol|length > 0 %}
             {% for item in arbol %}
-            <div class="carpeta-item">
-                <span class="icono">
+            <div class="carpeta-item slide-in-left" style="display:flex; align-items:center; gap:var(--spacing-sm); padding:var(--spacing-sm) var(--spacing-md); border-radius:var(--radius-sm); border-bottom:1px solid var(--border-color); transition:all var(--transition-fast); color:var(--text-primary); font-size:var(--font-body);">
+                <span class="icono" style="font-size:1.4rem; width:32px; text-align:center; flex-shrink:0;">
                     {% if item.tipo == 'facturas' %}📄
                     {% elif item.tipo == 'boletas' %}🧾
                     {% else %}📋{% endif %}
                 </span>
-                <span class="nombre">{{ item.nombre }}</span>
+                <span class="nombre" style="flex:1; font-weight:var(--font-weight-medium);">{{ item.nombre }}</span>
                 <span class="tipo-tag tipo-{{ item.tipo }}">{{ item.tipo }}</span>
-                <span class="badge">{{ item.cantidad }} docs</span>
+                <span class="badge badge-primary">{{ item.cantidad }} docs</span>
             </div>
             {% endfor %}
         {% else %}
             <div class="empty-state">
-                <span class="icon-grande">📭</span>
-                <p>No hay carpetas con documentos</p>
-                <p style="font-size:14px; margin-top:5px;">Sube tus primeros PDFs desde la sección "Subir Archivos"</p>
+                <span class="empty-icon">📭</span>
+                <p style="font-size:var(--font-body);">No hay carpetas con documentos</p>
+                <p class="text-muted" style="font-size:var(--font-small);">Sube tus primeros PDFs desde la sección "Subir Archivos"</p>
             </div>
         {% endif %}
     </div>
 
-    <!-- ==================== RESUMEN POR MES ==================== -->
-    <div class="resumen-table glass-card">
+    <div class="glass-card fade-in-up stagger-3">
         <h3>📈 Resumen por Mes</h3>
         <div class="table-responsive">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Mes</th>
-                        <th>Facturas</th>
-                        <th>Boletas</th>
-                        <th>Percepciones</th>
+                        <th>📄 Facturas</th>
+                        <th>🧾 Boletas</th>
+                        <th>📋 Percepciones</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% if total_documentos > 0 %}
-                        {% set meses_dict = {} %}
-                        {% for item in arbol %}
-                            {% set parts = item.nombre.split('_') %}
-                            {% if parts|length == 2 %}
-                                {% set anio = parts[0] %}
-                                {% set mes_num = parts[1] %}
-                                {% set key = anio ~ '_' ~ mes_num %}
-                                {% if key not in meses_dict %}
-                                    {% set _ = meses_dict.update({key: {'anio': anio, 'mes': mes_num, 'facturas': 0, 'boletas': 0, 'percepciones': 0}}) %}
-                                {% endif %}
-                                {% if item.tipo == 'facturas' %}
-                                    {% set _ = meses_dict.update({key: meses_dict[key]|merge({'facturas': item.cantidad})}) %}
-                                {% elif item.tipo == 'boletas' %}
-                                    {% set _ = meses_dict.update({key: meses_dict[key]|merge({'boletas': item.cantidad})}) %}
-                                {% elif item.tipo == 'percepciones' %}
-                                    {% set _ = meses_dict.update({key: meses_dict[key]|merge({'percepciones': item.cantidad})}) %}
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                        
-                        {% set nombre_meses = {
-                            '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
-                            '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto',
-                            '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'
-                        } %}
-                        
-                        {% for key, data in meses_dict|dictsort(reverse=true) %}
-                            {% set total_mes = data.facturas + data.boletas + data.percepciones %}
-                            <tr>
-                                <td><strong>{{ nombre_meses[data.mes] }} {{ data.anio }}</strong></td>
-                                <td>{{ data.facturas }}</td>
-                                <td>{{ data.boletas }}</td>
-                                <td>{{ data.percepciones }}</td>
-                                <td><span class="badge-total">{{ total_mes }}</span></td>
-                            </tr>
+                    {% if resumen_meses and resumen_meses|length > 0 %}
+                        {% for mes in resumen_meses %}
+                        <tr>
+                            <td><strong>{{ mes.nombre }}</strong></td>
+                            <td>{{ mes.facturas }}</td>
+                            <td>{{ mes.boletas }}</td>
+                            <td>{{ mes.percepciones }}</td>
+                            <td><span class="badge-total">{{ mes.total }}</span></td>
+                        </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
-                            <td colspan="5" style="text-align:center; color:rgba(255,255,255,0.4); padding:20px;">
+                            <td colspan="5" class="text-center" style="color:var(--text-muted); padding:var(--spacing-xl);">
                                 No hay documentos registrados
                             </td>
                         </tr>
@@ -444,100 +156,8 @@
 
 {% block extra_js %}
 <script>
-    // ============================================
-    // BOTONES CON ANIMACIONES Y NOTIFICACIONES
-    // ============================================
-    
     document.addEventListener('DOMContentLoaded', function() {
-        
-        // ==========================================
-        // BOTÓN: ORGANIZAR AUTOMÁTICO
-        // ==========================================
-        const btnOrganizar = document.getElementById('btnOrganizar');
-        if (btnOrganizar) {
-            btnOrganizar.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Animación de carga
-                const originalText = btnOrganizar.innerHTML;
-                btnOrganizar.innerHTML = '⏳ Organizando...';
-                btnOrganizar.disabled = true;
-                btnOrganizar.style.opacity = '0.7';
-                
-                // Mostrar notificación
-                if (window.mostrarNotificacion) {
-                    window.mostrarNotificacion('🔄 Organizando carpetas automáticamente...', 'info');
-                }
-                
-                // Llamar a la API
-                fetch('/api/organizar-carpetas', { 
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Restaurar botón
-                    btnOrganizar.innerHTML = originalText;
-                    btnOrganizar.disabled = false;
-                    btnOrganizar.style.opacity = '1';
-                    
-                    if (data.success) {
-                        if (window.mostrarNotificacion) {
-                            window.mostrarNotificacion('✅ Carpetas organizadas correctamente', 'success');
-                        }
-                        // Recargar después de 1.5 segundos
-                        setTimeout(() => location.reload(), 1500);
-                    } else {
-                        if (window.mostrarNotificacion) {
-                            window.mostrarNotificacion('❌ Error: ' + (data.message || 'Error desconocido'), 'error');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    btnOrganizar.innerHTML = originalText;
-                    btnOrganizar.disabled = false;
-                    btnOrganizar.style.opacity = '1';
-                    
-                    if (window.mostrarNotificacion) {
-                        window.mostrarNotificacion('❌ Error al conectar con el servidor', 'error');
-                    }
-                });
-            });
-        }
-        
-        // ==========================================
-        // BOTÓN: VER ESTADÍSTICAS
-        // ==========================================
-        const btnEstadisticas = document.getElementById('btnEstadisticas');
-        if (btnEstadisticas) {
-            btnEstadisticas.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                if (window.mostrarNotificacion) {
-                    window.mostrarNotificacion('📊 Cargando estadísticas...', 'info');
-                }
-                
-                // Navegar a reportes
-                window.location.href = '/reportes';
-            });
-        }
-        
-        // ==========================================
-        // TAMBIÉN SOPORTAR ONCLICK LEGACY
-        // ==========================================
-        // Si hay botones con onclick, también funcionan
-        window.organizarAutomatico = function() {
-            document.getElementById('btnOrganizar')?.click();
-        };
-        
-        window.verEstadisticas = function() {
-            document.getElementById('btnEstadisticas')?.click();
-        };
-        
+        console.log('📁 Página de carpetas lista');
     });
 </script>
 {% endblock %}

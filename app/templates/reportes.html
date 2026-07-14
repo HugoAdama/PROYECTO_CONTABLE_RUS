@@ -4,729 +4,183 @@
 
 {% block extra_css %}
 <style>
-    /* ============================================
-       REPORTES - DISEÑO UX/UI PROFESIONAL
-       ============================================ */
-    
-    .report-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 16px;
-        margin-bottom: 28px;
+    .reportes-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
     }
-    
-    .report-stat-card {
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 14px;
-        padding: 16px 20px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        text-align: center;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .report-stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        border-radius: 14px 14px 0 0;
-    }
-    
-    .report-stat-card:hover {
-        background: rgba(255, 255, 255, 0.05);
-        transform: translateY(-3px);
-        border-color: rgba(255, 255, 255, 0.07);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    }
-    
-    .report-stat-card .stat-icon {
-        font-size: 1.4rem;
-        display: block;
-        margin-bottom: 4px;
-    }
-    
-    .report-stat-card .stat-label {
-        color: rgba(255, 255, 255, 0.25);
-        font-size: 0.6rem;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        font-weight: 600;
-    }
-    
-    .report-stat-card .stat-value {
-        color: #fff;
-        font-size: 1.3rem;
-        font-weight: 800;
-        margin-top: 2px;
-        letter-spacing: -0.3px;
-    }
-    
-    .report-stat-card .stat-value.positive { color: #4ade80; }
-    .report-stat-card .stat-value.warning { color: #fbbf24; }
-    .report-stat-card .stat-value.danger { color: #f87171; }
-    .report-stat-card .stat-value.info { color: #60a5fa; }
-    
-    .report-stat-card.ventas::before { background: #4ade80; }
-    .report-stat-card.compras::before { background: #60a5fa; }
-    .report-stat-card.percepciones::before { background: #fbbf24; }
-    .report-stat-card.estado::before { background: #a78bfa; }
-    .report-stat-card.impuesto::before { background: #f472b6; }
-    
-    .chart-container {
-        background: rgba(255, 255, 255, 0.02);
-        border-radius: 16px;
-        padding: 20px 24px;
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
-    }
-    
-    .chart-container:hover {
-        background: rgba(255, 255, 255, 0.04);
-        border-color: rgba(255, 255, 255, 0.06);
-    }
-    
-    .chart-container .chart-header {
+    .filtros-reportes {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 14px;
+        gap: var(--spacing-md);
         flex-wrap: wrap;
-        gap: 8px;
+        align-items: flex-end;
+        margin-bottom: var(--spacing-lg);
     }
-    
-    .chart-container .chart-header h4 {
-        color: rgba(255, 255, 255, 0.4);
-        font-weight: 500;
-        font-size: 0.85rem;
-        letter-spacing: 0.3px;
-        margin: 0;
+    .filtros-reportes .form-group {
+        margin-bottom: 0;
+        min-width: 150px;
     }
-    
-    .chart-container .chart-header .chart-badge {
-        font-size: 0.6rem;
-        padding: 2px 12px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.04);
-        color: rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.04);
+    .filtros-reportes .form-group label {
+        font-size: var(--font-small);
+        text-transform: uppercase;
+        letter-spacing: var(--letter-spacing-wide);
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-xs);
     }
-    
-    .chart-wrapper {
+    .filtros-reportes .form-control {
+        padding: 10px 14px;
+        font-size: var(--font-body);
+    }
+    .resumen-reportes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: var(--spacing-md);
+        margin: var(--spacing-lg) 0;
+    }
+    .resumen-item {
+        background: var(--bg-card);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: 1px solid var(--border-color);
+        text-align: center;
+        transition: all var(--transition-base);
+    }
+    .resumen-item:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+    }
+    .resumen-item .resumen-valor {
+        font-size: var(--font-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
+    }
+    .resumen-item .resumen-label {
+        font-size: var(--font-small);
+        color: var(--text-secondary);
+        font-weight: var(--font-weight-medium);
+        margin-top: var(--spacing-xs);
+    }
+    .graficos-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-lg);
+    }
+    .grafico-card { min-height: 300px; }
+    .grafico-card .grafico-container {
         width: 100%;
         height: 280px;
     }
-    
-    .filters-bar-reportes {
-        display: flex;
-        gap: 14px;
-        align-items: center;
-        flex-wrap: wrap;
-        padding: 16px 22px;
-        background: rgba(255, 255, 255, 0.02);
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        margin-bottom: 28px;
-        backdrop-filter: blur(8px);
-    }
-    
-    .filters-bar-reportes label {
-        color: rgba(255, 255, 255, 0.3);
-        font-size: 0.7rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-    }
-    
-    .filters-bar-reportes select {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        color: #ffffff;
-        padding: 8px 16px;
-        border-radius: 10px;
-        font-size: 0.85rem;
-        font-family: var(--font);
-        min-width: 120px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        appearance: none;
-        -webkit-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.3)' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 14px center;
-        padding-right: 38px;
-    }
-    
-    .filters-bar-reportes select:focus {
-        outline: none;
-        border-color: rgba(96, 165, 250, 0.2);
-        background-color: rgba(255, 255, 255, 0.06);
-    }
-    
-    .filters-bar-reportes select option {
-        background: #1a1a3e;
-        color: #ffffff;
-        padding: 8px 12px;
-    }
-    
-    .filters-bar-reportes .btn-filter {
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        padding: 8px 20px;
-        border-radius: 10px;
-        color: rgba(255, 255, 255, 0.5);
-        font-weight: 500;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: var(--font);
-    }
-    
-    .filters-bar-reportes .btn-filter:hover {
-        background: rgba(255, 255, 255, 0.07);
-        color: rgba(255, 255, 255, 0.8);
-    }
-    
-    .filters-bar-reportes .btn-filter.active {
-        background: rgba(96, 165, 250, 0.08);
-        border-color: rgba(96, 165, 250, 0.12);
-        color: #60a5fa;
-    }
-    
-    .btn-export {
-        margin-left: auto;
-        background: linear-gradient(135deg, #4ade80, #22c55e);
-        color: #fff;
-        border: none;
-        padding: 10px 24px;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: var(--font);
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        box-shadow: 0 4px 20px rgba(34, 197, 94, 0.15);
-        position: relative;
-    }
-    
-    .btn-export:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(34, 197, 94, 0.25);
-        color: #fff;
-    }
-    
-    .btn-export:active {
-        transform: scale(0.97);
-    }
-    
-    .btn-export .spinner-border {
-        width: 16px;
-        height: 16px;
-        border-width: 2px;
-        border-color: #fff;
-        border-right-color: transparent;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
-    
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-    
-    .filters-active {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 8px;
-    }
-    
-    .filter-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 12px;
-        background: rgba(96, 165, 250, 0.06);
-        border: 1px solid rgba(96, 165, 250, 0.08);
-        border-radius: 20px;
-        font-size: 0.7rem;
-        color: rgba(255, 255, 255, 0.6);
-    }
-    
-    .filter-tag .remove {
-        cursor: pointer;
-        color: rgba(255, 255, 255, 0.2);
-        transition: color 0.3s ease;
-    }
-    
-    .filter-tag .remove:hover {
-        color: #f87171;
-    }
-    
-    .summary-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 16px;
-        margin-top: 8px;
-    }
-    
-    .summary-item .summary-label {
-        color: rgba(255, 255, 255, 0.15);
-        font-size: 0.65rem;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        font-weight: 600;
-    }
-    
-    .summary-item .summary-value {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.6);
-    }
-    
-    @media (max-width: 1024px) {
-        .report-stats { grid-template-columns: repeat(3, 1fr); }
-    }
-    
     @media (max-width: 768px) {
-        .report-stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .report-stat-card { padding: 12px 14px; }
-        .report-stat-card .stat-value { font-size: 1rem; }
-        .filters-bar-reportes { padding: 14px 16px; gap: 10px; }
-        .filters-bar-reportes select { min-width: 80px; padding: 6px 14px; font-size: 0.8rem; padding-right: 32px; }
-        .chart-container { padding: 14px 16px; }
-        .chart-wrapper { height: 220px; }
-        .btn-export { margin-left: 0; width: 100%; justify-content: center; }
-        .summary-grid { grid-template-columns: repeat(2, 1fr); }
+        .graficos-grid { grid-template-columns: 1fr; }
+        .filtros-reportes { flex-direction: column; align-items: stretch; }
+        .filtros-reportes .form-group { min-width: auto; }
+        .resumen-reportes { grid-template-columns: repeat(2, 1fr); }
     }
-    
     @media (max-width: 480px) {
-        .report-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
-        .report-stat-card { padding: 10px 12px; }
-        .report-stat-card .stat-value { font-size: 0.9rem; }
-        .filters-bar-reportes { flex-direction: column; align-items: stretch; gap: 8px; padding: 14px; }
-        .filters-bar-reportes select { width: 100%; min-width: unset; }
-        .chart-wrapper { height: 180px; }
-        .chart-container { padding: 12px 14px; }
-        .chart-container .chart-header h4 { font-size: 0.75rem; }
-        .summary-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-        .summary-item .summary-value { font-size: 1.1rem; }
+        .resumen-reportes { grid-template-columns: 1fr; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="page-header animate-fade-in">
-    <h1 class="page-title">📊 Reportes Financieros</h1>
-    <p class="page-subtitle">Análisis detallado de tus finanzas en el Régimen RUS</p>
-</div>
-
-<div class="filters-bar-reportes animate-fade-in animate-fade-in-delay-1">
-    <label for="filtro_anio">Año:</label>
-    <select id="filtro_anio">
-        <option value="">📅 Todos</option>
-        {% if años_disponibles %}
-            {% for a in años_disponibles %}
-            <option value="{{ a }}" {% if a == anio_actual %}selected{% endif %}>{{ a }}</option>
-            {% endfor %}
-        {% else %}
-            <option value="" disabled>No hay años disponibles</option>
-        {% endif %}
-    </select>
+<div class="reportes-container">
     
-    <label for="filtro_mes">Mes:</label>
-    <select id="filtro_mes">
-        <option value="">📆 Todos</option>
-        {% if meses_disponibles %}
-            {% for m in meses_disponibles %}
-            <option value="{{ m }}" {% if m == mes_actual %}selected{% endif %}>
-                {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][m-1] }}
-            </option>
-            {% endfor %}
-        {% else %}
-            <option value="" disabled>Selecciona un año primero</option>
-        {% endif %}
-    </select>
-    
-    <button class="btn-filter active" onclick="aplicarFiltros()">
-        <i class="fas fa-search"></i> Aplicar
-    </button>
-    <button class="btn-filter" onclick="limpiarFiltros()">
-        <i class="fas fa-undo"></i> Limpiar
-    </button>
-    
-    <a href="#" class="btn-export" id="btnExportarExcel" onclick="exportarExcel(event)">
-        <i class="fas fa-file-excel"></i> 
-        <span id="exportText">Exportar a Excel</span>
-        <span id="exportSpinner" style="display:none;" class="spinner-border"></span>
-    </a>
-</div>
-
-<div class="filters-active animate-fade-in animate-fade-in-delay-1" id="filtrosActivos">
-    {% if anio_actual %}
-    <span class="filter-tag">
-        📅 {{ anio_actual }}
-        <span class="remove" onclick="removerFiltro('anio')">✕</span>
-    </span>
-    {% endif %}
-    {% if mes_actual %}
-    <span class="filter-tag">
-        📆 {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][mes_actual-1] }}
-        <span class="remove" onclick="removerFiltro('mes')">✕</span>
-    </span>
-    {% endif %}
-    {% if not anio_actual and not mes_actual %}
-    <span style="color:rgba(255,255,255,0.1);font-size:0.75rem;">Mostrando todos los datos disponibles</span>
-    {% endif %}
-</div>
-
-<div class="report-stats animate-fade-in animate-fade-in-delay-2">
-    <div class="report-stat-card ventas">
-        <span class="stat-icon">💰</span>
-        <div class="stat-label">Total Ventas</div>
-        <div class="stat-value positive">S/ {{ "{:,.2f}".format(datos.resumen.total_ventas) }}</div>
-    </div>
-    <div class="report-stat-card compras">
-        <span class="stat-icon">🛒</span>
-        <div class="stat-label">Total Compras</div>
-        <div class="stat-value info">S/ {{ "{:,.2f}".format(datos.resumen.total_compras) }}</div>
-    </div>
-    <div class="report-stat-card percepciones">
-        <span class="stat-icon">📋</span>
-        <div class="stat-label">Total Percepciones</div>
-        <div class="stat-value warning">S/ {{ "{:,.2f}".format(datos.resumen.total_percepciones) }}</div>
-    </div>
-    <div class="report-stat-card estado">
-        <span class="stat-icon">🏛️</span>
-        <div class="stat-label">Estado RUS</div>
-        <div class="stat-value {% if datos.resumen.estado_rus == 'normal' %}positive{% elif datos.resumen.estado_rus == 'alerta' %}warning{% else %}danger{% endif %}">
-            {{ datos.resumen.estado_rus|upper }}
+    <div class="page-header fade-in-up">
+        <div class="header-left">
+            <h1>
+                <span class="icon-title">📊</span>
+                Reportes
+                <span class="subtitle">Análisis financiero con gráficos interactivos</span>
+            </h1>
+        </div>
+        <div class="header-actions">
+            <a href="{{ url_for('main.exportar_excel', mes=mes_actual, anio=anio_actual) }}" 
+               class="btn btn-success" id="btnExportarExcel">
+                <span class="icon">📤</span> Exportar a Excel
+            </a>
         </div>
     </div>
-    <div class="report-stat-card impuesto">
-        <span class="stat-icon">🧾</span>
-        <div class="stat-label">Impuesto Mensual</div>
-        <div class="stat-value info">S/ {{ datos.resumen.impuesto_mensual }}</div>
-    </div>
-</div>
 
-<div class="grid-2 animate-fade-in animate-fade-in-delay-3">
-    <div class="chart-container">
-        <div class="chart-header">
-            <h4>📈 Evolución de Ventas Mensuales</h4>
-            <span class="chart-badge">{{ datos.ventas.meses|length }} meses</span>
-        </div>
-        <div id="grafico_ventas" class="chart-wrapper"></div>
+    <div class="glass-card fade-in-up stagger-1">
+        <form method="GET" action="{{ url_for('main.reportes') }}" class="filtros-reportes">
+            <div class="form-group">
+                <label for="filtro-anio">Año</label>
+                <select id="filtro-anio" name="anio" class="form-control">
+                    <option value="">Todos</option>
+                    {% for a in años_disponibles %}
+                    <option value="{{ a }}" {% if a == anio_actual %}selected{% endif %}>{{ a }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="filtro-mes">Mes</label>
+                <select id="filtro-mes" name="mes" class="form-control">
+                    <option value="">Todos</option>
+                    {% for m in meses_disponibles %}
+                    <option value="{{ m }}" {% if m == mes_actual %}selected{% endif %}>
+                        {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][m-1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="align-self:flex-end;">
+                🔍 Aplicar Filtros
+            </button>
+            <a href="{{ url_for('main.reportes') }}" class="btn btn-secondary" style="align-self:flex-end;">
+                <span class="icon">🗑️</span> Limpiar
+            </a>
+        </form>
     </div>
-    <div class="chart-container">
-        <div class="chart-header">
-            <h4>📉 Evolución de Compras Mensuales</h4>
-            <span class="chart-badge">{{ datos.compras.meses|length }} meses</span>
-        </div>
-        <div id="grafico_compras" class="chart-wrapper"></div>
-    </div>
-</div>
 
-<div class="grid-2 animate-fade-in animate-fade-in-delay-4">
-    <div class="chart-container">
-        <div class="chart-header">
+    <div class="resumen-reportes">
+        <div class="resumen-item fade-in-up stagger-2">
+            <div class="resumen-valor" style="color:var(--color-primary);">S/ {{ "%.2f"|format(datos.total_ventas) }}</div>
+            <div class="resumen-label">Total Ventas</div>
+        </div>
+        <div class="resumen-item fade-in-up stagger-3">
+            <div class="resumen-valor" style="color:var(--color-success);">S/ {{ "%.2f"|format(datos.total_compras) }}</div>
+            <div class="resumen-label">Total Compras</div>
+        </div>
+        <div class="resumen-item fade-in-up stagger-4">
+            <div class="resumen-valor" style="color:var(--color-warning);">S/ {{ "%.2f"|format(datos.total_percepciones) }}</div>
+            <div class="resumen-label">Total Percepciones</div>
+        </div>
+        <div class="resumen-item fade-in-up stagger-5">
+            <div class="resumen-valor" style="color:var(--text-primary);">{{ datos.estado_rus }}</div>
+            <div class="resumen-label">Estado RUS</div>
+        </div>
+        <div class="resumen-item fade-in-up stagger-6">
+            <div class="resumen-valor" style="color:var(--color-secondary);">S/ {{ datos.impuesto_mensual }}</div>
+            <div class="resumen-label">Impuesto Mensual</div>
+        </div>
+    </div>
+
+    <div class="graficos-grid">
+        <div class="glass-card grafico-card fade-in-up stagger-3">
+            <h4>📈 Evolución de Ventas</h4>
+            <div class="grafico-container" id="grafico-ventas"></div>
+        </div>
+        <div class="glass-card grafico-card fade-in-up stagger-4">
+            <h4>📉 Evolución de Compras</h4>
+            <div class="grafico-container" id="grafico-compras"></div>
+        </div>
+        <div class="glass-card grafico-card fade-in-up stagger-5">
             <h4>📊 Evolución de Impuestos</h4>
-            <span class="chart-badge">{{ datos.impuestos.meses|length }} meses</span>
+            <div class="grafico-container" id="grafico-impuestos"></div>
         </div>
-        <div id="grafico_impuestos" class="chart-wrapper"></div>
-    </div>
-    <div class="chart-container">
-        <div class="chart-header">
-            <h4>🎯 Distribución de Gastos por Proveedor</h4>
-            <span class="chart-badge">{{ datos.distribucion.proveedores|length }} proveedores</span>
-        </div>
-        <div id="grafico_distribucion" class="chart-wrapper"></div>
-    </div>
-</div>
-
-{% if datos.resumen %}
-<div class="glass-card animate-fade-in animate-fade-in-delay-5" style="margin-top:8px;">
-    <div class="summary-grid">
-        <div class="summary-item">
-            <div class="summary-label">📄 Facturas</div>
-            <div class="summary-value">{{ datos.resumen.num_facturas }}</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">🧾 Boletas</div>
-            <div class="summary-value">{{ datos.resumen.num_boletas }}</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">📋 Percepciones</div>
-            <div class="summary-value">{{ datos.resumen.num_percepciones }}</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">📅 Último mes</div>
-            <div class="summary-value">{{ datos.resumen.ultimo_mes }}</div>
+        <div class="glass-card grafico-card fade-in-up stagger-6">
+            <h4>🥧 Distribución de Gastos</h4>
+            <div class="grafico-container" id="grafico-distribucion"></div>
         </div>
     </div>
 </div>
-{% endif %}
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+{% if datos %}
 <script>
-    const datosIniciales = {{ datos|tojson|safe }};
-
-    function renderizarGraficos(datos) {
-        if (typeof Plotly === 'undefined') {
-            console.error('Plotly no está disponible');
-            return;
-        }
-
-        const ventas = datos.ventas;
-        Plotly.newPlot('grafico_ventas', [{
-            x: ventas.meses,
-            y: ventas.montos,
-            type: 'bar',
-            marker: { color: '#4ade80', opacity: 0.85, line: { color: '#22c55e', width: 1 } },
-            text: ventas.montos.map(v => 'S/ ' + v.toFixed(2)),
-            textposition: 'outside',
-        }], {
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: 'rgba(255,255,255,0.6)', size: 12 },
-            margin: { l: 70, r: 30, t: 40, b: 60 },
-            yaxis: { title: 'Monto (S/)', gridcolor: 'rgba(255,255,255,0.04)', tickformat: 'S/.2f' },
-            xaxis: { title: 'Mes', gridcolor: 'rgba(255,255,255,0.02)', tickangle: -30 },
-            showlegend: false,
-            hovermode: 'x unified'
-        }, { responsive: true });
-
-        const compras = datos.compras;
-        Plotly.newPlot('grafico_compras', [{
-            x: compras.meses,
-            y: compras.montos,
-            type: 'bar',
-            marker: { color: '#60a5fa', opacity: 0.85, line: { color: '#3b82f6', width: 1 } },
-            text: compras.montos.map(v => 'S/ ' + v.toFixed(2)),
-            textposition: 'outside',
-        }], {
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: 'rgba(255,255,255,0.6)', size: 12 },
-            margin: { l: 70, r: 30, t: 40, b: 60 },
-            yaxis: { title: 'Monto (S/)', gridcolor: 'rgba(255,255,255,0.04)', tickformat: 'S/.2f' },
-            xaxis: { title: 'Mes', gridcolor: 'rgba(255,255,255,0.02)', tickangle: -30 },
-            showlegend: false,
-            hovermode: 'x unified'
-        }, { responsive: true });
-
-        const impuestos = datos.impuestos;
-        Plotly.newPlot('grafico_impuestos', [{
-            x: impuestos.meses,
-            y: impuestos.impuestos,
-            type: 'scatter',
-            mode: 'lines+markers',
-            line: { color: '#fbbf24', width: 3, shape: 'spline' },
-            marker: { color: '#f59e0b', size: 10, line: { color: '#fff', width: 1 } },
-            fill: 'tozeroy',
-            fillcolor: 'rgba(251,191,36,0.1)',
-            text: impuestos.impuestos.map(v => 'S/ ' + v.toFixed(2)),
-        }], {
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: 'rgba(255,255,255,0.6)', size: 12 },
-            margin: { l: 70, r: 30, t: 40, b: 60 },
-            yaxis: { title: 'Impuesto (S/)', gridcolor: 'rgba(255,255,255,0.04)', tickformat: 'S/.2f' },
-            xaxis: { title: 'Mes', gridcolor: 'rgba(255,255,255,0.02)', tickangle: -30 },
-            showlegend: false,
-            hovermode: 'x unified'
-        }, { responsive: true });
-
-        const distribucion = datos.distribucion;
-        if (distribucion.proveedores && distribucion.proveedores.length > 0) {
-            Plotly.newPlot('grafico_distribucion', [{
-                values: distribucion.montos,
-                labels: distribucion.proveedores,
-                type: 'pie',
-                hole: 0.4,
-                marker: {
-                    colors: ['#4ade80', '#60a5fa', '#fbbf24', '#f87171', '#a78bfa', '#34d399', '#f472b6']
-                },
-                textinfo: 'label+percent',
-                textposition: 'auto',
-                hoverinfo: 'label+value',
-                hovertemplate: '%{label}<br>S/ %{value:,.2f}<br>%{percent}<extra></extra>',
-                textfont: { color: 'rgba(255,255,255,0.7)', size: 11 }
-            }], {
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: 'rgba(255,255,255,0.5)', size: 12 },
-                margin: { l: 20, r: 20, t: 20, b: 20 },
-                showlegend: true,
-                legend: {
-                    font: { color: 'rgba(255,255,255,0.4)', size: 11 },
-                    orientation: 'v',
-                    x: 1.05,
-                    y: 0.5
-                }
-            }, { responsive: true });
-        } else {
-            document.getElementById('grafico_distribucion').innerHTML =
-                '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.2);font-size:0.95rem;">No hay datos de gastos disponibles</div>';
-        }
-    }
-
-    function aplicarFiltros() {
-        console.log('🔍 Aplicando filtros...');
-        const anio = document.getElementById('filtro_anio').value;
-        const mes = document.getElementById('filtro_mes').value;
-        console.log('  - Año:', anio || 'Todos');
-        console.log('  - Mes:', mes || 'Todos');
-        
-        let url = '/api/reportes/datos?';
-        if (anio) url += 'anio=' + anio + '&';
-        if (mes) url += 'mes=' + mes + '&';
-        
-        document.querySelectorAll('.chart-wrapper').forEach(el => {
-            el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.15);font-size:0.9rem;">🔄 Cargando datos...</div>';
-        });
-        
-        fetch(url)
-            .then(response => {
-                if (!response.ok) throw new Error('Error en la respuesta del servidor');
-                return response.json();
-            })
-            .then(datos => {
-                console.log('✅ Datos recibidos');
-                renderizarGraficos(datos);
-                actualizarResumen(datos.resumen);
-                actualizarFiltrosActivos(anio, mes);
-                if (typeof NotificationsModule !== 'undefined') {
-                    NotificationsModule.success('✅ Filtros aplicados');
-                }
-            })
-            .catch(error => {
-                console.error('❌ Error:', error);
-                if (typeof NotificationsModule !== 'undefined') {
-                    NotificationsModule.error('❌ Error al aplicar filtros');
-                }
-            });
-    }
-
-    function limpiarFiltros() {
-        console.log('🧹 Limpiando filtros...');
-        document.getElementById('filtro_anio').value = '';
-        document.getElementById('filtro_mes').value = '';
-        window.location.href = '/reportes';
-    }
-
-    function actualizarFiltrosActivos(anio, mes) {
-        const container = document.getElementById('filtrosActivos');
-        if (!container) return;
-        let html = '';
-        if (anio) {
-            html += `<span class="filter-tag">📅 ${anio} <span class="remove" onclick="removerFiltro('anio')">✕</span></span>`;
-        }
-        if (mes) {
-            const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-            html += `<span class="filter-tag">📆 ${meses[mes-1]} <span class="remove" onclick="removerFiltro('mes')">✕</span></span>`;
-        }
-        if (!anio && !mes) {
-            html = '<span style="color:rgba(255,255,255,0.1);font-size:0.75rem;">Mostrando todos los datos disponibles</span>';
-        }
-        container.innerHTML = html;
-    }
-
-    function removerFiltro(tipo) {
-        if (tipo === 'anio') document.getElementById('filtro_anio').value = '';
-        else if (tipo === 'mes') document.getElementById('filtro_mes').value = '';
-        aplicarFiltros();
-    }
-
-    function actualizarResumen(resumen) {
-        const cards = document.querySelectorAll('.report-stat-card .stat-value');
-        if (cards.length >= 5) {
-            cards[0].textContent = 'S/ ' + resumen.total_ventas.toFixed(2);
-            cards[1].textContent = 'S/ ' + resumen.total_compras.toFixed(2);
-            cards[2].textContent = 'S/ ' + resumen.total_percepciones.toFixed(2);
-            cards[3].textContent = resumen.estado_rus.toUpperCase();
-            cards[4].textContent = 'S/ ' + resumen.impuesto_mensual;
-            cards[3].className = 'stat-value ' + (resumen.estado_rus === 'normal' ? 'positive' : resumen.estado_rus === 'alerta' ? 'warning' : 'danger');
-        }
-    }
-
-    function exportarExcel(event) {
-        event.preventDefault();
-        const btn = document.getElementById('btnExportarExcel');
-        const text = document.getElementById('exportText');
-        const spinner = document.getElementById('exportSpinner');
-        console.log('📊 Exportando a Excel...');
-        
-        btn.style.pointerEvents = 'none';
-        btn.style.opacity = '0.6';
-        spinner.style.display = 'inline-block';
-        text.textContent = 'Generando Excel...';
-        
-        if (typeof NotificationsModule !== 'undefined') {
-            NotificationsModule.info('📊 Generando archivo Excel...', { duration: 3000 });
-        }
-        
-        const anio = document.getElementById('filtro_anio').value;
-        const mes = document.getElementById('filtro_mes').value;
-        let url = '/exportar/excel?';
-        if (anio) url += 'anio=' + anio + '&';
-        if (mes) url += 'mes=' + mes + '&';
-        
-        fetch(url)
-            .then(response => {
-                if (!response.ok) throw new Error('Error al generar el Excel');
-                return response.blob();
-            })
-            .then(blob => {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `reporte_RUS_${new Date().toISOString().slice(0,10)}.xlsx`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
-                console.log('✅ Excel descargado');
-                if (typeof NotificationsModule !== 'undefined') {
-                    NotificationsModule.success('✅ Excel descargado');
-                }
-                btn.style.pointerEvents = '';
-                btn.style.opacity = '1';
-                spinner.style.display = 'none';
-                text.textContent = 'Exportar a Excel';
-            })
-            .catch(error => {
-                console.error('❌ Error:', error);
-                if (typeof NotificationsModule !== 'undefined') {
-                    NotificationsModule.error('❌ Error al generar el Excel');
-                }
-                btn.style.pointerEvents = '';
-                btn.style.opacity = '1';
-                spinner.style.display = 'none';
-                text.textContent = 'Exportar a Excel';
-            });
-    }
-
-    window.aplicarFiltros = aplicarFiltros;
-    window.limpiarFiltros = limpiarFiltros;
-    window.exportarExcel = exportarExcel;
-    window.removerFiltro = removerFiltro;
-
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof datosIniciales !== 'undefined' && datosIniciales) {
-            renderizarGraficos(datosIniciales);
-        }
-        console.log('📊 Años disponibles:', {{ años_disponibles|tojson|safe }});
-        console.log('📆 Meses disponibles:', {{ meses_disponibles|tojson|safe }});
-    });
+    window.datosReportes = {{ datos|tojson|safe }};
 </script>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,54 @@
+/* ============================================
+   SETTINGS: PALETA DE COLORES
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+:root {
+    /* ===== COLORES PRIMARIOS ===== */
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-primary-light: #93bbfc;
+    --color-primary-50: rgba(96, 165, 250, 0.05);
+    --color-primary-100: rgba(96, 165, 250, 0.1);
+    --color-primary-200: rgba(96, 165, 250, 0.2);
+    
+    /* ===== COLORES SECUNDARIOS ===== */
+    --color-secondary: #a78bfa;
+    --color-secondary-dark: #8b5cf6;
+    --color-secondary-light: #c4b5fd;
+    --color-secondary-50: rgba(167, 139, 250, 0.05);
+    --color-secondary-100: rgba(167, 139, 250, 0.1);
+    
+    /* ===== COLORES DE ESTADO ===== */
+    --color-success: #4ade80;
+    --color-success-dark: #22c55e;
+    --color-success-bg: rgba(74, 222, 128, 0.1);
+    --color-success-100: rgba(74, 222, 128, 0.2);
+    
+    --color-warning: #fbbf24;
+    --color-warning-dark: #f59e0b;
+    --color-warning-bg: rgba(251, 191, 36, 0.1);
+    --color-warning-100: rgba(251, 191, 36, 0.2);
+    
+    --color-danger: #f87171;
+    --color-danger-dark: #ef4444;
+    --color-danger-bg: rgba(248, 113, 113, 0.1);
+    --color-danger-100: rgba(248, 113, 113, 0.2);
+    
+    --color-info: #60a5fa;
+    --color-info-bg: rgba(96, 165, 250, 0.1);
+    
+    /* ===== COLORES DE FONDO ===== */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+}

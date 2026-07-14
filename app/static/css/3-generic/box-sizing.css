@@ -1,0 +1,10 @@
+/* ============================================
+   GENERIC: BOX SIZING
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}

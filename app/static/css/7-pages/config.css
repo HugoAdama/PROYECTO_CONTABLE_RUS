@@ -1,0 +1,130 @@
+/* ============================================
+   PAGES: CONFIGURACIÓN
+   Sistema de Control Financiero RUS v3.9.1
+   ============================================ */
+
+.config-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.config-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.config-section .section-title {
+    font-size: var(--font-h3);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-md) 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.system-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.system-info-item {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-base);
+}
+
+.system-info-item:hover {
+    border-color: var(--border-hover);
+}
+
+.system-info-item .info-label {
+    font-size: var(--font-tiny);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+    font-weight: var(--font-weight-semibold);
+}
+
+.system-info-item .info-value {
+    font-size: var(--font-h4);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-top: var(--spacing-xs);
+}
+
+.system-info-item .info-value .highlight {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+}
+
+.color-picker-wrapper input[type="color"] {
+    width: 60px;
+    height: 60px;
+    padding: 4px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    background: transparent;
+}
+
+.color-picker-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker-wrapper input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: var(--radius-sm);
+}
+
+.color-picker-wrapper .color-hex {
+    font-size: var(--font-body);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    font-family: monospace;
+}
+
+.save-feedback {
+    display: none;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-size: var(--font-body);
+    font-weight: var(--font-weight-medium);
+    margin-top: var(--spacing-md);
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+.save-feedback.success {
+    display: block;
+    background: var(--color-success-bg);
+    border: 1px solid var(--color-success-100);
+    color: var(--color-success);
+}
+
+.save-feedback.error {
+    display: block;
+    background: var(--color-danger-bg);
+    border: 1px solid var(--color-danger-100);
+    color: var(--color-danger);
+}
+
+.save-feedback.info {
+    display: block;
+    background: var(--color-info-bg);
+    border: 1px solid var(--color-primary-100);
+    color: var(--color-primary);
+}
