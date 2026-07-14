@@ -5,6 +5,9 @@ import pytest
 import os
 import sys
 from datetime import date
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -12,6 +15,12 @@ from app import create_app
 from src.models.factura_compra import FacturaCompra
 from src.models.boleta_venta import BoletaVenta
 from src.models.percepcion import Percepcion
+
+Base = declarative_base()
+
+# ============================================
+# FIXTURES DE APLICACIÓN
+# ============================================
 
 @pytest.fixture(scope='session')
 def app():
@@ -27,167 +36,157 @@ def client(app):
     return app.test_client()
 
 # ============================================
-# FACTURAS REALES - NOMBRES EXACTOS
+# FIXTURE PARA SESIÓN DE BASE DE DATOS
+# ============================================
+
+@pytest.fixture
+def db_session():
+    """Fixture que proporciona una sesión de base de datos para pruebas."""
+    engine = create_engine('sqlite:///:memory:')
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    Base.metadata.create_all(bind=engine)
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# ============================================
+# FIXTURES CON DATOS REALES DE DOÑA MARÍA
 # ============================================
 
 @pytest.fixture
 def factura_30022():
+    """Factura F033-00330022 - S/ 750.13"""
     return FacturaCompra(
         fecha_emision=date(2026, 5, 8),
-        numero='F033-00330022',          # ✅ campo EXACTO
+        numero='F033-00330022',
         monto=750.13,
-        proveedor='Natura Cosméticos S.A.'
+        proveedor='NATURA COSMETICOS S.A.'
     )
 
 @pytest.fixture
 def factura_30623():
+    """Factura F033-00330623 - S/ 191.70"""
     return FacturaCompra(
         fecha_emision=date(2026, 5, 12),
-        numero='F033-00330623',          # ✅ campo EXACTO
+        numero='F033-00330623',
         monto=191.70,
-        proveedor='Natura Cosméticos S.A.'
+        proveedor='NATURA COSMETICOS S.A.'
     )
 
 @pytest.fixture
 def factura_31167():
+    """Factura F033-00331167 - S/ 450.37"""
     return FacturaCompra(
         fecha_emision=date(2026, 5, 14),
-        numero='F033-00331167',          # ✅ campo EXACTO
+        numero='F033-00331167',
         monto=450.37,
-        proveedor='Natura Cosméticos S.A.'
+        proveedor='NATURA COSMETICOS S.A.'
     )
-
-# ============================================
-# BOLETAS REALES - NOMBRES EXACTOS
-# ============================================
 
 @pytest.fixture
 def boleta_302():
+    """Boleta EB01-302 - S/ 200.00"""
     return BoletaVenta(
-        fecha_emision=date(2026, 5, 15),
-        numero='EB01-302',               # ✅ campo EXACTO
+        fecha_emision=date(2026, 5, 31),
+        numero='EB01-302',
         monto=200.00,
-        cliente='DE LA CRUZ MELCHOR MARIA TERESA'
+        cliente='KAROLAY CHAVEZ'
     )
 
 @pytest.fixture
 def boleta_303():
+    """Boleta EB01-303 - S/ 220.00"""
     return BoletaVenta(
-        fecha_emision=date(2026, 5, 20),
-        numero='EB01-303',               # ✅ campo EXACTO
+        fecha_emision=date(2026, 5, 31),
+        numero='EB01-303',
         monto=220.00,
-        cliente='DE LA CRUZ MELCHOR MARIA TERESA'
+        cliente='INACIA CHU'
     )
 
 @pytest.fixture
 def boleta_304():
+    """Boleta EB01-304 - S/ 140.00"""
     return BoletaVenta(
-        fecha_emision=date(2026, 5, 25),
-        numero='EB01-304',               # ✅ campo EXACTO
+        fecha_emision=date(2026, 5, 31),
+        numero='EB01-304',
         monto=140.00,
-        cliente='DE LA CRUZ MELCHOR MARIA TERESA'
+        cliente='BEICY VAR'
     )
-
-# ============================================
-# PERCEPCIÓN REAL - NOMBRES EXACTOS
-# ============================================
 
 @pytest.fixture
 def percepcion_real():
+    """Percepción P003-00602821"""
     return Percepcion(
-        fecha_emision=date(2026, 5, 28),
-        numero='P003-00602821',          # ✅ campo EXACTO
-        monto=441.54,                    # ✅ campo EXACTO
-        proveedor='Natura Cosméticos S.A.'
+        fecha_emision=date(2026, 7, 14),
+        numero='P003-00602821',
+        monto=441.54,
+        proveedor='NATURA COSMETICOS S.A.'
+        # tasa eliminado - no existe en el modelo
     )
 
 # ============================================
-# FIXTURES PARA EXTRACTORES DE PDF
+# FIXTURES DE RUTAS A PDFS REALES
 # ============================================
 
-import os
+FIXTURES_DIR = os.path.join(os.path.dirname(__file__), 'fixtures')
+PDFS_REALES_DIR = os.path.join(FIXTURES_DIR, 'pdfs_reales')
+
+@pytest.fixture
+def ruta_factura_30623():
+    return os.path.join(PDFS_REALES_DIR, '20101796532-01-F033-00330623.pdf')
+
+@pytest.fixture
+def ruta_factura_30022():
+    return os.path.join(PDFS_REALES_DIR, '20101796532-01-F033-00330022.pdf')
+
+@pytest.fixture
+def ruta_factura_31167():
+    return os.path.join(PDFS_REALES_DIR, '20101796532-01-F033-00331167.pdf')
+
+@pytest.fixture
+def ruta_boleta_302():
+    return os.path.join(PDFS_REALES_DIR, 'PDF-BOLETAEB01-30215117337437.pdf')
+
+@pytest.fixture
+def ruta_boleta_303():
+    return os.path.join(PDFS_REALES_DIR, 'PDF-BOLETAEB01-30315117337437.pdf')
+
+@pytest.fixture
+def ruta_boleta_304():
+    return os.path.join(PDFS_REALES_DIR, 'PDF-BOLETAEB01-30415117337437.pdf')
+
+@pytest.fixture
+def ruta_percepcion_real():
+    return os.path.join(PDFS_REALES_DIR, '20101796532-40-P003-00602821.pdf')
+
+# ============================================
+# FIXTURES PARA EXTRACTORES
+# ============================================
+
 from src.extractors.base_extractor import BaseExtractor
 from src.extractors.factura_extractor import FacturaExtractor
 from src.extractors.boleta_extractor import BoletaExtractor
 from src.extractors.percepcion_extractor import PercepcionExtractor
 from src.extractors.detector_extractor import DetectorExtractor
 
-# Ruta a los PDFs reales
-FIXTURES_DIR = os.path.join(os.path.dirname(__file__), 'fixtures')
-PDFS_REALES_DIR = os.path.join(FIXTURES_DIR, 'pdfs_reales')
-
-
 @pytest.fixture
 def base_extractor():
-    """Fixture para el extractor base."""
     return BaseExtractor()
-
 
 @pytest.fixture
 def factura_extractor():
-    """Fixture para el extractor de facturas."""
     return FacturaExtractor()
-
 
 @pytest.fixture
 def boleta_extractor():
-    """Fixture para el extractor de boletas."""
     return BoletaExtractor()
-
 
 @pytest.fixture
 def percepcion_extractor():
-    """Fixture para el extractor de percepciones."""
     return PercepcionExtractor()
-
 
 @pytest.fixture
 def detector_extractor():
-    """Fixture para el detector de tipo de documento."""
     return DetectorExtractor()
-
-
-# ============================================
-# FIXTURES DE RUTAS A PDFS REALES
-# ============================================
-
-@pytest.fixture
-def ruta_factura_30022():
-    """Ruta a la factura F033-00330022."""
-    return os.path.join(PDFS_REALES_DIR, '20101796532-01-F033-00330022.pdf')
-
-
-@pytest.fixture
-def ruta_factura_30623():
-    """Ruta a la factura F033-00330623."""
-    return os.path.join(PDFS_REALES_DIR, '20101796532-01-F033-00330623.pdf')
-
-
-@pytest.fixture
-def ruta_factura_31167():
-    """Ruta a la factura F033-00331167."""
-    return os.path.join(PDFS_REALES_DIR, '20101796532-01-F033-00331167.pdf')
-
-
-@pytest.fixture
-def ruta_boleta_302():
-    """Ruta a la boleta EB01-302."""
-    return os.path.join(PDFS_REALES_DIR, 'PDF-BOLETAEB01-30215117337437.pdf')
-
-
-@pytest.fixture
-def ruta_boleta_303():
-    """Ruta a la boleta EB01-303."""
-    return os.path.join(PDFS_REALES_DIR, 'PDF-BOLETAEB01-30315117337437.pdf')
-
-
-@pytest.fixture
-def ruta_boleta_304():
-    """Ruta a la boleta EB01-304."""
-    return os.path.join(PDFS_REALES_DIR, 'PDF-BOLETAEB01-30415117337437.pdf')
-
-
-@pytest.fixture
-def ruta_percepcion_real():
-    """Ruta a la percepción P003-00602821."""
-    return os.path.join(PDFS_REALES_DIR, '20101796532-40-P003-00602821.pdf')
