@@ -1,219 +1,145 @@
-/**
- * MODULES: UPLOAD
- * Sistema de Control Financiero RUS v3.9.1
- * 
- * Maneja la subida de archivos con Drag & Drop
+﻿/**
+ * Upload - Feedback de subida de archivos
+ * Mejora la experiencia al subir archivos
  */
 
-class UploadModule {
-    constructor() {
-        this.uploadArea = document.getElementById('uploadArea');
-        this.fileInput = document.getElementById('fileInput');
-        this.fileList = document.getElementById('fileList');
-        this.btnSubir = document.getElementById('btnSubir');
-        this.btnLimpiar = document.getElementById('btnLimpiar');
-        this.progressBar = document.getElementById('progressBar');
-        this.uploadProgress = document.getElementById('uploadProgress');
-        this.selectedFiles = [];
-        this.init();
-    }
-    
-    init() {
-        console.log('📤 Upload inicializado');
-        this.setupClick();
-        this.setupDragDrop();
-        this.setupButtons();
-    }
-    
-    /**
-     * Configurar click para seleccionar archivos
-     */
-    setupClick() {
-        if (this.uploadArea) {
-            this.uploadArea.addEventListener('click', () => {
-                this.fileInput?.click();
-            });
-        }
+(function() {
+    "use strict";
+
+    // ============================================
+    // DRAG & DROP CON FEEDBACK VISUAL
+    // ============================================
+
+    const dropZone = document.getElementById("drop-zone");
+    if (dropZone) {
+        // Estado de arrastre
+        let dragCounter = 0;
         
-        if (this.fileInput) {
-            this.fileInput.addEventListener('change', (e) => {
-                this.handleFiles(e.target.files);
-                this.fileInput.value = '';
-            });
-        }
-    }
-    
-    /**
-     * Configurar Drag & Drop
-     */
-    setupDragDrop() {
-        if (!this.uploadArea) return;
-        
-        this.uploadArea.addEventListener('dragover', (e) => {
+        dropZone.addEventListener("dragenter", function(e) {
             e.preventDefault();
-            this.uploadArea.classList.add('dragover');
-        });
-        
-        this.uploadArea.addEventListener('dragleave', () => {
-            this.uploadArea.classList.remove('dragover');
-        });
-        
-        this.uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            this.uploadArea.classList.remove('dragover');
-            this.handleFiles(e.dataTransfer.files);
-        });
-    }
-    
-    /**
-     * Manejar archivos seleccionados
-     */
-    handleFiles(files) {
-        const validFiles = Array.from(files).filter(f => 
-            f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
-        );
-        
-        if (validFiles.length === 0) {
-            if (window.mostrarNotificacion) {
-                window.mostrarNotificacion('⚠️ Solo se permiten archivos PDF', 'warning');
+            dragCounter++;
+            if (dragCounter === 1) {
+                dropZone.classList.add("drag-over");
+                // Feedback visual: borde brillante
+                dropZone.style.borderColor = "var(--color-primary)";
+                dropZone.style.boxShadow = "0 0 30px rgba(96, 165, 250, 0.2)";
             }
-            return;
-        }
+        });
         
-        this.selectedFiles = [...this.selectedFiles, ...validFiles];
-        this.renderFileList();
-        this.updateButtons();
+        dropZone.addEventListener("dragleave", function(e) {
+            e.preventDefault();
+            dragCounter--;
+            if (dragCounter === 0) {
+                dropZone.classList.remove("drag-over");
+                dropZone.style.borderColor = "";
+                dropZone.style.boxShadow = "";
+            }
+        });
         
-        if (window.mostrarNotificacion) {
-            window.mostrarNotificacion(`✅ ${validFiles.length} archivo(s) seleccionado(s)`, 'success');
-        }
+        dropZone.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            // Efecto pulsante en el borde
+            dropZone.style.borderColor = "var(--color-primary)";
+            dropZone.style.boxShadow = "0 0 40px rgba(96, 165, 250, 0.3)";
+        });
+        
+        dropZone.addEventListener("drop", function(e) {
+            e.preventDefault();
+            dragCounter = 0;
+            dropZone.classList.remove("drag-over");
+            dropZone.style.borderColor = "";
+            dropZone.style.boxShadow = "";
+            
+            // Procesar archivos
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        });
     }
-    
-    /**
-     * Renderizar lista de archivos
-     */
-    renderFileList() {
-        if (!this.fileList) return;
+
+    // ============================================
+    // PROGRESO INDIVIDUAL POR ARCHIVO
+    // ============================================
+
+    function handleFiles(files) {
+        const fileList = document.getElementById("file-list");
+        if (!fileList) return;
         
-        if (this.selectedFiles.length === 0) {
-            this.fileList.innerHTML = '';
-            return;
-        }
-        
-        this.fileList.innerHTML = this.selectedFiles.map((file, index) => `
-            <div class="file-item" data-index="${index}">
-                <span class="file-icon">📄</span>
-                <span class="file-name">${file.name}</span>
-                <span class="file-size">${(file.size / 1024).toFixed(1)} KB</span>
-                <span class="file-status pending">⏳</span>
-                <button class="btn btn-sm btn-danger" onclick="window.removeFile(${index})" style="padding:4px 10px; font-size:0.8rem;">
-                    ✕
-                </button>
-            </div>
-        `).join('');
-        
-        // Exponer función de eliminación
-        window.removeFile = (index) => {
-            this.selectedFiles.splice(index, 1);
-            this.renderFileList();
-            this.updateButtons();
-        };
+        Array.from(files).forEach(function(file, index) {
+            // Crear elemento de archivo
+            const item = document.createElement("div");
+            item.className = "file-item";
+            item.dataset.index = index;
+            
+            item.innerHTML = `
+                <div class="file-info">
+                    <span class="file-icon">📄</span>
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${formatFileSize(file.size)}</span>
+                </div>
+                <div class="file-progress">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="file-status">
+                    <span class="status-text">⏳ Pendiente</span>
+                </div>
+            `;
+            
+            fileList.appendChild(item);
+            
+            // Simular subida con progreso
+            simulateUpload(item, file);
+        });
     }
-    
-    /**
-     * Configurar botones
-     */
-    setupButtons() {
-        if (this.btnSubir) {
-            this.btnSubir.addEventListener('click', () => {
-                this.uploadFiles();
-            });
-        }
-        
-        if (this.btnLimpiar) {
-            this.btnLimpiar.addEventListener('click', () => {
-                this.selectedFiles = [];
-                this.renderFileList();
-                this.updateButtons();
-                this.uploadProgress?.classList.remove('active');
-                if (this.progressBar) this.progressBar.style.width = '0%';
-            });
-        }
-    }
-    
-    /**
-     * Actualizar estado de botones
-     */
-    updateButtons() {
-        const hasFiles = this.selectedFiles.length > 0;
-        if (this.btnSubir) this.btnSubir.disabled = !hasFiles;
-        if (this.btnLimpiar) this.btnLimpiar.disabled = !hasFiles;
-    }
-    
-    /**
-     * Subir archivos
-     */
-    uploadFiles() {
-        if (this.selectedFiles.length === 0) return;
-        
-        if (this.btnSubir) {
-            this.btnSubir.disabled = true;
-            this.btnSubir.innerHTML = '⏳ Subiendo...';
-        }
-        
-        if (this.uploadProgress) {
-            this.uploadProgress.classList.add('active');
-        }
-        
-        // Simular progreso
+
+    function simulateUpload(item, file) {
+        const progressBar = item.querySelector(".progress-bar");
+        const statusText = item.querySelector(".status-text");
         let progress = 0;
-        const interval = setInterval(() => {
-            progress += 5;
-            if (progress <= 90 && this.progressBar) {
-                this.progressBar.style.width = progress + '%';
+        
+        // Actualizar estado a "Subiendo"
+        statusText.textContent = "⬆️ Subiendo...";
+        statusText.style.color = "var(--color-primary)";
+        
+        const interval = setInterval(function() {
+            // Simular progreso con velocidad variable
+            const increment = Math.random() * 15 + 5;
+            progress = Math.min(progress + increment, 100);
+            progressBar.style.width = progress + "%";
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                // Completado
+                statusText.textContent = "✅ Completado";
+                statusText.style.color = "var(--color-success)";
+                progressBar.style.background = "var(--color-success)";
+                
+                // Mostrar notificación
+                showNotification(`${file.name} subido correctamente`, "success");
             }
         }, 200);
-        
-        // Simular subida
-        setTimeout(() => {
-            clearInterval(interval);
-            if (this.progressBar) this.progressBar.style.width = '100%';
-            
-            // Marcar archivos como procesados
-            this.fileList?.querySelectorAll('.file-item .file-status').forEach(el => {
-                el.textContent = '✅';
-                el.className = 'file-status success';
-            });
-            
-            if (this.btnSubir) {
-                this.btnSubir.innerHTML = '✅ Completado';
-            }
-            
-            if (window.mostrarNotificacion) {
-                window.mostrarNotificacion('✅ Archivos subidos y procesados correctamente', 'success');
-            }
-            
-            setTimeout(() => {
-                if (this.btnSubir) {
-                    this.btnSubir.disabled = false;
-                    this.btnSubir.innerHTML = '🚀 Subir y Procesar';
-                }
-                if (this.uploadProgress) {
-                    this.uploadProgress.classList.remove('active');
-                }
-                if (this.progressBar) this.progressBar.style.width = '0%';
-                this.selectedFiles = [];
-                this.renderFileList();
-                this.updateButtons();
-            }, 2000);
-            
-        }, 3000);
     }
-}
 
-// ============================================
-// INICIALIZAR
-// ============================================
-document.addEventListener('DOMContentLoaded', () => {
-    new UploadModule();
-});
+    // ============================================
+    // UTILIDADES
+    // ============================================
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return "0 B";
+        const k = 1024;
+        const sizes = ["B", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    }
+
+    function showNotification(message, type) {
+        // Usar sistema de notificaciones global si existe
+        if (window.Notifications) {
+            window.Notifications.show(message, type);
+        } else {
+            console.log(`[${type}] ${message}`);
+        }
+    }
+
+})();
