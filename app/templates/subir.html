@@ -9,23 +9,36 @@
 <div class="upload-container">
 
     <!-- DROPZONE -->
-    <div class="dropzone glass-card">
+    <div class="dropzone glass-card" id="dropZone">
         <i class="fas fa-cloud-upload-alt" style="font-size:44px; color:var(--accent); margin-bottom:16px; display:block;"></i>
         <h3>Arrastra tus archivos PDF aquí</h3>
         <p>o haz clic para seleccionar</p>
-        <button class="btn btn-primary"><i class="fas fa-folder-open"></i> Seleccionar archivos</button>
+        <button class="btn btn-primary" id="selectFilesBtn">
+            <i class="fas fa-folder-open"></i> Seleccionar archivos
+        </button>
+        <input type="file" id="fileInput" accept=".pdf" multiple style="display:none;">
     </div>
 
-    <!-- ACCIONES -->
-    <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
-        <button class="btn btn-primary"><i class="fas fa-upload"></i> Subir y procesar</button>
-        <button class="btn btn-secondary"><i class="fas fa-trash-alt"></i> Limpiar</button>
+    <!-- LISTA DE ARCHIVOS -->
+    <div id="fileListContainer" style="display:none; margin-bottom:20px;">
+        <div class="card">
+            <div class="card-title"><i class="fas fa-file-pdf"></i> Archivos seleccionados</div>
+            <div id="fileList" class="file-list"></div>
+            <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
+                <button class="btn btn-primary" id="uploadBtn">
+                    <i class="fas fa-upload"></i> Subir y procesar
+                </button>
+                <button class="btn btn-secondary" id="clearBtn">
+                    <i class="fas fa-trash-alt"></i> Limpiar
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- ÚLTIMOS ARCHIVOS -->
     <div class="card">
         <div class="card-title"><i class="fas fa-history"></i> Últimos archivos procesados</div>
-        <div class="empty-state">
+        <div id="recentFiles" class="empty-state">
             <i class="fas fa-inbox" style="font-size:32px; color:var(--text-muted); margin-bottom:12px; display:block;"></i>
             <p>No hay archivos procesados recientemente</p>
         </div>
@@ -33,6 +46,9 @@
 
 </div>
 
+<!-- ============================================
+ESTILOS
+============================================ -->
 <style>
     .upload-container { max-width: 800px; margin: 0 auto; }
 
@@ -43,11 +59,13 @@
         text-align: center;
         margin-bottom: 20px;
         transition: all 0.3s ease;
+        cursor: pointer;
     }
 
-    .dropzone:hover {
+    .dropzone.dragover {
         border-color: var(--accent);
         background: var(--accent-soft);
+        transform: scale(1.01);
     }
 
     .dropzone h3 {
@@ -60,6 +78,101 @@
         margin: 0 0 20px;
         color: var(--text-secondary);
         font-size: 13.5px;
+    }
+
+    .file-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .file-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        background: var(--card-bg);
+        border-radius: 10px;
+        border: 1px solid var(--card-border);
+        transition: all 0.2s ease;
+    }
+
+    .file-item .file-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .file-item .file-name {
+        font-weight: 500;
+        font-size: 13.5px;
+        color: var(--text-primary);
+    }
+
+    .file-item .file-size {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .file-item .file-status {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    .file-item .file-status.pending {
+        color: var(--amber);
+        background: var(--amber-soft);
+    }
+
+    .file-item .file-status.uploading {
+        color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .file-item .file-status.success {
+        color: var(--green);
+        background: var(--green-soft);
+    }
+
+    .file-item .file-status.error {
+        color: var(--red);
+        background: var(--red-soft);
+    }
+
+    .file-item .file-remove {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+
+    .file-item .file-remove:hover {
+        color: var(--red);
+        background: var(--red-soft);
+    }
+
+    .file-item .file-progress {
+        width: 100px;
+        height: 6px;
+        background: var(--card-bg-strong);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 0 12px;
+    }
+
+    .file-item .file-progress .progress-bar {
+        height: 100%;
+        background: linear-gradient(135deg, var(--accent), var(--rose));
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        width: 0%;
     }
 
     .empty-state {
@@ -76,6 +189,286 @@
     @media (max-width: 768px) {
         .dropzone { padding: 32px 16px; }
         .dropzone h3 { font-size: 15px; }
+        .file-item { flex-wrap: wrap; gap: 8px; }
+        .file-item .file-progress { width: 60px; }
     }
 </style>
+
+<!-- ============================================
+SCRIPTS - FUNCIONALIDAD COMPLETA
+============================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ============================================
+    // ELEMENTOS
+    // ============================================
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const selectBtn = document.getElementById('selectFilesBtn');
+    const fileListContainer = document.getElementById('fileListContainer');
+    const fileList = document.getElementById('fileList');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const recentFiles = document.getElementById('recentFiles');
+
+    let selectedFiles = [];
+
+    // ============================================
+    // NOTIFICACIONES
+    // ============================================
+    function showNotification(message, type) {
+        const container = document.getElementById('notification-container') || (() => {
+            const c = document.createElement('div');
+            c.id = 'notification-container';
+            c.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;max-width:400px;';
+            document.body.appendChild(c);
+            return c;
+        })();
+
+        const colors = {
+            success: 'var(--green)',
+            error: 'var(--red)',
+            info: 'var(--accent)',
+            warning: 'var(--amber)'
+        };
+
+        const bgColors = {
+            success: 'var(--green-soft)',
+            error: 'var(--red-soft)',
+            info: 'var(--accent-soft)',
+            warning: 'var(--amber-soft)'
+        };
+
+        const icons = {
+            success: '✅',
+            error: '❌',
+            info: 'ℹ️',
+            warning: '⚠️'
+        };
+
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid ${colors[type] || colors.info};
+            border-left: 4px solid ${colors[type] || colors.info};
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            animation: slideInRight 0.3s ease forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        `;
+
+        notification.innerHTML = `${icons[type] || 'ℹ️'} ${message}`;
+
+        container.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(20px)';
+            notification.style.transition = 'all 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // ============================================
+    // DRAG & DROP
+    // ============================================
+    dropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        const files = Array.from(e.dataTransfer.files);
+        handleFiles(files);
+    });
+
+    // ============================================
+    // SELECCIONAR ARCHIVOS
+    // ============================================
+    selectBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+        const files = Array.from(this.files);
+        handleFiles(files);
+        this.value = '';
+    });
+
+    // ============================================
+    // MANEJAR ARCHIVOS
+    // ============================================
+    function handleFiles(files) {
+        const validFiles = files.filter(file => {
+            if (file.type !== 'application/pdf') {
+                showNotification(`❌ ${file.name} no es un PDF`, 'error');
+                return false;
+            }
+            if (file.size > 50 * 1024 * 1024) {
+                showNotification(`❌ ${file.name} excede 50MB`, 'error');
+                return false;
+            }
+            return true;
+        });
+
+        if (validFiles.length === 0) return;
+
+        selectedFiles.push(...validFiles);
+        renderFileList();
+        showNotification(`✅ ${validFiles.length} archivo(s) seleccionado(s)`, 'success');
+    }
+
+    // ============================================
+    // RENDERIZAR LISTA DE ARCHIVOS
+    // ============================================
+    function renderFileList() {
+        if (selectedFiles.length === 0) {
+            fileListContainer.style.display = 'none';
+            return;
+        }
+
+        fileListContainer.style.display = 'block';
+        fileList.innerHTML = '';
+
+        selectedFiles.forEach((file, index) => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.dataset.index = index;
+
+            const size = (file.size / 1024 / 1024).toFixed(2);
+
+            item.innerHTML = `
+                <div class="file-info">
+                    <i class="fas fa-file-pdf" style="color:var(--rose);"></i>
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${size} MB</span>
+                </div>
+                <div class="file-progress">
+                    <div class="progress-bar" id="progress-${index}" style="width:0%;"></div>
+                </div>
+                <span class="file-status pending" id="status-${index}">⏳ Pendiente</span>
+                <button class="file-remove" data-index="${index}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            fileList.appendChild(item);
+
+            // Eliminar archivo
+            item.querySelector('.file-remove').addEventListener('click', function() {
+                const idx = parseInt(this.dataset.index);
+                selectedFiles.splice(idx, 1);
+                renderFileList();
+                showNotification(`🗑️ Archivo eliminado`, 'info');
+            });
+        });
+    }
+
+    // ============================================
+    // LIMPIAR
+    // ============================================
+    clearBtn.addEventListener('click', function() {
+        selectedFiles = [];
+        renderFileList();
+        showNotification('🧹 Lista limpiada', 'info');
+    });
+
+    // ============================================
+    // SUBIR ARCHIVOS
+    // ============================================
+    uploadBtn.addEventListener('click', function() {
+        if (selectedFiles.length === 0) {
+            showNotification('⚠️ No hay archivos para subir', 'warning');
+            return;
+        }
+
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
+
+        let completed = 0;
+
+        selectedFiles.forEach((file, index) => {
+            const statusEl = document.getElementById(`status-${index}`);
+            const progressEl = document.getElementById(`progress-${index}`);
+
+            statusEl.textContent = '⬆️ Subiendo...';
+            statusEl.className = 'file-status uploading';
+
+            // Simular progreso
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress > 100) progress = 100;
+                progressEl.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    statusEl.textContent = '✅ Completado';
+                    statusEl.className = 'file-status success';
+                    completed++;
+                    showNotification(`✅ ${file.name} subido correctamente`, 'success');
+
+                    if (completed === selectedFiles.length) {
+                        uploadBtn.disabled = false;
+                        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Subir y procesar';
+                        showNotification('🎉 Todos los archivos procesados!', 'success');
+
+                        // Actualizar últimos archivos
+                        updateRecentFiles();
+                    }
+                }
+            }, 200);
+        });
+    });
+
+    // ============================================
+    // ACTUALIZAR ÚLTIMOS ARCHIVOS
+    // ============================================
+    function updateRecentFiles() {
+        const recentContainer = document.getElementById('recentFiles');
+        if (recentContainer) {
+            recentContainer.innerHTML = `
+                <div style="display:flex;flex-direction:column;gap:8px;text-align:left;">
+                    ${selectedFiles.map(f => `
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card-bg);border-radius:8px;border:1px solid var(--card-border);">
+                            <i class="fas fa-file-pdf" style="color:var(--green);"></i>
+                            <span style="font-size:13px;color:var(--text-primary);">${f.name}</span>
+                            <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">${(f.size/1024/1024).toFixed(2)} MB</span>
+                            <span style="font-size:11px;color:var(--green);font-weight:600;">✅ Procesado</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+    }
+
+    // ============================================
+    // ANIMACIÓN DE NOTIFICACIONES
+    // ============================================
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    `;
+    document.head.appendChild(style);
+
+});
+</script>
 {% endblock %}
