@@ -59,7 +59,7 @@
         }
 
         /* ============================================
-        TOPBAR
+        TOPBAR - SIN TOGGLE
         ============================================ */
         .topbar {
             display: flex;
@@ -109,49 +109,134 @@
         }
 
         /* ============================================
-        TOGGLE TEMA
+        SIDEBAR
         ============================================ */
-        .toggle-wrap {
+        .sidebar {
+            width: 240px;
+            padding: 28px 18px;
+            flex-shrink: 0;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(28px) saturate(160%);
+            -webkit-backdrop-filter: blur(28px) saturate(160%);
+            border-right: 1px solid var(--card-border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: all 0.4s ease;
+        }
+
+        [data-theme="dark"] .sidebar {
+            background: rgba(10, 10, 26, 0.45);
+        }
+
+        [data-theme="light"] .sidebar {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .sidebar-brand {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 6px;
+            text-decoration: none;
         }
 
-        .toggle-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .toggle {
-            width: 52px;
-            height: 28px;
-            border-radius: 20px;
-            background: var(--card-bg-strong);
-            border: 1px solid var(--card-border-strong);
-            position: relative;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .toggle-dot {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+        .sidebar-brand .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
             background: linear-gradient(135deg, var(--accent), var(--rose));
-            transition: left 0.25s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #fff;
+            font-size: 15px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px var(--accent-soft);
         }
 
-        [data-theme="light"] .toggle-dot {
-            left: 27px;
+        .sidebar-brand .brand-name {
+            font-family: 'Outfit', 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 17px;
+            line-height: 1.1;
+            color: var(--text-primary);
         }
 
-        .toggle:hover {
-            transform: scale(1.02);
+        .sidebar-brand .brand-sub {
+            font-size: 10.5px;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            display: block;
+        }
+
+        .nav-label {
+            font-size: 10.5px;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin: 22px 8px 8px;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 17px;
+            text-align: center;
+            opacity: 0.85;
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-soft);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .sidebar-footer .version {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
         }
     </style>
 
@@ -200,13 +285,6 @@
                 <h1 class="page-title" id="pt">{% block page_title %}Dashboard{% endblock %}</h1>
                 <p class="page-sub" id="ps">{% block page_subtitle %}Resumen financiero de tu negocio en el Régimen RUS{% endblock %}</p>
             </div>
-            <div class="toggle-wrap">
-                <span class="toggle-label">Claro</span>
-                <div class="toggle" onclick="toggleTheme()">
-                    <div class="toggle-dot"></div>
-                </div>
-                <span class="toggle-label">Oscuro</span>
-            </div>
         </div>
 
         {% block content %}{% endblock %}
@@ -229,17 +307,10 @@ SCRIPTS
 <script src="/static/js/app.js" defer></script>
 
 <script>
-    function toggleTheme() {
-        const root = document.documentElement;
-        const current = root.getAttribute('data-theme');
-        root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-    }
-
-    // Activar elemento de navegación según la página actual
     document.addEventListener('DOMContentLoaded', function() {
+        // Activar elemento de navegación según la página actual
         const currentPath = window.location.pathname;
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(function(item) {
+        document.querySelectorAll('.nav-item').forEach(function(item) {
             const href = item.getAttribute('href');
             if (href === currentPath) {
                 item.classList.add('active');
@@ -253,5 +324,3 @@ SCRIPTS
 {% block extra_js %}{% endblock %}
 </body>
 </html>
-
-
