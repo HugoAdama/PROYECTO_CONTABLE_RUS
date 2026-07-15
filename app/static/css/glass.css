@@ -1,90 +1,47 @@
-/* ============================================
+﻿/* ============================================
    GLASS.CSS - PUNTO DE ENTRADA
-   Sistema de Control Financiero RUS v3.9.1
-   
-   🏗️ ARQUITECTURA ATOMICA:
-   1. Settings - Configuración global
-   2. Tools - Herramientas y mixins
-   3. Generic - Estilos base
-   4. Elements - Elementos HTML puros
-   5. Components - Componentes reutilizables
-   6. Layouts - Estructuras de página
-   7. Pages - Estilos por página
-   8. Utilities - Clases utilitarias
-   9. Animations - Animaciones
+   Sistema de Control Financiero RUS v4.0
    ============================================ */
 
-/* ============================================
-   1. SETTINGS - Configuración global
-   ============================================ */
+/* 1. SETTINGS */
 @import url('1-settings/variables.css');
 @import url('1-settings/colors.css');
 @import url('1-settings/typography.css');
 
-/* ============================================
-   2. TOOLS - Herramientas y mixins
-   (Preparado para futuras extensiones)
-   ============================================ */
+/* 2. TOOLS (preparado) */
 /* @import url('2-tools/mixins.css'); */
-/* @import url('2-tools/functions.css'); */
 
-/* ============================================
-   3. GENERIC - Estilos base
-   ============================================ */
+/* 3. GENERIC */
 @import url('3-generic/reset.css');
 @import url('3-generic/box-sizing.css');
 
-/* ============================================
-   4. ELEMENTS - Elementos HTML puros
-   ============================================ */
+/* 4. ELEMENTS */
 @import url('4-elements/body.css');
 @import url('4-elements/headings.css');
 @import url('4-elements/links.css');
 
-/* ============================================
-   5. COMPONENTS - Componentes reutilizables
-   ============================================ */
+/* 5. COMPONENTS */
 @import url('5-components/buttons.css');
 @import url('5-components/cards.css');
 @import url('5-components/badges.css');
 @import url('5-components/tables.css');
 
-/* ============================================
-   6. LAYOUTS - Estructuras de página
-   ============================================ */
+/* 6. LAYOUTS */
 @import url('6-layouts/header.css');
 
-/* ============================================
-   7. PAGES - Estilos por página
-   ============================================ */
+/* 7. PAGES */
 @import url('7-pages/dashboard.css');
-@import url('7-pages/reports.css');
 @import url('7-pages/config.css');
 @import url('7-pages/upload.css');
 @import url('7-pages/backups.css');
 @import url('7-pages/historial.css');
 
-/* ============================================
-   8. UTILITIES - Clases utilitarias
-   ============================================ */
+/* 8. UTILITIES */
 @import url('8-utilities/spacing.css');
 @import url('8-utilities/flex.css');
 @import url('8-utilities/text.css');
-@import url('8-utilities/display.css');
-@import url('8-utilities/borders.css');
 
-/* ============================================
-   9. ANIMATIONS - Animaciones
-   ============================================ */
+/* 9. ANIMATIONS */
 @import url('9-animations/entries.css');
 @import url('9-animations/transitions.css');
-@import url('9-animations/keyframes.css');
-
-/* ============================================
-   NOTAS:
-   - Los archivos en 2-tools están comentados porque
-     actualmente no se utilizan mixins o funciones CSS.
-   - Los archivos de páginas adicionales (dashboard, reports, etc.)
-     se importan pero deben existir en la carpeta 7-pages/.
-   - Si un archivo no existe, el navegador lo ignorará.
-   ============================================ */
+@import url('9-animations/liquid-glass.css');

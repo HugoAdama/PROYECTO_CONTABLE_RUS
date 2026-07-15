@@ -1,48 +1,76 @@
 ﻿/* ============================================
-   VARIABLES CSS - DESIGN SYSTEM
+   DESIGN SYSTEM - LIQUID GLASS
+   Basado en el diseño de Maria Boutique
    ============================================ */
 
 :root {
-    /* --- COLORES --- */
-    --color-primary: var(--color-primary);
-    --color-primary-dark: var(--color-primary-dark);
-    --color-secondary: #a78bfa;
-    --color-success: #4ade80;
-    --color-warning: #fbbf24;
-    --color-danger: #f87171;
-    
-    /* --- TAMAÑOS --- */
-    --text-xs: 0.875rem;
-    --text-sm: 1rem;
-    --text-base: 1.125rem;
-    --text-lg: 1.25rem;
-    --text-xl: 1.5rem;
-    --text-2xl: 1.875rem;
-    --text-3xl: 2.25rem;
-    
-    /* --- ESPACIADO --- */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    
-    /* --- BORDES --- */
-    --radius-sm: 8px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
-    
-    /* --- FONDOS --- */
-    --bg-primary: #f0f4ff;
-    --bg-card: rgba(255, 255, 255, 0.7);
-    --bg-dark: #0a0a1e;
+    /* --- MODO OSCURO (por defecto) --- */
+    --bg1: #0b0b1f;
+    --bg2: #1a1140;
+    --bg3: #0d1b2e;
+    --glow1: rgba(124, 92, 255, 0.55);
+    --glow2: rgba(56, 189, 248, 0.35);
+    --glow3: rgba(236, 72, 153, 0.28);
+    --card-bg: rgba(255, 255, 255, 0.055);
+    --card-bg-strong: rgba(255, 255, 255, 0.09);
+    --card-border: rgba(255, 255, 255, 0.14);
+    --card-border-strong: rgba(255, 255, 255, 0.22);
+    --text-primary: #f4f4fb;
+    --text-secondary: #a6a6c4;
+    --text-muted: #6d6d8c;
+    --accent: #8b7bff;
+    --accent-soft: rgba(139, 123, 255, 0.18);
+    --green: #3ee6a8;
+    --green-soft: rgba(62, 230, 168, 0.15);
+    --rose: #ff7a9c;
+    --rose-soft: rgba(255, 122, 156, 0.15);
+    --amber: #ffc266;
+    --amber-soft: rgba(255, 194, 102, 0.15);
+    --red: #ff6161;
+    --red-soft: rgba(255, 97, 97, 0.15);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    --sidebar-bg: rgba(10, 10, 26, 0.45);
+    --input-bg: rgba(255, 255, 255, 0.06);
 }
 
-/* Modo Oscuro */
-[data-theme="dark"] {
-    --bg-primary: #0a0a1e;
-    --bg-card: rgba(255, 255, 255, 0.04);
+/* --- MODO CLARO --- */
+[data-theme="light"] {
+    --bg1: #eaf1ff;
+    --bg2: #f3ecff;
+    --bg3: #fff1f6;
+    --glow1: rgba(129, 140, 248, 0.35);
+    --glow2: rgba(56, 189, 248, 0.30);
+    --glow3: rgba(244, 114, 182, 0.25);
+    --card-bg: rgba(255, 255, 255, 0.55);
+    --card-bg-strong: rgba(255, 255, 255, 0.78);
+    --card-border: rgba(255, 255, 255, 0.7);
+    --card-border-strong: rgba(255, 255, 255, 0.9);
+    --text-primary: #1c1c2e;
+    --text-secondary: #5b5b76;
+    --text-muted: #8a8aa3;
+    --accent: #6d5cff;
+    --accent-soft: rgba(109, 92, 255, 0.12);
+    --green: #0ea86c;
+    --green-soft: rgba(14, 168, 108, 0.12);
+    --rose: #e14d72;
+    --rose-soft: rgba(225, 77, 114, 0.12);
+    --amber: #c9861a;
+    --amber-soft: rgba(201, 134, 26, 0.14);
+    --red: #d3453f;
+    --red-soft: rgba(211, 69, 63, 0.12);
+    --shadow: 0 8px 32px rgba(80, 80, 140, 0.14);
+    --sidebar-bg: rgba(255, 255, 255, 0.35);
+    --input-bg: rgba(255, 255, 255, 0.6);
 }
 
-/* El color primario se sincroniza con theme.js */
-
+/* --- VARIABLES COMPATIBILIDAD --- */
+:root {
+    --color-primary: var(--accent);
+    --color-secondary: #c473ff;
+    --color-success: var(--green);
+    --color-warning: var(--amber);
+    --color-danger: var(--red);
+    --bg-primary: var(--bg1);
+    --bg-card: var(--card-bg);
+    --text-on-dark: var(--text-primary);
+}
