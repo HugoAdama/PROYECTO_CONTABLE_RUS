@@ -1,39 +1,94 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}Backup - Sistema RUS{% endblock %}
+{% block title %}Backup - Maria Boutique{% endblock %}
+
+{% block page_title %}Backup{% endblock %}
+{% block page_subtitle %}Copia de seguridad y restauración de datos{% endblock %}
 
 {% block content %}
-<div class="page-header fade-in-up">
-    <h1>💾 Backup</h1>
-    <p class="subtitle">Copia de seguridad y restauración de datos</p>
-</div>
+<div class="backup-container">
 
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-    <div class="glass-card fade-in-up stagger-1" style="padding:24px; text-align:center;">
-        <div style="font-size:3rem; margin-bottom:12px;">💾</div>
-        <h3 style="font-size:1.3rem; margin-bottom:8px;">Crear Backup</h3>
-        <p style="color:var(--text-muted); font-size:1rem;">Guarda una copia de seguridad completa de tu base de datos</p>
-        <button class="btn btn-primary" style="margin-top:16px;">📦 Crear Backup Ahora</button>
-    </div>
+    <div class="row2-equal">
+        <!-- Crear Backup -->
+        <div class="card backup-card">
+            <div class="backup-icon" style="background:var(--accent-soft);">
+                <i class="fas fa-file-export" style="color:var(--accent); font-size:26px;"></i>
+            </div>
+            <h3 style="margin:0 0 6px;">Crear backup</h3>
+            <p>Guarda una copia de seguridad completa de tu base de datos</p>
+            <button class="btn btn-primary" style="margin:0 auto; display:inline-flex;">
+                <i class="fas fa-download"></i> Crear backup ahora
+            </button>
+        </div>
 
-    <div class="glass-card fade-in-up stagger-2" style="padding:24px; text-align:center;">
-        <div style="font-size:3rem; margin-bottom:12px;">🔄</div>
-        <h3 style="font-size:1.3rem; margin-bottom:8px;">Restaurar Backup</h3>
-        <p style="color:var(--text-muted); font-size:1rem;">Selecciona un backup previo para restaurar</p>
-        <div style="display:flex; gap:12px; justify-content:center; margin-top:16px; flex-wrap:wrap;">
-            <button class="btn btn-secondary">📂 Seleccionar Backup</button>
-            <button class="btn btn-primary">🔄 Restaurar</button>
+        <!-- Restaurar Backup -->
+        <div class="card backup-card">
+            <div class="backup-icon" style="background:var(--green-soft);">
+                <i class="fas fa-upload" style="color:var(--green); font-size:26px;"></i>
+            </div>
+            <h3 style="margin:0 0 6px;">Restaurar backup</h3>
+            <p>Selecciona un backup previo para restaurar</p>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <button class="btn btn-secondary"><i class="fas fa-folder-open"></i> Seleccionar backup</button>
+                <button class="btn btn-primary"><i class="fas fa-undo"></i> Restaurar</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="glass-card fade-in-up stagger-3" style="padding:24px; margin-top:24px;">
-    <h3 style="font-size:1.2rem; margin-bottom:16px;">📋 Backups Disponibles</h3>
-    <div style="text-align:center; padding:24px 0; color:var(--text-muted);">
-        <p style="font-size:1.1rem;">No hay backups disponibles</p>
-        <p style="font-size:0.95rem;">Crea tu primer backup usando el botón "Crear Backup Ahora"</p>
+    <!-- Backups Disponibles -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-database"></i> Backups disponibles</div>
+        <div class="empty-state">
+            <i class="fas fa-box-open" style="font-size:32px; color:var(--text-muted); margin-bottom:12px; display:block;"></i>
+            <p>No hay backups disponibles</p>
+            <p style="font-size:12px;">Crea tu primer backup usando el botón "Crear backup ahora"</p>
+        </div>
     </div>
+
 </div>
+
+<style>
+    .backup-container { max-width: 900px; margin: 0 auto; }
+
+    .row2-equal {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .backup-card {
+        text-align: center;
+    }
+
+    .backup-card p {
+        color: var(--text-secondary);
+        font-size: 13.5px;
+        margin: 0 0 18px;
+    }
+
+    .backup-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 32px 20px;
+        color: var(--text-muted);
+    }
+
+    .empty-state p {
+        margin: 4px 0;
+    }
+
+    @media (max-width: 768px) {
+        .row2-equal { grid-template-columns: 1fr; gap: 14px; }
+    }
+</style>
 {% endblock %}
-
-

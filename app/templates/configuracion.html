@@ -1,630 +1,301 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}Configuración - Sistema RUS{% endblock %}
+{% block title %}Configuración - Maria Boutique{% endblock %}
+
+{% block page_title %}Configuración{% endblock %}
+{% block page_subtitle %}Personaliza tu experiencia{% endblock %}
 
 {% block content %}
 <div class="config-container">
-    
-    <!-- HEADER -->
-    <div class="config-header fade-in-up">
-        <h1>⚙️ Configuración</h1>
-        <p class="subtitle">Personaliza tu experiencia</p>
+
+    <!-- PERFIL -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-user"></i> Perfil</div>
+        <div class="field-full">
+            <label>Nombre del negocio</label>
+            <input type="text" value="Maria Boutique" class="form-control">
+            <span class="hint">Aparecerá en el dashboard y reportes</span>
+        </div>
+        <div class="field-full">
+            <label>Email de notificaciones</label>
+            <input type="email" value="negocio@email.com" class="form-control">
+            <span class="hint">Recibirás alertas y reportes</span>
+        </div>
+        <div class="switch-row">
+            <div>
+                <span style="font-size:13px; font-weight:500;">Notificaciones</span>
+                <span class="hint">Alertas sobre límites RUS</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <button class="btn btn-primary" style="width:100%; justify-content:center;">Guardar perfil</button>
     </div>
 
-    <!-- GRID DE 2 COLUMNAS -->
-    <div class="config-grid">
-        
-        <!-- COLUMNA IZQUIERDA: PERFIL -->
-        <div class="config-card glass-card fade-in-up stagger-1">
-            <div class="card-header">
-                <span class="card-icon">👤</span>
-                <h3>Perfil</h3>
+    <!-- APARIENCIA -->
+    <div class="card" style="margin-top:20px;">
+        <div class="card-title"><i class="fas fa-palette"></i> Apariencia</div>
+        <div class="switch-row">
+            <div>
+                <span style="font-size:13px; font-weight:500;">Modo oscuro</span>
+                <span class="hint">Alterna entre modo oscuro y claro</span>
             </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="nombreNegocio">Nombre del Negocio</label>
-                    <input type="text" id="nombreNegocio" class="form-control" value="Maria Boutique">
-                    <span class="help-text">Aparecerá en el dashboard y reportes</span>
-                </div>
-                <div class="form-group">
-                    <label for="emailNotificaciones">Email de Notificaciones</label>
-                    <input type="email" id="emailNotificaciones" class="form-control" value="negocio@email.com">
-                    <span class="help-text">Recibirás alertas y reportes</span>
-                </div>
-                <div class="form-group">
-                    <div class="toggle-row">
-                        <span>🔔 Notificaciones</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="notificacionesActivas" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <span class="help-text">Alertas sobre límites RUS</span>
-                </div>
-                <button class="btn btn-primary btn-block" id="btnGuardarPerfil">💾 Guardar Perfil</button>
-            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="themeToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
         </div>
-
-        <!-- COLUMNA DERECHA: APARIENCIA -->
-        <div class="config-card glass-card fade-in-up stagger-2">
-            <div class="card-header">
-                <span class="card-icon">🎨</span>
-                <h3>Apariencia</h3>
+        <div class="switch-row">
+            <div>
+                <span style="font-size:13px; font-weight:500;">Color primario</span>
+                <span class="hint">Botones y elementos destacados</span>
             </div>
-            <div class="card-body">
-                <div class="toggle-row highlight-row">
-                    <div>
-                        <span class="toggle-label">🌙 Modo Oscuro</span>
-                        <span class="toggle-desc">Alterna entre modo oscuro y claro</span>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="themeToggle" data-theme-toggle checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="color-row">
-                    <div>
-                        <span class="color-label">🎨 Color Primario</span>
-                        <span class="color-desc">Botones y elementos destacados</span>
-                    </div>
-                    <div class="color-picker-wrapper">
-                        <input type="color" id="colorPrimario" value="#60a5fa">
-                        <span class="color-hex" id="colorHex">#60a5fa</span>
-                    </div>
-                </div>
-                
+            <div style="display:flex; align-items:center; gap:8px;">
+                <input type="color" id="colorPrimario" value="#8b7bff" style="width:36px; height:36px; border-radius:8px; border:1px solid var(--card-border); padding:2px; cursor:pointer;">
+                <span style="font-size:13px; color:var(--text-secondary);" id="colorHex">#8b7bff</span>
             </div>
         </div>
     </div>
 
-    <!-- SISTEMA - OCUPA TODO EL ANCHO -->
-    <div class="config-card glass-card fade-in-up stagger-3">
-        <div class="card-header">
-            <span class="card-icon">💻</span>
-            <h3>Información del Sistema</h3>
-        </div>
-        <div class="card-body">
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">Versión</span>
-                    <span class="info-value">3.9.1</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Base de Datos</span>
-                    <span class="info-value">SQLite</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Framework</span>
-                    <span class="info-value">Flask</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Documentos</span>
-                    <span class="info-value">7</span>
-                </div>
+    <!-- INFORMACIÓN DEL SISTEMA -->
+    <div class="card" style="margin-top:20px;">
+        <div class="card-title"><i class="fas fa-server"></i> Información del sistema</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Versión</span>
+                <span class="info-value">4.0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Base de Datos</span>
+                <span class="info-value">SQLite</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Framework</span>
+                <span class="info-value">Flask</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Documentos</span>
+                <span class="info-value">7</span>
             </div>
         </div>
     </div>
 
     <!-- ZONA DE PELIGRO -->
-    <div class="config-card glass-card danger-zone fade-in-up stagger-4">
-        <div class="card-header">
-            <span class="card-icon">⚠️</span>
-            <h3 style="color: var(--color-danger);">Zona de Peligro</h3>
-        </div>
-        <div class="card-body">
-            <p class="danger-text">Estas acciones son irreversibles</p>
-            <div class="danger-actions">
-                <button class="btn btn-danger" id="btnResetearConfig">🔄 Restablecer</button>
-                <button class="btn btn-danger" id="btnLimpiarCache">🗑️ Limpiar Caché</button>
-            </div>
+    <div class="card danger-zone" style="margin-top:20px;">
+        <div class="card-title" style="color:var(--red);"><i class="fas fa-exclamation-triangle"></i> Zona de peligro</div>
+        <p style="font-size:13px; color:var(--text-secondary); margin:0 0 16px;">Estas acciones son irreversibles</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-danger" id="btnResetearConfig">Restablecer</button>
+            <button class="btn btn-danger" id="btnLimpiarCache">Limpiar caché</button>
         </div>
     </div>
 
 </div>
 
-<style>
-/* ============================================
-   CONFIGURACIÓN - 2 COLUMNAS
-   ============================================ */
-
-.config-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.config-header {
-    margin-bottom: 32px;
-}
-
-.config-header h1 {
-    font-size: 2.4rem;
-    font-weight: 800;
-    margin-bottom: 4px;
-}
-
-.config-header .subtitle {
-    font-size: 1.1rem;
-    color: var(--text-muted);
-}
-
-/* GRID DE 2 COLUMNAS */
-.config-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 24px;
-}
-
-/* Tarjetas */
-.config-card {
-    background: var(--bg-card);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-[data-theme="light"] .config-card {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.config-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
-}
-
-.card-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 20px 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-[data-theme="light"] .card-header {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.card-header .card-icon {
-    font-size: 1.4rem;
-}
-
-.card-header h3 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin: 0;
-}
-
-.card-body {
-    padding: 18px 20px 20px;
-}
-
-/* Formularios */
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-    color: var(--text-secondary);
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 1rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--text-primary);
-    transition: all 0.3s ease;
-}
-
-[data-theme="light"] .form-control {
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(0, 0, 0, 0.02);
-}
-
-.form-control:focus {
-    border-color: var(--color-primary);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
-}
-
-.help-text {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    display: block;
-    margin-top: 4px;
-}
-
-/* Toggle */
-.toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
-    gap: 16px;
-}
-
-.toggle-row.highlight-row {
-    background: rgba(96, 165, 250, 0.04);
-    padding: 14px 18px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-}
-
-.toggle-label {
-    font-weight: 600;
-    font-size: 1rem;
-    display: block;
-}
-
-.toggle-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    display: block;
-}
-
-.toggle-switch {
-    position: relative;
-    width: 52px;
-    height: 30px;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle-slider {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-    transition: all 0.3s ease;
-}
-
-[data-theme="light"] .toggle-slider {
-    background: rgba(0, 0, 0, 0.06);
-}
-
-.toggle-slider::before {
-    content: "";
-    position: absolute;
-    height: 22px;
-    width: 22px;
-    left: 4px;
-    bottom: 4px;
-    background: #fff;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="light"] .toggle-slider::before {
-    background: #1a1a2e;
-}
-
-.toggle-switch input:checked + .toggle-slider {
-    background: var(--color-primary);
-}
-    background: var(--color-primary);
-}
-
-.toggle-switch input:checked + .toggle-slider::before {
-    transform: translateX(22px);
-}
-
-/* Color picker */
-.color-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.color-label {
-    font-weight: 600;
-    font-size: 1rem;
-    display: block;
-}
-
-.color-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    display: block;
-}
-
-.color-picker-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-}
-
-.color-picker-wrapper input[type="color"] {
-    width: 48px;
-    height: 48px;
-    padding: 3px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    cursor: pointer;
-    background: transparent;
-}
-
-[data-theme="light"] .color-picker-wrapper input[type="color"] {
-    border: 2px solid rgba(0, 0, 0, 0.1);
-}
-
-.color-picker-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
-}
-
-.color-picker-wrapper input[type="color"]::-webkit-color-swatch {
-    border: none;
-    border-radius: 8px;
-}
-
-.color-hex {
-    font-family: monospace;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    min-width: 65px;
-}
-
-/* Botones */
-.btn-block {
-    width: 100%;
-    justify-content: center;
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px 24px;
-    min-height: 48px;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: inherit;
-}
-
-.btn-primary {
-    background: var(--color-primary);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(96, 165, 250, 0.25);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(96, 165, 250, 0.35);
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #f87171, #ef4444);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(248, 113, 113, 0.25);
-}
-
-.btn-danger:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(248, 113, 113, 0.35);
-}
-
-/* Info grid */
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-}
-
-.info-item {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 12px 16px;
-    border-radius: 12px;
-    text-align: center;
-}
-
-[data-theme="light"] .info-item {
-    background: rgba(0, 0, 0, 0.02);
-}
-
-.info-item .info-label {
-    display: block;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    font-weight: 600;
-}
-
-.info-item .info-value {
-    display: block;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-top: 2px;
-    color: var(--text-primary);
-}
-
-/* Zona de peligro */
-.danger-zone {
-    border: 1px solid rgba(248, 113, 113, 0.15) !important;
-}
-
-.danger-text {
-    color: var(--color-danger);
-    font-weight: 500;
-    margin-bottom: 14px;
-}
-
-.danger-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .config-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    .info-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .card-body {
-        padding: 14px 16px;
-    }
-    .color-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .color-picker-wrapper {
-        justify-content: center;
-    }
-    .danger-actions {
-        flex-direction: column;
-    }
-    .danger-actions .btn {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .config-container {
-        padding: 10px;
-    }
-    .config-header h1 {
-        font-size: 1.8rem;
-    }
-    .info-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-</style>
-
 <!-- ============================================
-   EFECTO DE AGUA/LUZ - FONDO ANIMADO
-   ============================================ -->
+ESTILOS DE CONFIGURACIÓN
+============================================ -->
 <style>
-/* Fondo con ondas de agua/luz */
-.config-container::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    background: 
-        radial-gradient(ellipse at 20% 50%, rgba(96, 165, 250, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 50%, rgba(167, 139, 250, 0.08) 0%, transparent 50%);
-    animation: waterGlow 8s ease-in-out infinite alternate;
-}
+    .config-container { max-width: 800px; margin: 0 auto; }
 
-[data-theme="dark"] .config-container::before {
-    background: 
-        radial-gradient(ellipse at 20% 50%, rgba(96, 165, 250, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 50%, rgba(167, 139, 250, 0.15) 0%, transparent 50%);
-}
+    .field-full { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .field-full label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .field-full .hint { font-size: 11.5px; color: var(--text-muted); font-weight: 400; }
 
-@keyframes waterGlow {
-    0% {
-        opacity: 0.6;
-        transform: scale(1) rotate(0deg);
+    .form-control {
+        background: var(--input-bg);
+        border: 1px solid var(--card-border-strong);
+        border-radius: 10px;
+        padding: 9px 12px;
+        color: var(--text-primary);
+        font-size: 13.5px;
+        font-family: 'Inter', sans-serif;
+        width: 100%;
+        transition: border-color 0.2s ease;
     }
-    100% {
-        opacity: 1;
-        transform: scale(1.05) rotate(2deg);
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--accent);
     }
-}
 
-/* Ondas en movimiento */
-.wave-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    z-index: -1;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-.wave {
-    position: absolute;
-    bottom: 0;
-    left: -50%;
-    width: 200%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        rgba(96, 165, 250, 0.02) 25%,
-        transparent 50%
-    );
-    animation: waveMove 12s linear infinite;
-}
-
-.wave:nth-child(2) {
-    animation-duration: 18s;
-    animation-delay: -3s;
-    opacity: 0.5;
-}
-
-.wave:nth-child(3) {
-    animation-duration: 24s;
-    animation-delay: -6s;
-    opacity: 0.3;
-}
-
-@keyframes waveMove {
-    0% {
-        transform: translateX(0) scaleY(1);
+    .switch-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 8px 0;
     }
-    50% {
-        transform: translateX(25%) scaleY(0.6);
+
+    .switch-row .hint {
+        display: block;
+        font-size: 11.5px;
+        color: var(--text-muted);
+        margin-top: 2px;
     }
-    100% {
-        transform: translateX(50%) scaleY(1);
+
+    .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 26px;
+        cursor: pointer;
+        flex-shrink: 0;
     }
-}
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        inset: 0;
+        background: var(--card-bg-strong);
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        border: 1px solid var(--card-border);
+    }
+
+    .toggle-slider::before {
+        content: "";
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background: var(--text-primary);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+        background: linear-gradient(135deg, var(--accent), var(--rose));
+        border-color: var(--accent);
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(22px);
+        background: #fff;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .info-item {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 14px 16px;
+        text-align: center;
+        border: 1px solid var(--card-border);
+    }
+
+    .info-item .info-label {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .info-item .info-value {
+        display: block;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-top: 2px;
+    }
+
+    .danger-zone {
+        border-color: var(--red-soft) !important;
+    }
+
+    @media (max-width: 768px) {
+        .info-grid { grid-template-columns: repeat(2, 1fr); }
+        .config-container { padding: 0 4px; }
+    }
+
+    @media (max-width: 480px) {
+        .info-grid { grid-template-columns: 1fr; }
+        .switch-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
 </style>
-
-<!-- ONDAS EN EL HTML -->
-<div class="wave-container">
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('⚙️ Configuración con diseño de 2 columnas y efectos de agua');
+        // ============================================
+        // TOGGLE DE TEMA
+        // ============================================
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeToggle.checked = currentTheme === 'dark';
+
+            themeToggle.addEventListener('change', function() {
+                const newTheme = this.checked ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('rus-theme', newTheme);
+            });
+        }
+
+        // ============================================
+        // SELECTOR DE COLOR
+        // ============================================
+        const colorPicker = document.getElementById('colorPrimario');
+        const colorHex = document.getElementById('colorHex');
+
+        if (colorPicker && colorHex) {
+            const savedColor = localStorage.getItem('rus-primary-color') || '#8b7bff';
+            colorPicker.value = savedColor;
+            colorHex.textContent = savedColor;
+            document.documentElement.style.setProperty('--accent', savedColor);
+
+            colorPicker.addEventListener('input', function() {
+                const color = this.value;
+                colorHex.textContent = color;
+                document.documentElement.style.setProperty('--accent', color);
+                localStorage.setItem('rus-primary-color', color);
+            });
+        }
+
+        // ============================================
+        // BOTONES DE PELIGRO
+        // ============================================
+        const resetBtn = document.getElementById('btnResetearConfig');
+        const clearCacheBtn = document.getElementById('btnLimpiarCache');
+
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                if (confirm('⚠️ ¿Estás seguro de restablecer toda la configuración?')) {
+                    localStorage.clear();
+                    alert('✅ Configuración restablecida');
+                    location.reload();
+                }
+            });
+        }
+
+        if (clearCacheBtn) {
+            clearCacheBtn.addEventListener('click', function() {
+                if (confirm('🗑️ ¿Limpiar caché del navegador?')) {
+                    if ('caches' in window) {
+                        caches.keys().then(function(names) {
+                            names.forEach(function(name) {
+                                caches.delete(name);
+                            });
+                        });
+                    }
+                    alert('✅ Caché limpiado');
+                    location.reload();
+                }
+            });
+        }
     });
 </script>
 {% endblock %}
-
-
-
-
-
-

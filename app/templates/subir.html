@@ -1,36 +1,81 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}Subir Archivos - Sistema RUS{% endblock %}
+{% block title %}Subir archivos - Maria Boutique{% endblock %}
+
+{% block page_title %}Subir archivos{% endblock %}
+{% block page_subtitle %}Procesa automáticamente tus facturas y boletas desde PDF{% endblock %}
 
 {% block content %}
-<div class="page-header fade-in-up">
-    <h1>📤 Subir Archivos</h1>
-    <p class="subtitle">Procesa automáticamente tus facturas y boletas desde PDF</p>
-</div>
+<div class="upload-container">
 
-<!-- Drop Zone -->
-<div class="glass-card fade-in-up stagger-1" style="padding:40px 24px; text-align:center; border:2px dashed rgba(255,255,255,0.1); min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s ease;">
-    <div style="font-size:4rem; margin-bottom:12px;">📄</div>
-    <h3 style="font-size:1.4rem; font-weight:600; color:var(--text-primary);">Arrastra tus archivos PDF aquí</h3>
-    <p style="font-size:1.1rem; color:var(--text-muted);">o haz clic para seleccionar</p>
-    <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
-        <button class="btn btn-primary">📎 Seleccionar Archivos</button>
+    <!-- DROPZONE -->
+    <div class="dropzone glass-card">
+        <i class="fas fa-cloud-upload-alt" style="font-size:44px; color:var(--accent); margin-bottom:16px; display:block;"></i>
+        <h3>Arrastra tus archivos PDF aquí</h3>
+        <p>o haz clic para seleccionar</p>
+        <button class="btn btn-primary"><i class="fas fa-folder-open"></i> Seleccionar archivos</button>
     </div>
+
+    <!-- ACCIONES -->
+    <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+        <button class="btn btn-primary"><i class="fas fa-upload"></i> Subir y procesar</button>
+        <button class="btn btn-secondary"><i class="fas fa-trash-alt"></i> Limpiar</button>
+    </div>
+
+    <!-- ÚLTIMOS ARCHIVOS -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-history"></i> Últimos archivos procesados</div>
+        <div class="empty-state">
+            <i class="fas fa-inbox" style="font-size:32px; color:var(--text-muted); margin-bottom:12px; display:block;"></i>
+            <p>No hay archivos procesados recientemente</p>
+        </div>
+    </div>
+
 </div>
 
-<!-- Acciones -->
-<div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
-    <button class="btn btn-primary">⬆️ Subir y Procesar</button>
-    <button class="btn btn-secondary">🧹 Limpiar</button>
-</div>
+<style>
+    .upload-container { max-width: 800px; margin: 0 auto; }
 
-<!-- Últimos Archivos -->
-<div class="page-header" style="margin-top:32px;">
-    <h2>📂 Últimos Archivos Procesados</h2>
-</div>
-<div class="glass-card fade-in-up stagger-2" style="padding:20px 24px; text-align:center; color:var(--text-muted);">
-    <p style="font-size:1.1rem;">No hay archivos procesados recientemente</p>
-</div>
+    .dropzone {
+        border: 2px dashed var(--card-border-strong);
+        border-radius: 20px;
+        padding: 56px 20px;
+        text-align: center;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .dropzone:hover {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .dropzone h3 {
+        margin: 0 0 6px;
+        font-size: 17px;
+        color: var(--text-primary);
+    }
+
+    .dropzone p {
+        margin: 0 0 20px;
+        color: var(--text-secondary);
+        font-size: 13.5px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-muted);
+        font-size: 13.5px;
+    }
+
+    .empty-state p {
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .dropzone { padding: 32px 16px; }
+        .dropzone h3 { font-size: 15px; }
+    }
+</style>
 {% endblock %}
-
-

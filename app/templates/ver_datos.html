@@ -1,107 +1,167 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}Ver Datos - Sistema RUS{% endblock %}
+{% block title %}Ver datos - Maria Boutique{% endblock %}
+
+{% block page_title %}Ver datos{% endblock %}
+{% block page_subtitle %}Visualización y filtrado de transacciones{% endblock %}
 
 {% block content %}
-<div class="page-header fade-in-up">
-    <h1>📋 Ver Datos</h1>
-    <p class="subtitle">Visualización y filtrado de transacciones</p>
-</div>
+<div class="datos-container">
 
-<!-- Filtros -->
-<div class="glass-card fade-in-up stagger-1" style="padding:20px 24px; margin-bottom:24px;">
-    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end;">
-        <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
-            <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Tipo</label>
-            <select class="form-control" style="padding:10px 14px; font-size:1rem;">
-                <option>Todos</option>
-                <option>Factura</option>
-                <option>Boleta</option>
-                <option>Percepción</option>
-            </select>
-        </div>
-        <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
-            <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Año</label>
-            <select class="form-control" style="padding:10px 14px; font-size:1rem;">
-                <option>Todos</option>
-                <option>2026</option>
-                <option>2025</option>
-            </select>
-        </div>
-        <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
-            <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Mes</label>
-            <select class="form-control" style="padding:10px 14px; font-size:1rem;">
-                <option>Todos</option>
-                <option>Enero</option>
-                <option>Febrero</option>
-                <option>Marzo</option>
-            </select>
-        </div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="btn btn-primary" style="padding:10px 24px; min-height:44px; font-size:1rem;">🔍 Aplicar Filtros</button>
-            <button class="btn btn-secondary" style="padding:10px 24px; min-height:44px; font-size:1rem;">🧹 Limpiar</button>
+    <!-- FILTROS -->
+    <div class="card" style="margin-bottom:20px;">
+        <div class="filter-bar">
+            <div class="field">
+                <label>Tipo</label>
+                <select><option>Todos</option></select>
+            </div>
+            <div class="field">
+                <label>Año</label>
+                <select><option>Todos</option></select>
+            </div>
+            <div class="field">
+                <label>Mes</label>
+                <select><option>Todos</option></select>
+            </div>
+            <button class="btn btn-primary"><i class="fas fa-search"></i> Aplicar filtros</button>
+            <button class="btn btn-secondary"><i class="fas fa-undo"></i> Limpiar</button>
         </div>
     </div>
+
+    <!-- TABLA -->
+    <div class="card">
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Número</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Proveedor/Cliente</th>
+                    <th>Descripción</th>
+                </tr>
+                <tr>
+                    <td><span class="type-pill percepcion">Percepción</span></td>
+                    <td>P003-00602821</td>
+                    <td>14/07/2026</td>
+                    <td>S/ 441.54</td>
+                    <td>NATURA</td>
+                    <td>Percepción P003-00602821</td>
+                </tr>
+                <tr>
+                    <td><span class="type-pill boleta">Boleta</span></td>
+                    <td>EB01-302</td>
+                    <td>31/05/2026</td>
+                    <td>S/ 200.00</td>
+                    <td>KAROLAY</td>
+                    <td>Boleta EB01-302</td>
+                </tr>
+                <tr>
+                    <td><span class="type-pill factura">Factura</span></td>
+                    <td>F033-00330623</td>
+                    <td>12/05/2026</td>
+                    <td>S/ 191.70</td>
+                    <td>NATURA</td>
+                    <td>Factura F033-00330623</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- PIE DE TABLA -->
+        <div class="table-footer">
+            <div class="tags">
+                <span class="tag">3 registros encontrados</span>
+                <span class="tag">📑 Facturas: 1</span>
+                <span class="tag">🧾 Boletas: 1</span>
+                <span class="tag">📋 Percepciones: 1</span>
+            </div>
+            <div class="pagination">
+                <button class="btn btn-sm btn-secondary">◀ Anterior</button>
+                <span class="page-number active">1</span>
+                <button class="btn btn-sm btn-secondary">Siguiente ▶</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<!-- Tabla -->
-<div class="table-container fade-in-up stagger-2">
-    <table>
-        <thead>
-            <tr>
-                <th>Tipo</th>
-                <th>Número</th>
-                <th>Fecha</th>
-                <th>Monto</th>
-                <th>Proveedor/Cliente</th>
-                <th>Descripción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><span class="badge badge-percepcion">Percepción</span></td>
-                <td><strong>P003-00602821</strong></td>
-                <td>14/07/2026</td>
-                <td>S/ 441.54</td>
-                <td>NATURA</td>
-                <td>Percepción P003-00602821</td>
-            </tr>
-            <tr>
-                <td><span class="badge badge-boleta">Boleta</span></td>
-                <td><strong>EB01-302</strong></td>
-                <td>31/05/2026</td>
-                <td>S/ 200.00</td>
-                <td>KAROLAY</td>
-                <td>Boleta EB01-302</td>
-            </tr>
-            <tr>
-                <td><span class="badge badge-factura">Factura</span></td>
-                <td><strong>F033-00330623</strong></td>
-                <td>12/05/2026</td>
-                <td>S/ 191.70</td>
-                <td>NATURA</td>
-                <td>Factura F033-00330623</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<style>
+    .datos-container { max-width: 1200px; margin: 0 auto; }
 
-<!-- Resumen y Paginación -->
-<div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-top:20px; gap:12px;">
-    <div style="font-size:1rem; color:var(--text-secondary);">
-        <strong>3</strong> registros encontrados
-        <span style="margin-left:16px;">
-            <span class="badge badge-factura">Facturas: 1</span>
-            <span class="badge badge-boleta">Boletas: 1</span>
-            <span class="badge badge-percepcion">Percepciones: 1</span>
-        </span>
-    </div>
-    <div style="display:flex; align-items:center; gap:12px; font-size:1rem;">
-        <button class="btn btn-secondary" style="padding:8px 16px; min-height:36px; font-size:0.9rem;">◀ Anterior</button>
-        <span style="font-weight:600;">Página 1 de 1</span>
-        <button class="btn btn-secondary" style="padding:8px 16px; min-height:36px; font-size:0.9rem;">Siguiente ▶</button>
-    </div>
-</div>
+    .filter-bar {
+        display: flex;
+        gap: 14px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .field label {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .field select,
+    .field input {
+        background: var(--input-bg);
+        border: 1px solid var(--card-border-strong);
+        border-radius: 10px;
+        padding: 8px 12px;
+        color: var(--text-primary);
+        font-size: 13px;
+        font-family: 'Inter', sans-serif;
+        min-width: 120px;
+    }
+
+    .field select:focus,
+    .field input:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .page-number {
+        padding: 4px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+
+    .page-number.active {
+        background: var(--accent-soft);
+        color: var(--accent);
+    }
+
+    .page-number:hover {
+        background: var(--card-bg);
+    }
+
+    .btn-sm {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .filter-bar { flex-direction: column; align-items: stretch; }
+        .table-footer { flex-direction: column; align-items: flex-start; }
+        .pagination { align-self: center; }
+    }
+</style>
 {% endblock %}
-
-

@@ -1,74 +1,103 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}Gestión de Carpetas - Sistema RUS{% endblock %}
+{% block title %}Gestión de carpetas - Maria Boutique{% endblock %}
+
+{% block page_title %}Gestión de carpetas{% endblock %}
+{% block page_subtitle %}Organiza y administra tus documentos por mes y año{% endblock %}
 
 {% block content %}
-<div class="page-header fade-in-up">
-    <h1>📁 Gestión de Carpetas</h1>
-    <p class="subtitle">Organiza y administra tus documentos por mes y año</p>
-</div>
+<div class="carpetas-container">
 
-<!-- Métricas -->
-<div class="cards-grid fade-in-up stagger-1">
-    <div class="metric-card">
-        <div class="metric-value" style="font-size:1.8rem;">3</div>
-        <div class="metric-label">Carpetas</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-value" style="font-size:1.8rem;">7</div>
-        <div class="metric-label">Documentos Totales</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-value" style="font-size:1.6rem;">524.3 KB</div>
-        <div class="metric-label">Espacio Usado</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-value" style="font-size:1.6rem;">3</div>
-        <div class="metric-label">Tipos de Documentos</div>
-    </div>
-</div>
-
-<!-- Acciones -->
-<div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;">
-    <button class="btn btn-primary">🔄 Organizar Automático</button>
-    <button class="btn btn-secondary">📊 Ver Estadísticas</button>
-</div>
-
-<!-- Estructura -->
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-    <div class="glass-card fade-in-up stagger-2" style="padding:20px 24px;">
-        <h3 style="font-size:1.2rem; margin-bottom:16px;">📂 Estructura de Carpetas</h3>
-        <ul style="list-style:none; padding:0;">
-            <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; align-items:center; gap:8px;">
-                <span>📁</span> 2026_05
-            </li>
-            <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; align-items:center; gap:8px;">
-                <span>📁</span> 2026_05
-            </li>
-            <li style="padding:6px 0; display:flex; align-items:center; gap:8px;">
-                <span>📁</span> 2026_05
-            </li>
-        </ul>
-    </div>
-
-    <div class="glass-card fade-in-up stagger-3" style="padding:20px 24px;">
-        <h3 style="font-size:1.2rem; margin-bottom:16px;">📊 Resumen por Mes</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:8px; font-weight:600; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--text-secondary);">
-            <span>Mes</span>
-            <span>Facturas</span>
-            <span>Boletas</span>
-            <span>Percepciones</span>
-            <span>Total</span>
+    <!-- MÉTRICAS -->
+    <div class="grid4">
+        <div class="card">
+            <div class="kpi-label">Carpetas</div>
+            <div class="kpi-value" style="font-size:26px;">1</div>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:8px; padding:12px 0;">
-            <span style="font-weight:600;">Mayo 2026</span>
-            <span>3</span>
-            <span>3</span>
-            <span>1</span>
-            <span style="font-weight:700; color:var(--color-primary);">7</span>
+        <div class="card">
+            <div class="kpi-label">Documentos totales</div>
+            <div class="kpi-value" style="font-size:26px;">7</div>
+        </div>
+        <div class="card">
+            <div class="kpi-label">Espacio usado</div>
+            <div class="kpi-value" style="font-size:26px;">2.4 MB</div>
+        </div>
+        <div class="card">
+            <div class="kpi-label">Tipos de documentos</div>
+            <div class="kpi-value" style="font-size:26px;">3</div>
         </div>
     </div>
+
+    <!-- ACCIONES -->
+    <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+        <button class="btn btn-primary"><i class="fas fa-sync-alt"></i> Organizar automático</button>
+        <button class="btn btn-secondary"><i class="fas fa-chart-bar"></i> Ver estadísticas</button>
+    </div>
+
+    <!-- ESTRUCTURA -->
+    <div class="row2">
+        <div class="card">
+            <div class="card-title"><i class="fas fa-folder-tree"></i> Estructura de carpetas</div>
+            <div class="folder-tree">
+                <div class="folder-row">
+                    <i class="fas fa-folder" style="color:var(--amber);"></i>
+                    <span>2026_05</span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title"><i class="fas fa-table"></i> Resumen por mes</div>
+            <table>
+                <tr><th>Mes</th><th>Facturas</th><th>Boletas</th><th>Percepciones</th><th>Total</th></tr>
+                <tr><td>Mayo 2026</td><td>3</td><td>3</td><td>1</td><td><strong>7</strong></td></tr>
+            </table>
+        </div>
+    </div>
+
 </div>
+
+<style>
+    .carpetas-container { max-width: 1200px; margin: 0 auto; }
+
+    .kpi-label {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .kpi-value {
+        font-size: 19px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .folder-tree {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .folder-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: var(--card-bg-strong);
+        border: 1px solid var(--card-border);
+        font-size: 13.5px;
+        color: var(--text-primary);
+    }
+
+    .folder-row i {
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .grid4 { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .row2 { grid-template-columns: 1fr; gap: 14px; }
+    }
+</style>
 {% endblock %}
-
-
