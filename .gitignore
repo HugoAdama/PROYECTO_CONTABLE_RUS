@@ -1,19 +1,67 @@
-﻿# PDFs reales de Doña María - NO subir al repositorio
-tests/fixtures/pdfs_reales/*.pdf
-data/**/*.pdf
-*.pdf
+﻿# ============================================
+# .gitignore - Archivos ignorados
+# ============================================
 
-# Datos reales
-tests/fixtures/datos_reales.json
-instance/*.db
-*.db
-*.sqlite
-
-# Archivos de entorno
-.env
-.env.*
-venv/
+# --- PYTHON ---
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+
+# --- BASE DE DATOS ---
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+instance/*.db
+
+# --- DOCUMENTOS SENSIBLES ---
+*.pdf
+*.xlsx
+*.xls
+*.csv
+data/**/*.pdf
+tests/fixtures/pdfs_reales/*.pdf
+
+# --- VARIABLES DE ENTORNO ---
+.env
+.env.local
+.env.*.local
+
+# --- DIRECTORIOS DE DATOS ---
+data/
+logs/
+uploads/
+backups/
+data/backups/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- LOGS ---
+*.log
+logs/
+
+# --- TESTS ---
 .pytest_cache/
-.coverage/
+.coverage
 htmlcov/

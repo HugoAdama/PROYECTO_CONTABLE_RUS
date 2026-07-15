@@ -1,326 +1,255 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Maria Boutique - Control RUS{% endblock %}</title>
-
-    <!-- ============================================
-    FONTS
-    ============================================ -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- ============================================
-    LIQUID GLASS - FONDO
-    ============================================ -->
-    <link rel="stylesheet" href="/static/css/9-animations/liquid-glass.css">
-
-    <!-- ============================================
-    CSS PRINCIPAL
-    ============================================ -->
-    <link rel="stylesheet" href="/static/css/glass.css">
-
-    <!-- ============================================
-    ESTILOS BASE
-    ============================================ -->
+    <title>{{ config.nombre_negocio or 'Maria Boutique' }} - {{ titulo or 'Control Financiero' }}</title>
+    
+    <!-- CSS - ITCSS 9 capas -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/1_settings/variables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/1_settings/colors.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/1_settings/typography.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/3_generic/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/3_generic/box-sizing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/4_elements/body.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/4_elements/headings.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/4_elements/links.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_components/buttons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_components/cards.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_components/badges.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_components/tables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_components/selects.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/6_layouts/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/7_pages/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/7_pages/upload.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/7_pages/reports.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/7_pages/config.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/7_pages/historial.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/7_pages/backups.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/8_utilities/flex.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/8_utilities/spacing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/9_animations/entries.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/9_animations/liquid-glass.css') }}">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        /* Estilos del layout principal */
+        :root {
+            --sidebar-width: 250px;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            font-size: 18px;
-            line-height: 1.7;
-            color: var(--text-primary);
             min-height: 100vh;
-            transition: background 0.4s ease, color 0.4s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
-
-        .app {
+        
+        .app-container {
             display: flex;
             min-height: 100vh;
         }
-
-        .main {
-            flex: 1;
-            padding: 32px 40px;
-            margin-left: 240px;
-            transition: margin-left 0.4s ease;
-        }
-
-        @media (max-width: 768px) {
-            .main {
-                padding: 20px 16px 32px;
-                margin-left: 0;
-                padding-top: 80px;
-            }
-        }
-
-        /* ============================================
-        TOPBAR - SIN TOGGLE
-        ============================================ */
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 26px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .page-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 26px;
-            font-weight: 600;
-            margin: 0 0 4px;
-            color: var(--text-primary);
-        }
-
-        .page-sub {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin: 0;
-        }
-
-        /* ============================================
-        FOOTER GLOBAL
-        ============================================ */
-        .footer-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid var(--card-border);
-            font-size: 12px;
-            color: var(--text-muted);
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        @media (max-width: 768px) {
-            .footer-bar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-        }
-
-        /* ============================================
-        SIDEBAR
-        ============================================ */
+        
+        /* Sidebar */
         .sidebar {
-            width: 240px;
-            padding: 28px 18px;
-            flex-shrink: 0;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(28px) saturate(160%);
-            -webkit-backdrop-filter: blur(28px) saturate(160%);
-            border-right: 1px solid var(--card-border);
-            position: fixed;
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: sticky;
             top: 0;
-            left: 0;
-            bottom: 0;
-            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--glass-border);
+            padding: 24px 18px;
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
-            transition: all 0.4s ease;
-        }
-
-        [data-theme="dark"] .sidebar {
-            background: rgba(10, 10, 26, 0.45);
-        }
-
-        [data-theme="light"] .sidebar {
-            background: rgba(255, 255, 255, 0.35);
-        }
-
-        .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-            text-decoration: none;
-        }
-
-        .sidebar-brand .brand-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--accent), var(--rose));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #fff;
-            font-size: 15px;
             flex-shrink: 0;
-            box-shadow: 0 4px 14px var(--accent-soft);
         }
-
-        .sidebar-brand .brand-name {
-            font-family: 'Outfit', 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 17px;
-            line-height: 1.1;
-            color: var(--text-primary);
+        
+        .sidebar-brand {
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--glass-border);
         }
-
-        .sidebar-brand .brand-sub {
-            font-size: 10.5px;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            margin-top: 2px;
+        
+        .sidebar-brand h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .sidebar-brand small {
             display: block;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 2px;
         }
-
-        .nav-label {
-            font-size: 10.5px;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            margin: 22px 8px 8px;
+        
+        .sidebar-menu {
+            list-style: none;
+            flex: 1;
+        }
+        
+        .sidebar-menu .menu-label {
+            font-size: 0.6rem;
             text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            font-weight: 600;
+            padding: 14px 0 4px 10px;
+            letter-spacing: 0.8px;
         }
-
-        .nav-item {
+        
+        .sidebar-menu li a {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 3px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            gap: 12px;
+            padding: 9px 14px;
+            color: rgba(255,255,255,0.65);
             text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
         }
-
-        .nav-item i {
-            width: 17px;
-            text-align: center;
-            opacity: 0.85;
-            font-size: 15px;
+        
+        .sidebar-menu li a:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transform: translateX(4px);
         }
-
-        .nav-item:hover {
-            background: var(--card-bg);
-            color: var(--text-primary);
+        
+        .sidebar-menu li a.active {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
         }
-
-        .nav-item.active {
-            background: var(--accent-soft);
-            color: var(--text-primary);
-            border: 1px solid var(--card-border);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        }
-
+        
+        .sidebar-menu li a .icon { font-size: 1.1rem; width: 24px; text-align: center; }
+        
         .sidebar-footer {
             margin-top: auto;
-            padding-top: 20px;
-            border-top: 1px solid var(--card-border);
+            padding-top: 16px;
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.3);
             text-align: center;
         }
-
-        .sidebar-footer .version {
-            font-size: 11px;
-            color: var(--text-muted);
+        
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 28px 32px;
+            overflow-y: auto;
+            max-height: 100vh;
         }
-
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .page-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.15);
+        }
+        
+        .page-header .subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
             .sidebar {
-                transform: translateX(-100%);
-                width: 280px;
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 16px;
             }
-            .sidebar.open {
-                transform: translateX(0);
-            }
+            .main-content { padding: 16px; max-height: none; }
         }
     </style>
-
+    
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-<div class="app">
-
-    <!-- ============================================
-    SIDEBAR
-    ============================================ -->
-    <nav class="sidebar" id="sidebar">
-        <a href="/" class="sidebar-brand">
-            <div class="brand-icon">MB</div>
-            <div>
-                <div class="brand-name">Maria Boutique</div>
-                <span class="brand-sub">Control Financiero</span>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h1>{{ config.nombre_negocio or 'Maria Boutique' }}</h1>
+                <small>Control Financiero RUS</small>
             </div>
-        </a>
-
-        <div class="nav-label">Principal</div>
-        <a href="/" class="nav-item active"><i class="fas fa-home"></i> Inicio</a>
-        <a href="/subir" class="nav-item"><i class="fas fa-cloud-upload-alt"></i> Subir archivos</a>
-        <a href="/ver_datos" class="nav-item"><i class="fas fa-list-ul"></i> Ver datos</a>
-
-        <div class="nav-label">Análisis</div>
-        <a href="/reportes" class="nav-item"><i class="fas fa-chart-bar"></i> Reportes</a>
-        <a href="/carpetas" class="nav-item"><i class="fas fa-folder-open"></i> Gestión carpetas</a>
-
-        <div class="nav-label">Sistema</div>
-        <a href="/backup" class="nav-item"><i class="fas fa-database"></i> Backup</a>
-        <a href="/historial" class="nav-item"><i class="fas fa-clock"></i> Historial</a>
-        <a href="/configuracion" class="nav-item"><i class="fas fa-sliders-h"></i> Configuración</a>
-
-        <div class="sidebar-footer">
-            <span class="version">v4.0 · Flask</span>
-        </div>
-    </nav>
-
-    <!-- ============================================
-    MAIN CONTENT
-    ============================================ -->
-    <main class="main" id="mainContent">
-        <div class="topbar">
-            <div>
-                <h1 class="page-title" id="pt">{% block page_title %}Dashboard{% endblock %}</h1>
-                <p class="page-sub" id="ps">{% block page_subtitle %}Resumen financiero de tu negocio en el Régimen RUS{% endblock %}</p>
+            
+            <ul class="sidebar-menu">
+                <li class="menu-label">Principal</li>
+                <li><a href="{{ url_for('main.index') }}" class="{% if request.endpoint == 'main.index' %}active{% endif %}"><span class="icon">📊</span> Inicio</a></li>
+                <li><a href="{{ url_for('main.subir') }}" class="{% if request.endpoint == 'main.subir' %}active{% endif %}"><span class="icon">📤</span> Subir archivos</a></li>
+                <li><a href="{{ url_for('main.ver_datos') }}" class="{% if request.endpoint == 'main.ver_datos' %}active{% endif %}"><span class="icon">📋</span> Ver datos</a></li>
+                
+                <li class="menu-label">Análisis</li>
+                <li><a href="{{ url_for('main.reportes') }}" class="{% if request.endpoint == 'main.reportes' %}active{% endif %}"><span class="icon">📈</span> Reportes</a></li>
+                <li><a href="{{ url_for('main.carpetas') }}" class="{% if request.endpoint == 'main.carpetas' %}active{% endif %}"><span class="icon">📁</span> Gestión carpetas</a></li>
+                
+                <li class="menu-label">Sistema</li>
+                <li><a href="{{ url_for('main.backup') }}" class="{% if request.endpoint == 'main.backup' %}active{% endif %}"><span class="icon">💾</span> Backup</a></li>
+                <li><a href="{{ url_for('main.historial') }}" class="{% if request.endpoint == 'main.historial' %}active{% endif %}"><span class="icon">📜</span> Historial</a></li>
+                <li><a href="{{ url_for('main.configuracion') }}" class="{% if request.endpoint == 'main.configuracion' %}active{% endif %}"><span class="icon">⚙️</span> Configuración</a></li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                v4.0 · Flask
             </div>
-        </div>
-
-        {% block content %}{% endblock %}
-
-        <!-- FOOTER GLOBAL -->
-        <div class="footer-bar">
-            <span>Maria Boutique v4.0</span>
-            <span>Sistema operativo · 7 documentos</span>
-            <span>© 2026 — Hecho con ❤️ para Doña María</span>
-        </div>
-    </main>
-</div>
-
-<!-- ============================================
-SCRIPTS
-============================================ -->
-<script src="/static/js/3-services/theme.js" defer></script>
-<script src="/static/js/3-services/notifications.js" defer></script>
-<script src="/static/js/4-modules/sidebar.js" defer></script>
-<script src="/static/js/app.js" defer></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Activar elemento de navegación según la página actual
-        const currentPath = window.location.pathname;
-        document.querySelectorAll('.nav-item').forEach(function(item) {
-            const href = item.getAttribute('href');
-            if (href === currentPath) {
-                item.classList.add('active');
-            } else {
-                item.classList.remove('active');
-            }
-        });
-    });
-</script>
-
-{% block extra_js %}{% endblock %}
+        </aside>
+        
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1>{{ titulo or 'Dashboard' }}</h1>
+                    <span class="subtitle">{{ subtitulo or 'Resumen financiero de tu negocio en el Régimen RUS' }}</span>
+                </div>
+                <div class="header-info" style="color:rgba(255,255,255,0.4);font-size:0.85rem;">
+                    {{ mes_actual or '' }}
+                </div>
+            </div>
+            
+            {% block content %}{% endblock %}
+            
+            <footer style="margin-top:40px;padding-top:16px;border-top:1px solid var(--glass-border);text-align:center;color:rgba(255,255,255,0.25);font-size:0.7rem;">
+                <p>{{ config.nombre_negocio or 'Maria Boutique' }} v4.0 — {{ total_documentos or 0 }} documentos</p>
+                <p>© 2026 — Hecho con ❤️ para Doña María</p>
+            </footer>
+        </main>
+    </div>
+    
+    <!-- JS - 5 capas -->
+    <script src="{{ url_for('static', filename='js/1_core/config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/1_core/events.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/2_utils/dom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/2_utils/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/2_utils/format.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/2_utils/storage.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/2_utils/validators.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/3_services/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/3_services/notifications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/3_services/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/4_modules/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/4_modules/upload.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/4_modules/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/4_modules/filters.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/4_modules/pagination.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/5_pages/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/5_pages/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/5_pages/reports.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/5_pages/config.js') }}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
