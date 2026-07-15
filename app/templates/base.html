@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -423,5 +423,156 @@
             
         })();
     </script>
-</body>
+<style>
+/* ============================================
+   LIQUID GLASS - EFECTOS GLOBALES
+   ============================================ */
+
+/* Fondo con ondas de agua/luz */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: 
+        radial-gradient(ellipse at 20% 50%, rgba(96, 165, 250, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(167, 139, 250, 0.06) 0%, transparent 50%);
+    animation: waterGlow 10s ease-in-out infinite alternate;
+}
+
+[data-theme="dark"] body::before {
+    background: 
+        radial-gradient(ellipse at 20% 50%, rgba(96, 165, 250, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(167, 139, 250, 0.12) 0%, transparent 50%);
+}
+
+@keyframes waterGlow {
+    0% {
+        opacity: 0.5;
+        transform: scale(1) rotate(0deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.05) rotate(1deg);
+    }
+}
+
+/* Ondas en movimiento */
+.wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        rgba(96, 165, 250, 0.03) 25%,
+        transparent 50%
+    );
+    animation: waveMove 15s linear infinite;
+}
+
+.wave:nth-child(2) {
+    animation-duration: 20s;
+    animation-delay: -4s;
+    opacity: 0.5;
+}
+
+.wave:nth-child(3) {
+    animation-duration: 25s;
+    animation-delay: -8s;
+    opacity: 0.3;
+}
+
+@keyframes waveMove {
+    0% {
+        transform: translateX(0) scaleY(1);
+    }
+    50% {
+        transform: translateX(25%) scaleY(0.5);
+    }
+    100% {
+        transform: translateX(50%) scaleY(1);
+    }
+}
+
+/* Efecto Glass en tarjetas - Mejorado */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .glass-card {
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .glass-card:hover {
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+/* Brillo en hover - Liquid Glass */
+.glass-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgba(255, 255, 255, 0.03) 0%,
+        transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.glass-card:hover::after {
+    opacity: 1;
+}
+
+.glass-card {
+    position: relative;
+    overflow: hidden;
+}
+</style>
+
+<!-- ONDAS -->
+<div class="wave-container">
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+</div>
+<script src="/static/js/4-modules/global-buttons.js" defer></script></body>
 </html>
+
+
+
+
