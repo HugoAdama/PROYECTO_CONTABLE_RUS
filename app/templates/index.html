@@ -1,6 +1,6 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}Dashboard - Sistema RUS{% endblock %}
+{% block title %}Dashboard - Maria Boutique{% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
@@ -11,39 +11,26 @@
         <p class="subtitle">Resumen financiero de tu negocio en el Régimen RUS</p>
     </div>
 
-    <!-- MÉTRICAS PRINCIPALES -->
+    <!-- MÉTRICAS -->
     <div class="metrics-grid fade-in-up stagger-1">
-        <!-- Ventas -->
         <div class="metric-card glass-card">
             <div class="metric-icon">💰</div>
             <div class="metric-value">S/ 200.00</div>
             <div class="metric-label">Ventas</div>
-            <div class="metric-change positive">
-                <span class="trend-arrow">▲</span> 12%
-            </div>
+            <div class="metric-change positive">▲ 12%</div>
         </div>
-
-        <!-- Compras -->
         <div class="metric-card glass-card">
             <div class="metric-icon">🛒</div>
             <div class="metric-value">S/ 191.70</div>
             <div class="metric-label">Compras</div>
-            <div class="metric-change negative">
-                <span class="trend-arrow">▼</span> 8%
-            </div>
+            <div class="metric-change negative">▼ 8%</div>
         </div>
-
-        <!-- Utilidad -->
         <div class="metric-card glass-card">
             <div class="metric-icon">📈</div>
             <div class="metric-value">S/ 8.30</div>
             <div class="metric-label">Utilidad</div>
-            <div class="metric-change positive">
-                <span class="trend-arrow">▲</span> 4.2%
-            </div>
+            <div class="metric-change positive">▲ 4.2%</div>
         </div>
-
-        <!-- Estado RUS -->
         <div class="metric-card glass-card rus-card">
             <div class="metric-icon">✅</div>
             <div class="metric-value status-value">Normal</div>
@@ -55,9 +42,8 @@
         </div>
     </div>
 
-    <!-- FILA 2: DOCUMENTOS + ÚLTIMAS BOLETAS -->
+    <!-- DOCUMENTOS Y BOLETAS -->
     <div class="row-two fade-in-up stagger-2">
-        <!-- Documentos -->
         <div class="glass-card documents-card">
             <div class="card-header-doc">
                 <span class="doc-icon">📄</span>
@@ -73,8 +59,6 @@
                 <span class="badge badge-percepcion">📋 Percepciones: 1</span>
             </div>
         </div>
-
-        <!-- Últimas Boletas -->
         <div class="glass-card boletas-card">
             <div class="card-header-doc">
                 <span class="doc-icon">📋</span>
@@ -101,7 +85,7 @@
         </div>
     </div>
 
-    <!-- FILA 3: DESGLOSE DE IMPUESTOS -->
+    <!-- IMPUESTOS -->
     <div class="glass-card tax-card fade-in-up stagger-3">
         <div class="card-header-doc">
             <span class="doc-icon">📊</span>
@@ -123,67 +107,18 @@
         </div>
     </div>
 
-    <!-- ============================================
-    FOOTER - INFORMACIÓN DEL SISTEMA
-    ============================================ -->
-        <!-- ============================================
-    FOOTER LIQUID GLASS - FIJO EN LA PARTE INFERIOR
-    ============================================ -->
-    <footer class="dashboard-footer fade-in-up stagger-4">
-        <div class="footer-content">
-            <div class="footer-left">
-
-                <span class="footer-version">v4.0</span>
-            </div>
-            <div class="footer-center">
-                <span class="footer-status">
-                    <span class="status-indicator online"></span>
-                    Sistema operativo
-                </span>
-                <span class="footer-docs">📄 7 documentos</span>
-            </div>
-            <div class="footer-right">
-                <span class="footer-copy">© 2026 - Hecho con ❤️ para Doña María</span>
-            </div>
-        </div>
-    </footer>
-
 </div>
 
-<!-- ============================================
-   ESTILOS MEJORADOS - UX/UI
-   ============================================ -->
 <style>
     /* ============================================
-       DASHBOARD - UX/UI MEJORADO
+       DASHBOARD - ESTILOS
        ============================================ */
+    .dashboard-container { max-width: 1200px; margin: 0 auto; }
 
-    .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 4px 20px;
-    }
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text-primary); }
+    .page-header .subtitle { font-size: 1.05rem; color: var(--text-muted); }
 
-    /* --- HEADER --- */
-    .page-header {
-        margin-bottom: 28px;
-    }
-
-    .page-header h1 {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: var(--text-primary);
-        margin-bottom: 2px;
-        letter-spacing: -0.5px;
-    }
-
-    .page-header .subtitle {
-        font-size: 1.05rem;
-        color: var(--text-muted);
-        font-weight: 400;
-    }
-
-    /* --- GRID DE MÉTRICAS --- */
     .metrics-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -196,524 +131,100 @@
         border-radius: 20px;
         background: var(--bg-card);
         border: 1px solid rgba(255, 255, 255, 0.06);
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
+        transition: all 0.35s ease;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
     }
 
-    [data-theme="dark"] .metric-card {
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-    }
+    [data-theme="dark"] .metric-card { box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2); }
+    .metric-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08); }
+    [data-theme="dark"] .metric-card:hover { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); }
 
-    .metric-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
-    }
-
-    [data-theme="dark"] .metric-card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
-    }
-
-    .metric-card .metric-icon {
-        font-size: 1.8rem;
-        margin-bottom: 6px;
-        display: block;
-    }
-
-    .metric-card .metric-value {
-        font-size: 2.2rem;
-        font-weight: 900;
-        color: var(--text-primary);
-        line-height: 1.2;
-        letter-spacing: -0.5px;
-    }
-
-    .metric-card .metric-label {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-secondary);
-        margin-top: 2px;
-    }
+    .metric-card .metric-icon { font-size: 1.8rem; margin-bottom: 6px; display: block; }
+    .metric-card .metric-value { font-size: 2.2rem; font-weight: 900; color: var(--text-primary); line-height: 1.2; }
+    .metric-card .metric-label { font-size: 1rem; font-weight: 600; color: var(--text-secondary); margin-top: 2px; }
 
     .metric-card .metric-change {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 14px;
-        border-radius: 30px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        margin-top: 10px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.04);
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 4px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 700;
+        margin-top: 10px; background: rgba(255,255,255,0.04);
     }
-
-    [data-theme="light"] .metric-card .metric-change {
-        background: rgba(0, 0, 0, 0.02);
-        border: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .metric-card .metric-change.positive {
-        color: #4ade80;
-        border-color: rgba(74, 222, 128, 0.15);
-    }
-
-    .metric-card .metric-change.negative {
-        color: #f87171;
-        border-color: rgba(248, 113, 113, 0.15);
-    }
-
-    .metric-card .trend-arrow {
-        font-size: 0.8rem;
-    }
-
-    /* --- ESTADO RUS --- */
-    .rus-card .status-value {
-        font-size: 1.8rem;
-        background: linear-gradient(135deg, #4ade80, #22c55e);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+    .metric-card .metric-change.positive { color: #4ade80; border-color: rgba(74,222,128,0.15); }
+    .metric-card .metric-change.negative { color: #f87171; border-color: rgba(248,113,113,0.15); }
 
     .rus-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 18px;
-        border-radius: 30px;
-        font-size: 0.95rem;
-        font-weight: 700;
-        margin-top: 10px;
-        background: rgba(74, 222, 128, 0.10);
-        color: #4ade80;
-        border: 1px solid rgba(74, 222, 128, 0.10);
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 6px 18px; border-radius: 30px; font-size: 0.95rem; font-weight: 700;
+        margin-top: 10px; background: rgba(74,222,128,0.10); color: #4ade80;
     }
+    .rus-status .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #4ade80; animation: pulse-dot 2s ease-in-out infinite; }
 
-    .rus-status .status-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #4ade80;
-        animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.4; transform: scale(0.7); }
-    }
-
-    /* --- FILA 2 --- */
-    .row-two {
-        display: grid;
-        grid-template-columns: 1fr 1.5fr;
-        gap: 18px;
-        margin-bottom: 24px;
-    }
-
+    .row-two { display: grid; grid-template-columns: 1fr 1.5fr; gap: 18px; margin-bottom: 24px; }
     .glass-card {
-        background: var(--bg-card);
-        border-radius: 20px;
-        padding: 22px 24px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        background: var(--bg-card); border-radius: 20px; padding: 22px 24px;
+        border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s ease;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
     }
+    [data-theme="dark"] .glass-card { box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+    [data-theme="light"] .glass-card { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); }
 
-    [data-theme="dark"] .glass-card {
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-    }
+    .card-header-doc { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .card-header-doc h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0; }
 
-    [data-theme="light"] .glass-card {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(0, 0, 0, 0.06);
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
-    }
+    .doc-count { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+    .doc-count .count-number { font-size: 3rem; font-weight: 900; color: var(--color-primary); line-height: 1; }
+    .doc-count .count-label { font-size: 1.05rem; color: var(--text-secondary); font-weight: 500; }
 
-    .glass-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-    }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; }
+    .badge-factura { background: rgba(96,165,250,0.10); color: #60a5fa; }
+    .badge-boleta { background: rgba(74,222,128,0.10); color: #4ade80; }
+    .badge-percepcion { background: rgba(167,139,250,0.10); color: #a78bfa; }
 
-    [data-theme="dark"] .glass-card:hover {
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    }
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th { text-align: left; padding: 10px 12px; font-weight: 700; color: var(--text-secondary); border-bottom: 2px solid rgba(255,255,255,0.06); font-size: 0.75rem; text-transform: uppercase; }
+    td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text-primary); }
 
-    .card-header-doc {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
+    .tax-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 4px; }
+    .tax-item { display: flex; flex-direction: column; padding: 14px 18px; background: rgba(255,255,255,0.03); border-radius: 14px; }
+    .tax-item .tax-label { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; }
+    .tax-item .tax-value { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
+    .tax-item .tax-value.highlight { color: #4ade80; font-size: 1.3rem; }
 
-    .card-header-doc .doc-icon {
-        font-size: 1.4rem;
-    }
-
-    .card-header-doc h3 {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin: 0;
-    }
-
-    /* --- DOCUMENTOS --- */
-    .doc-count {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
-
-    .doc-count .count-number {
-        font-size: 3rem;
-        font-weight: 900;
-        color: var(--color-primary);
-        line-height: 1;
-    }
-
-    .doc-count .count-label {
-        font-size: 1.05rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-    }
-
-    .doc-badges {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 14px;
-        border-radius: 30px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        border: 1px solid transparent;
-    }
-
-    .badge-factura {
-        background: rgba(96, 165, 250, 0.10);
-        color: #60a5fa;
-        border-color: rgba(96, 165, 250, 0.10);
-    }
-
-    .badge-boleta {
-        background: rgba(74, 222, 128, 0.10);
-        color: #4ade80;
-        border-color: rgba(74, 222, 128, 0.10);
-    }
-
-    .badge-percepcion {
-        background: rgba(167, 139, 250, 0.10);
-        color: #a78bfa;
-        border-color: rgba(167, 139, 250, 0.10);
-    }
-
-    /* --- TABLA --- */
-    .table-container {
-        overflow-x: auto;
-        margin-top: 4px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.95rem;
-    }
-
-    th {
-        text-align: left;
-        padding: 10px 12px;
-        font-weight: 700;
-        color: var(--text-secondary);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.06);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-    }
-
-    td {
-        padding: 10px 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        color: var(--text-primary);
-    }
-
-    [data-theme="light"] th {
-        border-bottom: 2px solid rgba(0, 0, 0, 0.06);
-    }
-
-    [data-theme="light"] td {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-    }
-
-    tr:hover td {
-        background: rgba(255, 255, 255, 0.02);
-    }
-
-    [data-theme="light"] tr:hover td {
-        background: rgba(0, 0, 0, 0.01);
-    }
-
-    td strong {
-        color: var(--color-primary);
-    }
-
-    /* --- TAX --- */
-    .tax-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        margin-top: 4px;
-    }
-
-    .tax-item {
-        display: flex;
-        flex-direction: column;
-        padding: 14px 18px;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        transition: all 0.2s ease;
-    }
-
-    [data-theme="light"] .tax-item {
-        background: rgba(0, 0, 0, 0.02);
-        border: 1px solid rgba(0, 0, 0, 0.03);
-    }
-
-    .tax-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    [data-theme="light"] .tax-item:hover {
-        background: rgba(0, 0, 0, 0.03);
-    }
-
-    .tax-item .tax-label {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .tax-item .tax-value {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-top: 2px;
-    }
-
-    .tax-item .tax-value.highlight {
-        color: #4ade80;
-        font-size: 1.3rem;
-    }
-
-    .tax-item .tax-value.status-normal {
-        color: #4ade80;
-        font-size: 1rem;
-        font-weight: 600;
-    }
-
-    .tax-item.highlight-item {
-        background: rgba(74, 222, 128, 0.04);
-        border-color: rgba(74, 222, 128, 0.08);
-    }
-
-    /* ============================================
-       FOOTER - NUEVO
-       ============================================ */
-    .dashboard-footer {
-        margin-top: 32px;
-        padding: 18px 24px;
-        border-radius: 16px;
-        background: var(--bg-card);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
-    }
-
-    [data-theme="dark"] .dashboard-footer {
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .footer-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px 20px;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-    }
-
-    .footer-left {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-    }
-
-    .footer-brand {
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: var(--text-primary);
-    }
-
-    .footer-version {
-        padding: 2px 12px;
-        border-radius: 30px;
-        background: rgba(96, 165, 250, 0.08);
-        color: #60a5fa;
-        font-weight: 600;
-        font-size: 0.75rem;
-        border: 1px solid rgba(96, 165, 250, 0.06);
-    }
-
-    .footer-center {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .footer-status {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 500;
-    }
-
-    .status-indicator {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    .status-indicator.online {
-        background: #4ade80;
-        animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    .footer-docs {
-        font-weight: 500;
-        color: var(--text-muted);
-    }
-
-    .footer-right {
-        font-weight: 400;
-        color: var(--text-muted);
-        opacity: 0.7;
-    }
-
-    /* ============================================
-       ANIMACIONES
-       ============================================ */
-    .fade-in-up {
-        animation: fadeInUp 0.6s ease forwards;
-        opacity: 0;
-    }
-
+    /* ANIMACIONES */
+    .fade-in-up { animation: fadeInUp 0.6s ease forwards; opacity: 0; }
     .stagger-1 { animation-delay: 0.05s; }
     .stagger-2 { animation-delay: 0.12s; }
     .stagger-3 { animation-delay: 0.20s; }
-    .stagger-4 { animation-delay: 0.28s; }
 
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ============================================
-       RESPONSIVE
-       ============================================ */
     @media (max-width: 1024px) {
-        .metrics-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-        .row-two {
-            grid-template-columns: 1fr;
-            gap: 14px;
-        }
-        .tax-grid {
-            grid-template-columns: 1fr 1fr;
-        }
+        .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .row-two { grid-template-columns: 1fr; gap: 14px; }
+        .tax-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-        .dashboard-container {
-            padding: 0;
-        }
-        .metric-card {
-            padding: 16px;
-        }
-        .metric-card .metric-value {
-            font-size: 1.6rem;
-        }
-        .doc-count .count-number {
-            font-size: 2.4rem;
-        }
-        .glass-card {
-            padding: 16px 18px;
-        }
-        .tax-grid {
-            grid-template-columns: 1fr;
-        }
-        .footer-content {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-            font-size: 0.8rem;
-        }
-        .footer-center {
-            flex-wrap: wrap;
-        }
+        .metric-card .metric-value { font-size: 1.6rem; }
+        .doc-count .count-number { font-size: 2.4rem; }
+        .glass-card { padding: 16px 18px; }
+        .tax-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
-        .metrics-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .metric-card {
-            padding: 14px;
-        }
-        .metric-card .metric-value {
-            font-size: 1.3rem;
-        }
-        .metric-card .metric-icon {
-            font-size: 1.4rem;
-        }
-        .page-header h1 {
-            font-size: 1.6rem;
-        }
+        .metrics-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .metric-card { padding: 14px; }
+        .metric-card .metric-value { font-size: 1.3rem; }
+        .page-header h1 { font-size: 1.6rem; }
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('📊 Dashboard moderno cargado');
+        console.log('📊 Dashboard cargado');
     });
 </script>
 {% endblock %}
-
-
-
-
-
-
-

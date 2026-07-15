@@ -1,781 +1,356 @@
 ﻿<!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema RUS{% endblock %}</title>
-    
+    <title>Maria Boutique - {% block title %}Control RUS{% endblock %}</title>
+
     <!-- ============================================
-    PRELOAD - Recursos críticos primero
+    FONTS
     ============================================ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <!-- ============================================
-    CSS CRÍTICO - Evitar FOUC
+    LIQUID GLASS - FONDO
+    ============================================ -->
+    <link rel="stylesheet" href="/static/css/9-animations/liquid-glass.css">
+
+    <!-- ============================================
+    CSS PRINCIPAL
+    ============================================ -->
+    <link rel="stylesheet" href="/static/css/glass.css">
+
+    <!-- ============================================
+    ESTILOS GLOBALES
     ============================================ -->
     <style>
-        /* Estilos mínimos para evitar FOUC */
+        /* RESET */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            opacity: 0; 
-            transition: opacity 0.3s ease;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            line-height: 1.7;
             background: #0a0a1e;
+            color: #f7fafc;
             min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
         }
-        body.loaded { opacity: 1; }
+
+        [data-theme="light"] body {
+            background: #f0f4ff;
+            color: #1a1a2e;
+        }
+
         .main-content {
             margin-left: 290px;
             padding: 32px 44px 44px;
             min-height: 100vh;
             transition: margin-left 0.4s ease, padding 0.4s ease;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .main-content.visible { opacity: 1; transform: translateY(0); }
+
         @media (max-width: 768px) {
-            .main-content { margin-left: 0; padding: 20px 16px 32px; padding-top: 80px; }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px 32px;
+                padding-top: 80px;
+            }
         }
-    </style>
-    
-    <!-- ============================================
-    FONTS Y CSS PRINCIPAL - NUEVA ARQUITECTURA
-    ============================================ -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
-    
-    <!-- ============================================
-    SIDEBAR STYLES (DIRECTOS PARA EVITAR FOUC)
-    ============================================ -->
-    <style>
+
+        /* FOOTER ÚNICO - GLOBAL */
+        .global-footer {
+            margin-top: 40px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="light"] .global-footer {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .global-footer .footer-brand {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .global-footer .footer-version {
+            padding: 2px 12px;
+            border-radius: 30px;
+            background: rgba(96, 165, 250, 0.08);
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.7rem;
+            border: 1px solid rgba(96, 165, 250, 0.06);
+        }
+
+        .global-footer .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            display: inline-block;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .global-footer .footer-copy {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .global-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 14px 18px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* SIDEBAR - Estilos básicos */
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
             width: 290px;
             height: 100vh;
-            background: rgba(8, 8, 30, 0.97);
-            backdrop-filter: blur(40px);
-            border-right: 1px solid rgba(255,255,255,0.06);
+            background: rgba(10, 10, 30, 0.92);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
             padding: 28px 20px 24px;
             overflow-y: auto;
             z-index: 1000;
-            transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 8px 0 60px rgba(0,0,0,0.5);
+            transition: transform 0.4s ease;
         }
-        .sidebar::-webkit-scrollbar { width: 4px; }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(96,165,250,0.2); border-radius: 10px; }
-        
+
+        [data-theme="light"] .sidebar {
+            background: rgba(255, 255, 255, 0.92);
+            border-right: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
         .sidebar-brand {
             text-align: center;
             padding: 8px 0 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             margin-bottom: 20px;
-            flex-shrink: 0;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
         }
-        .sidebar-brand:hover { transform: scale(1.02); }
-        .sidebar-brand .logo-icon { font-size: 3.2rem; display: block; margin-bottom: 8px; }
+
+        [data-theme="light"] .sidebar-brand {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .sidebar-brand .logo-icon { font-size: 2.8rem; display: block; margin-bottom: 4px; }
         .sidebar-brand h2 {
             font-size: 1.6rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            margin: 0;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-            margin: 0;
         }
+
+        [data-theme="light"] .sidebar-brand h2 {
+            background: linear-gradient(135deg, #1a1a2e, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .sidebar-brand .brand-sub {
             display: block;
-            color: rgba(255,255,255,0.25);
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 5px;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            margin-top: 6px;
+            margin-top: 2px;
         }
-        
-        .sidebar-nav { list-style: none; padding: 0; margin: 0; flex: 1; }
+
+        [data-theme="light"] .sidebar-brand .brand-sub {
+            color: rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-nav { list-style: none; padding: 0; margin: 0; }
         .sidebar-nav .nav-section {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 4px;
-            color: rgba(255,255,255,0.35);
-            padding: 16px 16px 8px;
+            color: rgba(255, 255, 255, 0.15);
+            padding: 20px 14px 8px;
             font-weight: 700;
             display: block;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 6px;
-            margin-top: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
-        .sidebar-nav .nav-section:first-of-type { margin-top: 0; }
-        .sidebar-nav li { margin-bottom: 3px; }
-        
+
+        [data-theme="light"] .sidebar-nav .nav-section {
+            color: rgba(0, 0, 0, 0.15);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
         .sidebar-nav a {
             display: flex;
             align-items: center;
-            gap: 18px;
-            padding: 14px 18px;
+            gap: 14px;
+            padding: 12px 16px;
             border-radius: 12px;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.35);
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
             transition: all 0.3s ease;
-            position: relative;
-            border: 1px solid transparent;
         }
-        .sidebar-nav a i {
-            width: 26px;
-            text-align: center;
-            font-size: 1.3rem;
-            color: rgba(255,255,255,0.25);
-            transition: all 0.3s ease;
+
+        [data-theme="light"] .sidebar-nav a {
+            color: rgba(0, 0, 0, 0.35);
         }
+
+        .sidebar-nav a i { width: 22px; text-align: center; font-size: 1.1rem; }
         .sidebar-nav a:hover {
-            background: rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.85);
-            transform: translateX(6px);
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.7);
+            transform: translateX(4px);
         }
-        .sidebar-nav a:hover i { color: #60a5fa; transform: scale(1.1); }
+
+        [data-theme="light"] .sidebar-nav a:hover {
+            background: rgba(0, 0, 0, 0.04);
+            color: rgba(0, 0, 0, 0.7);
+        }
+
         .sidebar-nav a.active {
-            background: rgba(96,165,250,0.08);
+            background: rgba(96, 165, 250, 0.08);
             color: #60a5fa;
-            border: 1px solid rgba(96,165,250,0.08);
+            border: 1px solid rgba(96, 165, 250, 0.08);
         }
-        .sidebar-nav a.active i { color: #60a5fa; }
-        .sidebar-nav a.active .nav-text { color: #60a5fa; font-weight: 600; }
-        .sidebar-nav a.active::before {
-            content: '';
-            position: absolute;
-            left: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 5px;
-            height: 30px;
-            background: linear-gradient(180deg, #60a5fa, #a78bfa);
-            border-radius: 0 8px 8px 0;
+
+        [data-theme="light"] .sidebar-nav a.active {
+            background: rgba(59, 130, 246, 0.06);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.06);
         }
-        
+
         .sidebar-footer {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.04);
-            flex-shrink: 0;
+            padding: 16px 0 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
             margin-top: auto;
         }
+
+        [data-theme="light"] .sidebar-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
         .sidebar-footer .version {
-            color: rgba(255,255,255,0.08);
-            font-size: 0.6rem;
-            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.06);
+            font-size: 0.55rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            font-weight: 600;
         }
-        
-        .sidebar-toggle {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1001;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #fff;
-            padding: 16px 20px;
-            border-radius: 16px;
-            font-size: 1.4rem;
-            cursor: pointer;
-            backdrop-filter: blur(16px);
+
+        [data-theme="light"] .sidebar-footer .version {
+            color: rgba(0, 0, 0, 0.06);
         }
-        .sidebar-toggle:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 999;
-            backdrop-filter: blur(6px);
-        }
-        
+
         @media (max-width: 768px) {
-            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
-            .sidebar { transform: translateX(-100%); width: 310px; padding: 24px 18px; }
+            .sidebar { transform: translateX(-100%); width: 300px; }
             .sidebar.open { transform: translateX(0); }
-            .sidebar-overlay.active { display: block; }
-        }
-        @media (max-width: 480px) {
-            .sidebar { width: 280px; padding: 18px 14px; }
-            .sidebar-brand h2 { font-size: 1.3rem; }
-            .sidebar-nav a { padding: 10px 14px; font-size: 0.95rem; }
         }
     </style>
-    
+
     {% block extra_css %}{% endblock %}
-<link rel="stylesheet" href="/static/css/9-animations/liquid-glass.css">
-<style>
-    /* ============================================
-       FOOTER GLOBAL - PROFESIONAL
-       ============================================ */
-    .site-footer {
-        margin-top: 40px;
-        padding: 16px 24px;
-        border-radius: 16px;
-        background: var(--bg-card);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-        width: 100%;
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 1;
-    }
-
-    [data-theme="dark"] .site-footer {
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-        background: rgba(10, 10, 30, 0.8);
-    }
-
-    [data-theme="light"] .site-footer {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(0, 0, 0, 0.04);
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-    }
-
-    .footer-inner {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .footer-section {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-    }
-
-    .footer-logo {
-        font-weight: 700;
-        font-size: 1rem;
-        color: var(--text-primary);
-    }
-
-    .footer-version {
-        padding: 2px 12px;
-        border-radius: 30px;
-        background: rgba(96, 165, 250, 0.08);
-        color: #60a5fa;
-        font-weight: 600;
-        font-size: 0.7rem;
-        border: 1px solid rgba(96, 165, 250, 0.06);
-    }
-
-    .footer-status {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 500;
-    }
-
-    .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #4ade80;
-        animation: pulse-dot 2s ease-in-out infinite;
-        display: inline-block;
-    }
-
-    .footer-divider {
-        color: var(--text-muted);
-        opacity: 0.3;
-    }
-
-    .footer-copy {
-        font-weight: 400;
-        color: var(--text-muted);
-        opacity: 0.7;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .site-footer {
-            padding: 14px 18px;
-            margin-top: 30px;
-            border-radius: 12px;
-        }
-        .footer-inner {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .footer-section {
-            font-size: 0.85rem;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-        .footer-logo {
-            font-size: 0.95rem;
-        }
-        .footer-copy {
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .site-footer {
-            padding: 12px 14px;
-            margin-top: 24px;
-        }
-        .footer-section {
-            font-size: 0.8rem;
-        }
-        .footer-logo {
-            font-size: 0.85rem;
-        }
-        .footer-version {
-            font-size: 0.65rem;
-            padding: 1px 10px;
-        }
-        .footer-divider {
-            display: none;
-        }
-    }
-</style>
 </head>
 <body>
-<!-- LIQUID GLASS - FONDO CON ONDAS DE LUZ -->
-<div class="liquid-bg">
-    <div class="orb"></div>
-    <div class="orb"></div>
-    <div class="orb"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-</div>
-    <!-- ============================================
-    TOGGLE MÓVIL
-    ============================================ -->
-    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menú">
-        <i class="fas fa-bars"></i>
-    </button>
-    
-    <!-- ============================================
-    OVERLAY
-    ============================================ -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ============================================
-    SIDEBAR
-    ============================================ -->
-    <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menú principal">
-        <a href="{{ url_for('main.index') }}" class="sidebar-brand" title="Ir al inicio">
+    <!-- LIQUID GLASS - FONDO -->
+    <div class="liquid-bg">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+        <a href="/" class="sidebar-brand">
             <span class="logo-icon">🏢</span>
             <h2>Maria Boutique</h2>
             <span class="brand-sub">Control Financiero</span>
         </a>
-        
         <ul class="sidebar-nav">
-            <li><span class="nav-section">✦ Principal</span></li>
-            <li>
-                <a href="{{ url_for('main.index') }}" class="{% if request.endpoint == 'main.index' %}active{% endif %}">
-                    <i class="fas fa-home"></i>
-                    <span class="nav-text">Inicio</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('main.subir') }}" class="{% if request.endpoint == 'main.subir' %}active{% endif %}">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span class="nav-text">Subir Archivos</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('main.ver_datos') }}" class="{% if request.endpoint == 'main.ver_datos' %}active{% endif %}">
-                    <i class="fas fa-list-ul"></i>
-                    <span class="nav-text">Ver Datos</span>
-                </a>
-            </li>
-            
-            <li><span class="nav-section">✦ Análisis</span></li>
-            <li>
-                <a href="{{ url_for('main.reportes') }}" class="{% if request.endpoint == 'main.reportes' %}active{% endif %}">
-                    <i class="fas fa-chart-bar"></i>
-                    <span class="nav-text">Reportes</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('main.carpetas') }}" class="{% if request.endpoint == 'main.carpetas' %}active{% endif %}">
-                    <i class="fas fa-folder-open"></i>
-                    <span class="nav-text">Gestión Carpetas</span>
-                </a>
-            </li>
-            
-            <li><span class="nav-section">✦ Sistema</span></li>
-            <li>
-                <a href="{{ url_for('main.backup') }}" class="{% if request.endpoint == 'main.backup' %}active{% endif %}">
-                    <i class="fas fa-database"></i>
-                    <span class="nav-text">Backup</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('main.historial') }}" class="{% if request.endpoint == 'main.historial' %}active{% endif %}">
-                    <i class="fas fa-clock"></i>
-                    <span class="nav-text">Historial</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('main.configuracion') }}" class="{% if request.endpoint == 'main.configuracion' %}active{% endif %}">
-                    <i class="fas fa-sliders-h"></i>
-                    <span class="nav-text">Configuración</span>
-                </a>
-            </li>
+            <li><span class="nav-section">✧ Principal</span></li>
+            <li><a href="/" class="active"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="/subir"><i class="fas fa-cloud-upload-alt"></i> Subir Archivos</a></li>
+            <li><a href="/ver_datos"><i class="fas fa-list-ul"></i> Ver Datos</a></li>
+            <li><span class="nav-section">✧ Análisis</span></li>
+            <li><a href="/reportes"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+            <li><a href="/carpetas"><i class="fas fa-folder-open"></i> Gestión Carpetas</a></li>
+            <li><span class="nav-section">✧ Sistema</span></li>
+            <li><a href="/backup"><i class="fas fa-database"></i> Backup</a></li>
+            <li><a href="/historial"><i class="fas fa-clock"></i> Historial</a></li>
+            <li><a href="/configuracion"><i class="fas fa-sliders-h"></i> Configuración</a></li>
         </ul>
-        
         <div class="sidebar-footer">
-            <span class="version">v3.9.1 · Flask</span>
+            <span class="version">v4.0 · Flask</span>
         </div>
     </nav>
 
-    <!-- ============================================
-    MAIN CONTENT
-    ============================================ -->
+    <!-- MAIN CONTENT -->
     <main class="main-content" id="mainContent">
         {% block content %}{% endblock %}
+
+        <!-- FOOTER ÚNICO - GLOBAL -->
+        <footer class="global-footer">
+            <div class="footer-brand">
+                🏢 Maria Boutique
+                <span class="footer-version">v4.0</span>
+            </div>
+            <div>
+                <span class="status-dot"></span>
+                Sistema operativo
+                <span style="opacity:0.3; margin:0 8px;">|</span>
+                📄 7 documentos
+            </div>
+            <div class="footer-copy">
+                © 2026 — Hecho con ❤️ para Doña María
+            </div>
+        </footer>
     </main>
 
-    <!-- ============================================
-    SCRIPTS - NUEVA ARQUITECTURA ATOMICA
-    ============================================ -->
-    
-    <!-- ===== 1. CORE ===== -->
-    <script src="{{ url_for('static', filename='js/1-core/config.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/1-core/events.js') }}" defer></script>
-    
-    <!-- ===== 2. UTILS ===== -->
-    <script src="{{ url_for('static', filename='js/2-utils/dom.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/2-utils/format.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/2-utils/api.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/2-utils/storage.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/2-utils/validators.js') }}" defer></script>
-    
-    <!-- ===== 3. SERVICES ===== -->
-    <script src="{{ url_for('static', filename='js/3-services/theme.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/3-services/notifications.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/3-services/auth.js') }}" defer></script>
-    
-    <!-- ===== 4. MODULES ===== -->
-    <script src="{{ url_for('static', filename='js/4-modules/sidebar.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/4-modules/filters.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/4-modules/pagination.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/4-modules/upload.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/4-modules/organizers.js') }}" defer></script>
-    
-    <!-- ===== 5. PAGES (siempre cargar) ===== -->
-    <script src="{{ url_for('static', filename='js/5-pages/dashboard.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/5-pages/config.js') }}" defer></script>
-    
-    <!-- ===== CHARTS (solo en reportes) ===== -->
-    {% if request.endpoint == 'main.reportes' %}
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
-    <script src="{{ url_for('static', filename='js/4-modules/charts.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/5-pages/reports.js') }}" defer></script>
-    {% endif %}
-    
-    <!-- ===== APP PRINCIPAL ===== -->
-    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
-    
-    {% block extra_js %}{% endblock %}
-    
-    <!-- ============================================
-    SCRIPT DE INICIALIZACIÓN
-    ============================================ -->
+    <!-- SCRIPTS -->
+    <script src="/static/js/3-services/theme.js" defer></script>
+    <script src="/static/js/3-services/notifications.js" defer></script>
+    <script src="/static/js/4-modules/sidebar.js" defer></script>
+    <script src="/static/js/app.js" defer></script>
+
     <script>
-        (function() {
-            'use strict';
-            
-            // Mostrar contenido
-            function showContent() {
-                const mainContent = document.getElementById('mainContent');
-                const body = document.body;
-                if (mainContent) mainContent.classList.add('visible');
-                if (body) body.classList.add('loaded');
-            }
-            
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                setTimeout(showContent, 30);
-            } else {
-                document.addEventListener('DOMContentLoaded', function() {
-                    setTimeout(showContent, 30);
-                });
-            }
-            setTimeout(showContent, 300);
-            
-            // Sidebar toggle
-            document.addEventListener('DOMContentLoaded', function() {
-                const sidebar = document.getElementById('sidebar');
-                const toggle = document.getElementById('sidebarToggle');
-                const overlay = document.getElementById('sidebarOverlay');
-                
-                if (!sidebar || !toggle) return;
-                
-                function isMobile() { return window.innerWidth <= 768; }
-                
-                function toggleSidebar() {
-                    if (!isMobile()) return;
-                    sidebar.classList.toggle('open');
-                    if (overlay) overlay.classList.toggle('active');
-                    const icon = toggle.querySelector('i');
-                    icon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-                    document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-                }
-                
-                toggle.addEventListener('click', toggleSidebar);
-                if (overlay) overlay.addEventListener('click', toggleSidebar);
-                
-                document.querySelectorAll('.sidebar a').forEach(function(link) {
-                    link.addEventListener('click', function() {
-                        if (isMobile() && sidebar.classList.contains('open')) {
-                            toggleSidebar();
-                        }
-                    });
-                });
-                
-                window.addEventListener('resize', function() {
-                    if (!isMobile() && sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                        if (overlay) overlay.classList.remove('active');
-                        toggle.querySelector('i').className = 'fas fa-bars';
-                        document.body.style.overflow = '';
-                    }
-                });
-            });
-            
-        })();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('mainContent').classList.add('visible');
+        });
     </script>
-<style>
-/* ============================================
-   LIQUID GLASS - EFECTOS GLOBALES
-   ============================================ */
 
-/* Fondo con ondas de agua/luz */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    background: 
-        radial-gradient(ellipse at 20% 50%, rgba(96, 165, 250, 0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 50%, rgba(167, 139, 250, 0.06) 0%, transparent 50%);
-    animation: waterGlow 10s ease-in-out infinite alternate;
-}
-
-[data-theme="dark"] body::before {
-    background: 
-        radial-gradient(ellipse at 20% 50%, rgba(96, 165, 250, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 50%, rgba(167, 139, 250, 0.12) 0%, transparent 50%);
-}
-
-@keyframes waterGlow {
-    0% {
-        opacity: 0.5;
-        transform: scale(1) rotate(0deg);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1.05) rotate(1deg);
-    }
-}
-
-/* Ondas en movimiento */
-.wave-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 150px;
-    z-index: -1;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-.wave {
-    position: absolute;
-    bottom: 0;
-    left: -50%;
-    width: 200%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        rgba(96, 165, 250, 0.03) 25%,
-        transparent 50%
-    );
-    animation: waveMove 15s linear infinite;
-}
-
-.wave:nth-child(2) {
-    animation-duration: 20s;
-    animation-delay: -4s;
-    opacity: 0.5;
-}
-
-.wave:nth-child(3) {
-    animation-duration: 25s;
-    animation-delay: -8s;
-    opacity: 0.3;
-}
-
-@keyframes waveMove {
-    0% {
-        transform: translateX(0) scaleY(1);
-    }
-    50% {
-        transform: translateX(25%) scaleY(0.5);
-    }
-    100% {
-        transform: translateX(50%) scaleY(1);
-    }
-}
-
-/* Efecto Glass en tarjetas - Mejorado */
-.glass-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-lg);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="dark"] .glass-card {
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-}
-
-.glass-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="dark"] .glass-card:hover {
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
-}
-
-/* Brillo en hover - Liquid Glass */
-.glass-card::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-        circle at 30% 30%,
-        rgba(255, 255, 255, 0.03) 0%,
-        transparent 60%
-    );
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none;
-}
-
-.glass-card:hover::after {
-    opacity: 1;
-}
-
-.glass-card {
-    position: relative;
-    overflow: hidden;
-}
-</style>
-
-<!-- ONDAS -->
-<div class="wave-container">
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-</div>
-<script src="/static/js/4-modules/global-buttons.js" defer></script>    <!-- ============================================
-    FOOTER GLOBAL - LIQUID GLASS
-    Aparece en todas las páginas
-    ============================================ -->
-    <footer class="global-footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <span class="footer-brand">🏢 Maria Boutique</span>
-                <span class="footer-version">v4.0</span>
-            </div>
-            <div class="footer-center">
-                <span class="footer-status">
-                    <span class="status-indicator online"></span>
-                    Sistema operativo
-                </span>
-                <span class="footer-docs">📄 7 documentos</span>
-            </div>
-            <div class="footer-right">
-                <span class="footer-copy">© 2026 - Hecho con ❤️ para Doña María</span>
-            </div>
-        </div>
-    </footer>
-    <!-- ============================================
-    FOOTER GLOBAL - PROFESIONAL
-    ============================================ -->
-    <footer class="site-footer">
-        <div class="footer-inner">
-            <div class="footer-section footer-brand">
-                <span class="footer-logo">🏢 Maria Boutique</span>
-                <span class="footer-version">v4.0</span>
-            </div>
-            <div class="footer-section footer-status">
-                <span class="status-dot"></span>
-                <span>Sistema operativo</span>
-                <span class="footer-divider">|</span>
-                <span>📄 7 documentos</span>
-            </div>
-            <div class="footer-section footer-copy">
-                <span>© 2026 — Hecho con ❤️ para Doña María</span>
-            </div>
-        </div>
-    </footer>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
