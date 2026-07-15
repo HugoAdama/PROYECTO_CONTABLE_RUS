@@ -2,156 +2,116 @@
 
 {% block title %}Dashboard - Maria Boutique{% endblock %}
 
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Resumen financiero de tu negocio en el Régimen RUS{% endblock %}
+
 {% block content %}
 <div class="dashboard-container">
 
-    <!-- HEADER -->
-    <div class="page-header fade-in-up">
-        <h1>📊 Dashboard</h1>
-        <p class="subtitle">Resumen financiero de tu negocio en el Régimen RUS</p>
-    </div>
-
-    <!-- ============================================
-    MÉTRICAS PRINCIPALES - 4 COLUMNAS
-    ============================================ -->
-    <div class="metrics-grid fade-in-up stagger-1">
-
-        <!-- Tarjeta: Ventas -->
-        <div class="metric-card metric-ventas">
-            <div class="metric-header">
-                <span class="metric-icon">💰</span>
-                <span class="metric-trend positive">▲ 12%</span>
+    <!-- MÉTRICAS PRINCIPALES -->
+    <div class="grid4">
+        <!-- Ventas -->
+        <div class="card">
+            <div class="metric-top">
+                <div class="metric-icon" style="background:var(--green-soft);">
+                    <i class="fas fa-arrow-up" style="color:var(--green);"></i>
+                </div>
+                <span class="pill up">▲ 12%</span>
             </div>
-            <div class="metric-value">S/ 200.00</div>
             <div class="metric-label">Ventas</div>
-            <div class="metric-change positive">+12% vs mes anterior</div>
+            <div class="metric-value">S/ 200.00</div>
+            <div class="metric-foot up">+12% vs mes anterior</div>
         </div>
 
-        <!-- Tarjeta: Compras -->
-        <div class="metric-card metric-compras">
-            <div class="metric-header">
-                <span class="metric-icon">🛒</span>
-                <span class="metric-trend negative">▼ 8%</span>
+        <!-- Compras -->
+        <div class="card">
+            <div class="metric-top">
+                <div class="metric-icon" style="background:var(--rose-soft);">
+                    <i class="fas fa-arrow-down" style="color:var(--rose);"></i>
+                </div>
+                <span class="pill down">▼ 8%</span>
             </div>
-            <div class="metric-value">S/ 191.70</div>
             <div class="metric-label">Compras</div>
-            <div class="metric-change negative">-8% vs mes anterior</div>
+            <div class="metric-value">S/ 191.70</div>
+            <div class="metric-foot down">-8% vs mes anterior</div>
         </div>
 
-        <!-- Tarjeta: Utilidad -->
-        <div class="metric-card metric-utilidad">
-            <div class="metric-header">
-                <span class="metric-icon">📈</span>
-                <span class="metric-trend positive">▲ 4.2%</span>
+        <!-- Utilidad -->
+        <div class="card">
+            <div class="metric-top">
+                <div class="metric-icon" style="background:var(--accent-soft);">
+                    <i class="fas fa-chart-line" style="color:var(--accent);"></i>
+                </div>
+                <span class="pill up">▲ 4.2%</span>
             </div>
-            <div class="metric-value">S/ 8.30</div>
             <div class="metric-label">Utilidad</div>
-            <div class="metric-change positive">+4.2% vs mes anterior</div>
+            <div class="metric-value">S/ 8.30</div>
+            <div class="metric-foot up">+4.2% vs mes anterior</div>
         </div>
 
-        <!-- Tarjeta: Estado RUS - DESTACADA -->
-        <div class="metric-card metric-rus">
-            <div class="metric-header">
-                <span class="metric-icon">✅</span>
-                <span class="metric-rus-badge">Normal</span>
+        <!-- Estado RUS -->
+        <div class="card">
+            <div class="metric-top">
+                <div class="metric-icon" style="background:var(--green-soft);">
+                    <i class="fas fa-check-circle" style="color:var(--green);"></i>
+                </div>
+                <span class="pill up">Normal</span>
             </div>
-            <div class="metric-value rus-value">Dentro del límite</div>
-            <div class="metric-label">Estado RUS</div>
-            <div class="rus-status normal">
-                <span class="status-dot"></span>
-                Impuesto: S/ 20
-            </div>
-            <div class="rus-message">✅ Estás dentro del límite RUS. ¡Sigue así!</div>
-        </div>
-    </div>
-
-    <!-- ============================================
-    RESULTADO RÁPIDO
-    ============================================ -->
-    <div class="quick-summary fade-in-up stagger-2">
-        <span class="summary-icon">✅</span>
-        <span class="summary-text">Estás dentro del límite RUS (S/ 8,000). ¡Sigue así, Doña María!</span>
-    </div>
-
-    <!-- ============================================
-    FILA 2: DOCUMENTOS + ÚLTIMAS BOLETAS
-    ============================================ -->
-    <div class="row-two fade-in-up stagger-3">
-
-        <!-- Columna Izquierda: Documentos -->
-        <div class="glass-card documents-card">
-            <div class="card-header-doc">
-                <span class="doc-icon">📄</span>
-                <h3>Total Documentos</h3>
-            </div>
-            <div class="doc-count">
-                <span class="count-number">3</span>
-                <span class="count-label">documentos</span>
-            </div>
-            <div class="doc-badges">
-                <span class="badge badge-factura">📑 Facturas: 1</span>
-                <span class="badge badge-boleta">🧾 Boletas: 1</span>
-                <span class="badge badge-percepcion">📋 Percepciones: 1</span>
-            </div>
-        </div>
-
-        <!-- Columna Derecha: Últimas Boletas -->
-        <div class="glass-card boletas-card">
-            <div class="card-header-doc">
-                <span class="doc-icon">📋</span>
-                <h3>Últimas Boletas</h3>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Número</th>
-                            <th>Monto</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>EB01-302</strong></td>
-                            <td>S/ 200.00</td>
-                            <td>31/05/2026</td>
-                        </tr>
-                        <tr>
-                            <td><strong>EB01-303</strong></td>
-                            <td>S/ 220.00</td>
-                            <td>31/05/2026</td>
-                        </tr>
-                        <tr>
-                            <td><strong>EB01-304</strong></td>
-                            <td>S/ 140.00</td>
-                            <td>31/05/2026</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="rus-status">
+                <div class="metric-label" style="margin-bottom:0;">Estado RUS</div>
+                <div class="rus-tax">Impuesto: S/ 20</div>
+                <div class="metric-foot up">✅ Dentro del límite RUS</div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================
-    FILA 3: DESGLOSE DE IMPUESTOS
-    ============================================ -->
-    <div class="glass-card tax-card fade-in-up stagger-4">
-        <div class="card-header-doc">
-            <span class="doc-icon">📊</span>
-            <h3>Desglose de Impuestos RUS</h3>
+    <!-- BANNER DE ESTADO -->
+    <div class="banner">
+        <i class="fas fa-check-circle" style="color:var(--green); font-size:18px;"></i>
+        <span>Estás dentro del límite RUS (S/ 8,000). ¡Sigue así, Doña María!</span>
+    </div>
+
+    <!-- FILA 2: DOCUMENTOS + BOLETAS -->
+    <div class="row2">
+        <!-- Documentos -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-file-alt"></i> Total documentos</div>
+            <div class="doc-count">3</div>
+            <div class="metric-label" style="margin-bottom:12px;">documentos</div>
+            <div class="tags">
+                <span class="tag">📑 Facturas: 1</span>
+                <span class="tag">🧾 Boletas: 1</span>
+                <span class="tag">📋 Percepciones: 1</span>
+            </div>
         </div>
-        <div class="tax-grid">
-            <div class="tax-item">
-                <span class="tax-label">Ventas del Mes</span>
-                <span class="tax-value">S/ 200.00</span>
+
+        <!-- Últimas Boletas -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-receipt"></i> Últimas boletas</div>
+            <table>
+                <tr><th>Número</th><th>Monto</th><th>Fecha</th></tr>
+                <tr><td>EB01-302</td><td>S/ 200.00</td><td>31/05/2026</td></tr>
+                <tr><td>EB01-303</td><td>S/ 220.00</td><td>31/05/2026</td></tr>
+                <tr><td>EB01-304</td><td>S/ 140.00</td><td>31/05/2026</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- DESGLOSE DE IMPUESTOS -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-chart-pie"></i> Desglose de impuestos RUS</div>
+        <div class="row3">
+            <div>
+                <div class="kpi-label">VENTAS DEL MES</div>
+                <div class="kpi-value">S/ 200.00</div>
             </div>
-            <div class="tax-item highlight-item">
-                <span class="tax-label">Impuesto a Pagar</span>
-                <span class="tax-value highlight">S/ 20</span>
+            <div>
+                <div class="kpi-label">IMPUESTO A PAGAR</div>
+                <div class="kpi-value" style="color:var(--green);">S/ 20</div>
             </div>
-            <div class="tax-item">
-                <span class="tax-label">Régimen</span>
-                <span class="tax-value status-normal">✅ Normal</span>
+            <div>
+                <div class="kpi-label">RÉGIMEN</div>
+                <div class="kpi-value" style="color:var(--green);">✅ Normal</div>
             </div>
         </div>
     </div>
@@ -159,434 +119,193 @@
 </div>
 
 <!-- ============================================
-   ESTILOS MEJORADOS - UX/UI
-   ============================================ -->
+ESTILOS DEL DASHBOARD
+============================================ -->
 <style>
-    /* ============================================
-       DASHBOARD - ESTILOS PROFESIONALES
-       ============================================ */
+    .dashboard-container { max-width: 1200px; margin: 0 auto; }
 
-    .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    /* --- HEADER --- */
-    .page-header { margin-bottom: 28px; }
-    .page-header h1 {
-        font-size: 2.4rem;
-        font-weight: 800;
-        color: var(--text-primary);
-        letter-spacing: -0.5px;
-    }
-    .page-header .subtitle {
-        font-size: 1.1rem;
-        color: var(--text-muted);
-    }
-
-    /* --- GRID DE MÉTRICAS --- */
-    .metrics-grid {
+    /* GRID 4 COLUMNAS */
+    .grid4 {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 18px;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
     }
 
-    .metric-card {
-        padding: 22px 20px 18px;
-        border-radius: 20px;
-        background: var(--bg-card);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    }
-
-    [data-theme="dark"] .metric-card {
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .metric-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
-    }
-
-    [data-theme="dark"] .metric-card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
-    }
-
-    /* --- METRIC HEADER --- */
-    .metric-header {
+    /* MÉTRICAS */
+    .metric-top {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 6px;
+        margin-bottom: 26px;
     }
 
-    .metric-icon { font-size: 1.8rem; }
-    .metric-trend {
-        font-size: 0.85rem;
-        font-weight: 700;
-        padding: 2px 12px;
-        border-radius: 30px;
-    }
-    .metric-trend.positive { color: #4ade80; background: rgba(74, 222, 128, 0.12); }
-    .metric-trend.negative { color: #f87171; background: rgba(248, 113, 113, 0.12); }
-
-    /* --- METRIC VALUE --- */
-    .metric-value {
-        font-size: 2.6rem;
-        font-weight: 900;
-        color: var(--text-primary);
-        line-height: 1.2;
-        letter-spacing: -0.5px;
+    .metric-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(6px);
+        font-size: 18px;
     }
 
     .metric-label {
-        font-size: 1.05rem;
-        font-weight: 600;
+        font-size: 13.5px;
         color: var(--text-secondary);
-        margin-top: 2px;
+        margin-bottom: 4px;
     }
 
-    .metric-change {
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: var(--text-muted);
-        margin-top: 8px;
-    }
-
-    .metric-change.positive { color: #4ade80; }
-    .metric-change.negative { color: #f87171; }
-
-    /* --- TARJETA RUS - DESTACADA --- */
-    .metric-rus {
-        background: linear-gradient(135deg, rgba(74, 222, 128, 0.06), rgba(74, 222, 128, 0.02));
-        border-color: rgba(74, 222, 128, 0.15);
-    }
-
-    [data-theme="dark"] .metric-rus {
-        background: linear-gradient(135deg, rgba(74, 222, 128, 0.08), rgba(74, 222, 128, 0.02));
-    }
-
-    .metric-rus-badge {
-        font-size: 0.85rem;
-        font-weight: 700;
-        padding: 2px 14px;
-        border-radius: 30px;
-        background: rgba(74, 222, 128, 0.12);
-        color: #4ade80;
-    }
-
-    .rus-value {
-        font-size: 1.8rem;
-        background: linear-gradient(135deg, #4ade80, #22c55e);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    .rus-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 18px;
-        border-radius: 30px;
-        font-size: 0.95rem;
-        font-weight: 700;
-        margin-top: 8px;
-        background: rgba(74, 222, 128, 0.10);
-        color: #4ade80;
-        border: 1px solid rgba(74, 222, 128, 0.10);
-    }
-
-    .rus-status .status-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #4ade80;
-        animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    .rus-message {
-        margin-top: 10px;
-        font-size: 0.9rem;
+    .metric-value {
+        font-size: 26px;
         font-weight: 600;
-        color: #4ade80;
-        background: rgba(74, 222, 128, 0.06);
-        padding: 8px 14px;
+        margin-bottom: 14px;
+        color: var(--text-primary);
+    }
+
+    .metric-foot {
+        font-size: 12.5px;
+        padding: 8px 10px;
         border-radius: 10px;
-        border-left: 3px solid #4ade80;
     }
 
-    /* --- QUICK SUMMARY --- */
-    .quick-summary {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 14px 20px;
-        border-radius: 14px;
-        background: rgba(74, 222, 128, 0.06);
-        border: 1px solid rgba(74, 222, 128, 0.10);
-        margin-bottom: 24px;
-        transition: all 0.3s ease;
-    }
+    .metric-foot.up { color: var(--green); background: var(--green-soft); }
+    .metric-foot.down { color: var(--rose); background: var(--rose-soft); }
 
-    .quick-summary .summary-icon { font-size: 1.6rem; }
-    .quick-summary .summary-text {
-        font-size: 1.05rem;
+    .pill {
+        font-size: 11.5px;
         font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    /* --- FILA 2 --- */
-    .row-two {
-        display: grid;
-        grid-template-columns: 1fr 1.5fr;
-        gap: 18px;
-        margin-bottom: 24px;
-    }
-
-    .glass-card {
-        background: var(--bg-card);
+        padding: 4px 9px;
         border-radius: 20px;
-        padding: 22px 24px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+    .pill.up { color: var(--green); background: var(--green-soft); }
+    .pill.down { color: var(--rose); background: var(--rose-soft); }
+    .pill.warn { color: var(--amber); background: var(--amber-soft); }
+
+    /* RUS STATUS */
+    .rus-status {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
 
-    [data-theme="dark"] .glass-card {
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    .rus-tax {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--green);
     }
 
-    [data-theme="light"] .glass-card {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .glass-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-    }
-
-    .card-header-doc {
+    /* BANNER */
+    .banner {
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
-
-    .card-header-doc .doc-icon { font-size: 1.4rem; }
-    .card-header-doc h3 {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin: 0;
-    }
-
-    /* --- DOCUMENTOS --- */
-    .doc-count {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
-
-    .doc-count .count-number {
-        font-size: 3.2rem;
-        font-weight: 900;
-        color: var(--color-primary);
-        line-height: 1;
-    }
-
-    .doc-count .count-label {
-        font-size: 1.05rem;
-        color: var(--text-secondary);
+        gap: 12px;
+        padding: 16px 20px;
+        border-radius: 16px;
+        background: var(--green-soft);
+        border: 1px solid var(--card-border);
+        margin-bottom: 20px;
+        backdrop-filter: blur(20px);
+        font-size: 14px;
         font-weight: 500;
+        color: var(--text-primary);
     }
 
-    .doc-badges {
+    /* ROW 2 */
+    .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .doc-count {
+        font-size: 40px;
+        font-weight: 700;
+        margin: 6px 0 12px;
+        color: var(--text-primary);
+    }
+
+    .tags {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
     }
 
-    .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 14px;
-        border-radius: 30px;
-        font-size: 0.9rem;
+    .tag {
+        font-size: 11.5px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: var(--card-bg-strong);
+        border: 1px solid var(--card-border);
+        color: var(--text-secondary);
+    }
+
+    /* ROW 3 */
+    .row3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .kpi-label {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .kpi-value {
+        font-size: 19px;
         font-weight: 600;
-        border: 1px solid transparent;
+        color: var(--text-primary);
     }
 
-    .badge-factura {
-        background: rgba(96, 165, 250, 0.10);
-        color: #60a5fa;
-        border-color: rgba(96, 165, 250, 0.10);
-    }
-
-    .badge-boleta {
-        background: rgba(74, 222, 128, 0.10);
-        color: #4ade80;
-        border-color: rgba(74, 222, 128, 0.10);
-    }
-
-    .badge-percepcion {
-        background: rgba(167, 139, 250, 0.10);
-        color: #a78bfa;
-        border-color: rgba(167, 139, 250, 0.10);
-    }
-
-    /* --- TABLA MEJORADA --- */
-    .table-container {
-        overflow-x: auto;
-        margin-top: 4px;
-    }
-
+    /* TABLA */
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 1rem;
+        font-size: 13.5px;
     }
 
     th {
         text-align: left;
-        padding: 12px 14px;
-        font-weight: 700;
-        color: var(--text-secondary);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.06);
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 11.5px;
+        letter-spacing: 0.5px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--card-border);
     }
 
     td {
-        padding: 12px 14px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        padding: 10px 0;
+        border-top: 1px solid var(--card-border);
         color: var(--text-primary);
     }
 
-    tr:hover td {
-        background: rgba(255, 255, 255, 0.02);
-    }
-
-    td strong {
-        color: var(--color-primary);
-    }
-
-    /* --- TAX --- */
-    .tax-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        margin-top: 4px;
-    }
-
-    .tax-item {
-        display: flex;
-        flex-direction: column;
-        padding: 14px 18px;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        transition: all 0.2s ease;
-    }
-
-    .tax-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .tax-item .tax-label {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .tax-item .tax-value {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-top: 2px;
-    }
-
-    .tax-item .tax-value.highlight {
-        color: #4ade80;
-        font-size: 1.3rem;
-    }
-
-    .tax-item .tax-value.status-normal {
-        color: #4ade80;
-        font-size: 1rem;
-        font-weight: 600;
-    }
-
-    .tax-item.highlight-item {
-        background: rgba(74, 222, 128, 0.04);
-        border-color: rgba(74, 222, 128, 0.08);
-    }
-
-    /* ============================================
-       ANIMACIONES
-       ============================================ */
-    .fade-in-up {
-        animation: fadeInUp 0.6s ease forwards;
-        opacity: 0;
-    }
-
-    .stagger-1 { animation-delay: 0.05s; }
-    .stagger-2 { animation-delay: 0.12s; }
-    .stagger-3 { animation-delay: 0.20s; }
-    .stagger-4 { animation-delay: 0.28s; }
-
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse-dot {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.4; transform: scale(0.7); }
-    }
-
-    /* ============================================
-       RESPONSIVE
-       ============================================ */
+    /* RESPONSIVE */
     @media (max-width: 1024px) {
-        .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-        .row-two { grid-template-columns: 1fr; gap: 14px; }
-        .tax-grid { grid-template-columns: 1fr 1fr; }
+        .grid4 { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .row2 { grid-template-columns: 1fr; gap: 14px; }
+        .row3 { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-        .metric-value { font-size: 2rem; }
-        .doc-count .count-number { font-size: 2.6rem; }
-        .glass-card { padding: 16px 18px; }
-        .quick-summary { flex-direction: column; align-items: flex-start; gap: 6px; }
-        .quick-summary .summary-text { font-size: 0.95rem; }
-        .rus-message { font-size: 0.85rem; }
-        .tax-grid { grid-template-columns: 1fr; }
+        .grid4 { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .metric-value { font-size: 20px; }
+        .doc-count { font-size: 32px; }
+        .banner { font-size: 13px; padding: 12px 16px; }
+        .row3 { grid-template-columns: 1fr; }
+        .topbar { flex-direction: column; align-items: flex-start; }
     }
 
     @media (max-width: 480px) {
-        .metrics-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-        .metric-card { padding: 14px; }
-        .metric-value { font-size: 1.6rem; }
-        .page-header h1 { font-size: 1.8rem; }
-        .metric-header .metric-icon { font-size: 1.4rem; }
-        .rus-message { font-size: 0.8rem; padding: 6px 12px; }
+        .grid4 { grid-template-columns: 1fr; gap: 10px; }
+        .metric-value { font-size: 18px; }
+        .main { padding: 12px; }
     }
 </style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('📊 Dashboard profesional cargado');
-    });
-</script>
 {% endblock %}

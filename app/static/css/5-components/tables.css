@@ -1,41 +1,83 @@
-/* ============================================
-   COMPONENTS: TABLES
-   Sistema de Control Financiero RUS v3.9.1
+﻿/* ============================================
+   TABLAS - LIQUID GLASS
+   Basado en el diseño de Maria Boutique
    ============================================ */
 
-.table-responsive {
+.table-container {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
-.table {
+table {
     width: 100%;
     border-collapse: collapse;
-    font-size: var(--font-body);
+    font-size: 13.5px;
+}
+
+th {
+    text-align: left;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 11.5px;
+    letter-spacing: 0.5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+td {
+    padding: 10px 0;
+    border-top: 1px solid var(--card-border);
     color: var(--text-primary);
 }
 
-.table thead th {
-    padding: 14px 16px;
-    text-align: left;
-    font-weight: var(--font-weight-semibold);
+tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* --- BADGES EN TABLAS --- */
+.type-pill {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.type-pill.percepcion {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.type-pill.boleta {
+    background: var(--green-soft);
+    color: var(--green);
+}
+
+.type-pill.factura {
+    background: var(--rose-soft);
+    color: var(--rose);
+}
+
+/* --- PAGINACIÓN --- */
+.pagination {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 13px;
     color: var(--text-secondary);
-    border-bottom: 2px solid var(--border-color);
-    font-size: var(--font-small);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wide);
 }
 
-.table tbody td {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border-color);
-    font-size: var(--font-body);
+.pagination .page-number {
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.table tbody tr:hover td {
-    background: var(--bg-card);
+.pagination .page-number.active {
+    background: var(--accent-soft);
+    color: var(--accent);
 }
 
-.table tbody tr:last-child td {
-    border-bottom: none;
+.pagination .page-number:hover {
+    background: var(--card-bg);
 }

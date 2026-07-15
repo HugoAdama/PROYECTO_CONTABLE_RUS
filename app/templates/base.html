@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maria Boutique - {% block title %}Control RUS{% endblock %}</title>
+    <title>{% block title %}Maria Boutique - Control RUS{% endblock %}</title>
 
     <!-- ============================================
     FONTS
     ============================================ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- ============================================
@@ -24,333 +24,232 @@
     <link rel="stylesheet" href="/static/css/glass.css">
 
     <!-- ============================================
-    ESTILOS GLOBALES
+    ESTILOS BASE
     ============================================ -->
     <style>
-        /* RESET */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
             font-size: 18px;
             line-height: 1.7;
-            background: #0a0a1e;
-            color: #f7fafc;
+            color: var(--text-primary);
             min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
-        [data-theme="light"] body {
-            background: #f0f4ff;
-            color: #1a1a2e;
+        .app {
+            display: flex;
+            min-height: 100vh;
         }
 
-        .main-content {
-            margin-left: 290px;
-            padding: 32px 44px 44px;
-            min-height: 100vh;
-            transition: margin-left 0.4s ease, padding 0.4s ease;
+        .main {
+            flex: 1;
+            padding: 32px 40px;
+            margin-left: 240px;
+            transition: margin-left 0.4s ease;
         }
 
         @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
+            .main {
                 padding: 20px 16px 32px;
+                margin-left: 0;
                 padding-top: 80px;
             }
         }
 
-        /* FOOTER ÚNICO - GLOBAL */
-        .global-footer {
-            margin-top: 40px;
-            padding: 16px 24px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            width: 100%;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+        /* ============================================
+        TOPBAR
+        ============================================ */
+        .topbar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            margin-bottom: 26px;
             flex-wrap: wrap;
-            gap: 12px 20px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.5);
+            gap: 12px;
         }
 
-        [data-theme="light"] .global-footer {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            color: rgba(0, 0, 0, 0.5);
-        }
-
-        .global-footer .footer-brand {
-            font-weight: 700;
-            font-size: 0.95rem;
+        .page-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 600;
+            margin: 0 0 4px;
             color: var(--text-primary);
         }
 
-        .global-footer .footer-version {
-            padding: 2px 12px;
-            border-radius: 30px;
-            background: rgba(96, 165, 250, 0.08);
-            color: #60a5fa;
-            font-weight: 600;
-            font-size: 0.7rem;
-            border: 1px solid rgba(96, 165, 250, 0.06);
+        .page-sub {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0;
         }
 
-        .global-footer .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4ade80;
-            display: inline-block;
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.7); }
-        }
-
-        .global-footer .footer-copy {
-            opacity: 0.6;
+        /* ============================================
+        FOOTER GLOBAL
+        ============================================ */
+        .footer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--card-border);
+            font-size: 12px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         @media (max-width: 768px) {
-            .global-footer {
+            .footer-bar {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 8px;
-                padding: 14px 18px;
-                font-size: 0.8rem;
+                gap: 4px;
             }
         }
 
-        /* SIDEBAR - Estilos básicos */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 290px;
-            height: 100vh;
-            background: rgba(10, 10, 30, 0.92);
-            backdrop-filter: blur(24px);
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 28px 20px 24px;
-            overflow-y: auto;
-            z-index: 1000;
-            transition: transform 0.4s ease;
-        }
-
-        [data-theme="light"] .sidebar {
-            background: rgba(255, 255, 255, 0.92);
-            border-right: 1px solid rgba(0, 0, 0, 0.04);
-        }
-
-        .sidebar-brand {
-            text-align: center;
-            padding: 8px 0 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            margin-bottom: 20px;
-        }
-
-        [data-theme="light"] .sidebar-brand {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .sidebar-brand .logo-icon { font-size: 2.8rem; display: block; margin-bottom: 4px; }
-        .sidebar-brand h2 {
-            font-size: 1.6rem;
-            font-weight: 900;
-            margin: 0;
-            background: linear-gradient(135deg, #60a5fa, #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        [data-theme="light"] .sidebar-brand h2 {
-            background: linear-gradient(135deg, #1a1a2e, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .sidebar-brand .brand-sub {
-            display: block;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        [data-theme="light"] .sidebar-brand .brand-sub {
-            color: rgba(0, 0, 0, 0.2);
-        }
-
-        .sidebar-nav { list-style: none; padding: 0; margin: 0; }
-        .sidebar-nav .nav-section {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: rgba(255, 255, 255, 0.15);
-            padding: 20px 14px 8px;
-            font-weight: 700;
-            display: block;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        [data-theme="light"] .sidebar-nav .nav-section {
-            color: rgba(0, 0, 0, 0.15);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-        }
-
-        .sidebar-nav a {
+        /* ============================================
+        TOGGLE TEMA
+        ============================================ */
+        .toggle-wrap {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            color: rgba(255, 255, 255, 0.35);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
+            gap: 10px;
+        }
+
+        .toggle-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .toggle {
+            width: 52px;
+            height: 28px;
+            border-radius: 20px;
+            background: var(--card-bg-strong);
+            border: 1px solid var(--card-border-strong);
+            position: relative;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
-        [data-theme="light"] .sidebar-nav a {
-            color: rgba(0, 0, 0, 0.35);
+        .toggle-dot {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--rose));
+            transition: left 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .sidebar-nav a i { width: 22px; text-align: center; font-size: 1.1rem; }
-        .sidebar-nav a:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: rgba(255, 255, 255, 0.7);
-            transform: translateX(4px);
+        [data-theme="light"] .toggle-dot {
+            left: 27px;
         }
 
-        [data-theme="light"] .sidebar-nav a:hover {
-            background: rgba(0, 0, 0, 0.04);
-            color: rgba(0, 0, 0, 0.7);
-        }
-
-        .sidebar-nav a.active {
-            background: rgba(96, 165, 250, 0.08);
-            color: #60a5fa;
-            border: 1px solid rgba(96, 165, 250, 0.08);
-        }
-
-        [data-theme="light"] .sidebar-nav a.active {
-            background: rgba(59, 130, 246, 0.06);
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.06);
-        }
-
-        .sidebar-footer {
-            text-align: center;
-            padding: 16px 0 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.02);
-            margin-top: auto;
-        }
-
-        [data-theme="light"] .sidebar-footer {
-            border-top: 1px solid rgba(0, 0, 0, 0.02);
-        }
-
-        .sidebar-footer .version {
-            color: rgba(255, 255, 255, 0.06);
-            font-size: 0.55rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        [data-theme="light"] .sidebar-footer .version {
-            color: rgba(0, 0, 0, 0.06);
-        }
-
-        @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); width: 300px; }
-            .sidebar.open { transform: translateX(0); }
+        .toggle:hover {
+            transform: scale(1.02);
         }
     </style>
 
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+<div class="app">
 
-    <!-- LIQUID GLASS - FONDO -->
-    <div class="liquid-bg">
-        <div class="orb"></div>
-        <div class="orb"></div>
-        <div class="orb"></div>
-    </div>
-
-    <!-- SIDEBAR -->
+    <!-- ============================================
+    SIDEBAR
+    ============================================ -->
     <nav class="sidebar" id="sidebar">
         <a href="/" class="sidebar-brand">
-            <span class="logo-icon">🏢</span>
-            <h2>Maria Boutique</h2>
-            <span class="brand-sub">Control Financiero</span>
+            <div class="brand-icon">MB</div>
+            <div>
+                <div class="brand-name">Maria Boutique</div>
+                <span class="brand-sub">Control Financiero</span>
+            </div>
         </a>
-        <ul class="sidebar-nav">
-            <li><span class="nav-section">✧ Principal</span></li>
-            <li><a href="/" class="active"><i class="fas fa-home"></i> Inicio</a></li>
-            <li><a href="/subir"><i class="fas fa-cloud-upload-alt"></i> Subir Archivos</a></li>
-            <li><a href="/ver_datos"><i class="fas fa-list-ul"></i> Ver Datos</a></li>
-            <li><span class="nav-section">✧ Análisis</span></li>
-            <li><a href="/reportes"><i class="fas fa-chart-bar"></i> Reportes</a></li>
-            <li><a href="/carpetas"><i class="fas fa-folder-open"></i> Gestión Carpetas</a></li>
-            <li><span class="nav-section">✧ Sistema</span></li>
-            <li><a href="/backup"><i class="fas fa-database"></i> Backup</a></li>
-            <li><a href="/historial"><i class="fas fa-clock"></i> Historial</a></li>
-            <li><a href="/configuracion"><i class="fas fa-sliders-h"></i> Configuración</a></li>
-        </ul>
+
+        <div class="nav-label">Principal</div>
+        <a href="/" class="nav-item active"><i class="fas fa-home"></i> Inicio</a>
+        <a href="/subir" class="nav-item"><i class="fas fa-cloud-upload-alt"></i> Subir archivos</a>
+        <a href="/ver_datos" class="nav-item"><i class="fas fa-list-ul"></i> Ver datos</a>
+
+        <div class="nav-label">Análisis</div>
+        <a href="/reportes" class="nav-item"><i class="fas fa-chart-bar"></i> Reportes</a>
+        <a href="/carpetas" class="nav-item"><i class="fas fa-folder-open"></i> Gestión carpetas</a>
+
+        <div class="nav-label">Sistema</div>
+        <a href="/backup" class="nav-item"><i class="fas fa-database"></i> Backup</a>
+        <a href="/historial" class="nav-item"><i class="fas fa-clock"></i> Historial</a>
+        <a href="/configuracion" class="nav-item"><i class="fas fa-sliders-h"></i> Configuración</a>
+
         <div class="sidebar-footer">
             <span class="version">v4.0 · Flask</span>
         </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content" id="mainContent">
+    <!-- ============================================
+    MAIN CONTENT
+    ============================================ -->
+    <main class="main" id="mainContent">
+        <div class="topbar">
+            <div>
+                <h1 class="page-title" id="pt">{% block page_title %}Dashboard{% endblock %}</h1>
+                <p class="page-sub" id="ps">{% block page_subtitle %}Resumen financiero de tu negocio en el Régimen RUS{% endblock %}</p>
+            </div>
+            <div class="toggle-wrap">
+                <span class="toggle-label">Claro</span>
+                <div class="toggle" onclick="toggleTheme()">
+                    <div class="toggle-dot"></div>
+                </div>
+                <span class="toggle-label">Oscuro</span>
+            </div>
+        </div>
+
         {% block content %}{% endblock %}
 
-        <!-- FOOTER ÚNICO - GLOBAL -->
-        <footer class="global-footer">
-            <div class="footer-brand">
-                🏢 Maria Boutique
-                <span class="footer-version">v4.0</span>
-            </div>
-            <div>
-                <span class="status-dot"></span>
-                Sistema operativo
-                <span style="opacity:0.3; margin:0 8px;">|</span>
-                📄 7 documentos
-            </div>
-            <div class="footer-copy">
-                © 2026 — Hecho con ❤️ para Doña María
-            </div>
-        </footer>
+        <!-- FOOTER GLOBAL -->
+        <div class="footer-bar">
+            <span>Maria Boutique v4.0</span>
+            <span>Sistema operativo · 7 documentos</span>
+            <span>© 2026 — Hecho con ❤️ para Doña María</span>
+        </div>
     </main>
+</div>
 
-    <!-- SCRIPTS -->
-    <script src="/static/js/3-services/theme.js" defer></script>
-    <script src="/static/js/3-services/notifications.js" defer></script>
-    <script src="/static/js/4-modules/sidebar.js" defer></script>
-    <script src="/static/js/app.js" defer></script>
+<!-- ============================================
+SCRIPTS
+============================================ -->
+<script src="/static/js/3-services/theme.js" defer></script>
+<script src="/static/js/3-services/notifications.js" defer></script>
+<script src="/static/js/4-modules/sidebar.js" defer></script>
+<script src="/static/js/app.js" defer></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('mainContent').classList.add('visible');
+<script>
+    function toggleTheme() {
+        const root = document.documentElement;
+        const current = root.getAttribute('data-theme');
+        root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Activar elemento de navegación según la página actual
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(function(item) {
+            const href = item.getAttribute('href');
+            if (href === currentPath) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
         });
-    </script>
+    });
+</script>
 
-    {% block extra_js %}{% endblock %}
+{% block extra_js %}{% endblock %}
 </body>
 </html>
