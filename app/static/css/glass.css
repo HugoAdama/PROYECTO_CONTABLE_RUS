@@ -24,7 +24,7 @@
 @import url('5-components/buttons.css');
 @import url('5-components/cards.css');
 @import url('5-components/badges.css');
-@import url('5-components/tables.css');
+@import url('5-components/tables.css');`n@import url('5-components/selects.css');
 
 /* 6. LAYOUTS */
 @import url('6-layouts/header.css');
@@ -45,3 +45,4 @@
 @import url('9-animations/entries.css');
 @import url('9-animations/transitions.css');
 @import url('9-animations/liquid-glass.css');
+
