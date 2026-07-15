@@ -8,85 +8,131 @@
 {% block content %}
 <div class="datos-container">
 
-    <!-- FILTROS -->
-    <div class="card" style="margin-bottom:20px;">
+    <!-- FILTROS - Mejorados -->
+    <div class="card filter-card fade-in-up stagger-1">
+        <div class="card-title"><i class="fas fa-filter"></i> Filtros</div>
         <div class="filter-bar">
             <div class="field">
-                <label>Tipo</label>
-                <select><option>Todos</option></select>
+                <label><i class="fas fa-tag"></i> Tipo</label>
+                <select>
+                    <option>Todos</option>
+                    <option>Factura</option>
+                    <option>Boleta</option>
+                    <option>Percepción</option>
+                </select>
             </div>
             <div class="field">
-                <label>Año</label>
-                <select><option>Todos</option></select>
+                <label><i class="fas fa-calendar"></i> Año</label>
+                <select>
+                    <option>Todos</option>
+                    <option>2026</option>
+                    <option>2025</option>
+                </select>
             </div>
             <div class="field">
-                <label>Mes</label>
-                <select><option>Todos</option></select>
+                <label><i class="fas fa-calendar-alt"></i> Mes</label>
+                <select>
+                    <option>Todos</option>
+                    <option>Enero</option>
+                    <option>Febrero</option>
+                    <option>Marzo</option>
+                    <option>Abril</option>
+                    <option>Mayo</option>
+                    <option>Junio</option>
+                </select>
             </div>
-            <button class="btn btn-primary"><i class="fas fa-search"></i> Aplicar filtros</button>
-            <button class="btn btn-secondary"><i class="fas fa-undo"></i> Limpiar</button>
+            <div class="filter-actions">
+                <button class="btn btn-primary"><i class="fas fa-search"></i> Aplicar filtros</button>
+                <button class="btn btn-secondary"><i class="fas fa-undo"></i> Limpiar</button>
+            </div>
         </div>
     </div>
 
-    <!-- TABLA -->
-    <div class="card">
+    <!-- TABLA DE DATOS - Mejorada -->
+    <div class="card table-card fade-in-up stagger-2">
+        <div class="table-header">
+            <div class="card-title"><i class="fas fa-table"></i> Registros</div>
+            <div class="table-stats">
+                <span class="stat-badge"><i class="fas fa-file-alt"></i> 3 registros</span>
+                <span class="stat-badge factura"><i class="fas fa-file-invoice"></i> Facturas: 1</span>
+                <span class="stat-badge boleta"><i class="fas fa-receipt"></i> Boletas: 1</span>
+                <span class="stat-badge percepcion"><i class="fas fa-hand-holding-usd"></i> Percepciones: 1</span>
+            </div>
+        </div>
+
         <div class="table-container">
             <table>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Número</th>
-                    <th>Fecha</th>
-                    <th>Monto</th>
-                    <th>Proveedor/Cliente</th>
-                    <th>Descripción</th>
-                </tr>
-                <tr>
-                    <td><span class="type-pill percepcion">Percepción</span></td>
-                    <td>P003-00602821</td>
-                    <td>14/07/2026</td>
-                    <td>S/ 441.54</td>
-                    <td>NATURA</td>
-                    <td>Percepción P003-00602821</td>
-                </tr>
-                <tr>
-                    <td><span class="type-pill boleta">Boleta</span></td>
-                    <td>EB01-302</td>
-                    <td>31/05/2026</td>
-                    <td>S/ 200.00</td>
-                    <td>KAROLAY</td>
-                    <td>Boleta EB01-302</td>
-                </tr>
-                <tr>
-                    <td><span class="type-pill factura">Factura</span></td>
-                    <td>F033-00330623</td>
-                    <td>12/05/2026</td>
-                    <td>S/ 191.70</td>
-                    <td>NATURA</td>
-                    <td>Factura F033-00330623</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Número</th>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Proveedor/Cliente</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fade-in-up stagger-3">
+                        <td><span class="type-pill percepcion"><i class="fas fa-hand-holding-usd"></i> Percepción</span></td>
+                        <td><strong>P003-00602821</strong></td>
+                        <td>14/07/2026</td>
+                        <td class="monto">S/ 441.54</td>
+                        <td><span class="cliente">NATURA</span></td>
+                        <td>Percepción P003-00602821</td>
+                    </tr>
+                    <tr class="fade-in-up stagger-4">
+                        <td><span class="type-pill boleta"><i class="fas fa-receipt"></i> Boleta</span></td>
+                        <td><strong>EB01-302</strong></td>
+                        <td>31/05/2026</td>
+                        <td class="monto">S/ 200.00</td>
+                        <td><span class="cliente">KAROLAY</span></td>
+                        <td>Boleta EB01-302</td>
+                    </tr>
+                    <tr class="fade-in-up stagger-5">
+                        <td><span class="type-pill factura"><i class="fas fa-file-invoice"></i> Factura</span></td>
+                        <td><strong>F033-00330623</strong></td>
+                        <td>12/05/2026</td>
+                        <td class="monto">S/ 191.70</td>
+                        <td><span class="cliente">NATURA</span></td>
+                        <td>Factura F033-00330623</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
-        <!-- PIE DE TABLA -->
+        <!-- PAGINACIÓN - Mejorada -->
         <div class="table-footer">
-            <div class="tags">
-                <span class="tag">3 registros encontrados</span>
-                <span class="tag">📑 Facturas: 1</span>
-                <span class="tag">🧾 Boletas: 1</span>
-                <span class="tag">📋 Percepciones: 1</span>
+            <div class="pagination-info">
+                <span class="info-text">Mostrando <strong>3</strong> de <strong>3</strong> registros</span>
             </div>
             <div class="pagination">
-                <button class="btn btn-sm btn-secondary">◀ Anterior</button>
+                <button class="btn btn-sm btn-secondary" disabled>
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
                 <span class="page-number active">1</span>
-                <button class="btn btn-sm btn-secondary">Siguiente ▶</button>
+                <button class="btn btn-sm btn-secondary" disabled>
+                    Siguiente <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </div>
 
 </div>
 
+<!-- ============================================
+ESTILOS MEJORADOS - VER DATOS
+============================================ -->
 <style>
-    .datos-container { max-width: 1200px; margin: 0 auto; }
+    .datos-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* --- FILTROS --- */
+    .filter-card {
+        margin-bottom: 20px;
+    }
 
     .filter-bar {
         display: flex;
@@ -98,70 +144,331 @@
     .field {
         display: flex;
         flex-direction: column;
-        gap: 6px;
-    }
-
-    .field label {
-        font-size: 11.5px;
-        color: var(--text-muted);
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-    }
-
-    .field select,
-    .field input {
-        background: var(--input-bg);
-        border: 1px solid var(--card-border-strong);
-        border-radius: 10px;
-        padding: 8px 12px;
-        color: var(--text-primary);
-        font-size: 13px;
-        font-family: 'Inter', sans-serif;
+        gap: 4px;
+        flex: 1;
         min-width: 120px;
     }
 
-    .field select:focus,
-    .field input:focus {
-        outline: none;
-        border-color: var(--accent);
+    .field label {
+        font-size: 11px;
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-weight: 600;
     }
 
-    .table-footer {
+    .field label i {
+        margin-right: 4px;
+        font-size: 11px;
+    }
+
+    .field select {
+        background: var(--input-bg);
+        border: 1px solid var(--card-border-strong);
+        border-radius: 10px;
+        padding: 9px 12px;
+        color: var(--text-primary);
+        font-size: 13px;
+        font-family: 'Inter', sans-serif;
+        width: 100%;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .field select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .filter-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    /* --- TABLA --- */
+    .table-card {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .table-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 16px;
+        padding: 18px 24px;
+        border-bottom: 1px solid var(--card-border);
         flex-wrap: wrap;
         gap: 12px;
     }
 
-    .page-number {
+    .table-stats {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .stat-badge {
+        font-size: 11px;
         padding: 4px 12px;
-        border-radius: 6px;
+        border-radius: 20px;
+        background: var(--card-bg-strong);
+        border: 1px solid var(--card-border);
+        color: var(--text-secondary);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .stat-badge i { font-size: 11px; }
+    .stat-badge.factura { border-color: var(--rose-soft); color: var(--rose); }
+    .stat-badge.boleta { border-color: var(--green-soft); color: var(--green); }
+    .stat-badge.percepcion { border-color: var(--accent-soft); color: var(--accent); }
+
+    .table-container {
+        overflow-x: auto;
+        padding: 0 4px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13.5px;
+    }
+
+    thead th {
+        text-align: left;
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        padding: 14px 16px;
+        border-bottom: 2px solid var(--card-border);
+        text-transform: uppercase;
+    }
+
+    tbody td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--card-border);
+        color: var(--text-primary);
+        transition: background 0.2s ease;
+    }
+
+    tbody tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .type-pill {
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .type-pill i { font-size: 11px; }
+
+    .type-pill.percepcion {
+        background: var(--accent-soft);
+        color: var(--accent);
+    }
+
+    .type-pill.boleta {
+        background: var(--green-soft);
+        color: var(--green);
+    }
+
+    .type-pill.factura {
+        background: var(--rose-soft);
+        color: var(--rose);
+    }
+
+    .monto {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .cliente {
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    /* --- PIE DE TABLA --- */
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        border-top: 1px solid var(--card-border);
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .pagination-info {
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+
+    .pagination-info strong {
+        color: var(--text-primary);
+    }
+
+    .pagination {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .page-number {
+        padding: 6px 14px;
+        border-radius: 8px;
         cursor: pointer;
         transition: all 0.2s ease;
         font-size: 13px;
         color: var(--text-secondary);
+        background: transparent;
+        border: 1px solid transparent;
+        min-width: 36px;
+        text-align: center;
     }
 
     .page-number.active {
         background: var(--accent-soft);
         color: var(--accent);
+        border-color: var(--accent-soft);
     }
 
-    .page-number:hover {
+    .page-number:hover:not(.active) {
         background: var(--card-bg);
+        border-color: var(--card-border);
     }
 
     .btn-sm {
         padding: 6px 14px;
         font-size: 12px;
+        min-height: 32px;
+    }
+
+    .btn-sm:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1024px) {
+        .filter-bar { gap: 10px; }
+        .field { min-width: 100px; }
     }
 
     @media (max-width: 768px) {
-        .filter-bar { flex-direction: column; align-items: stretch; }
-        .table-footer { flex-direction: column; align-items: flex-start; }
-        .pagination { align-self: center; }
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-actions {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .table-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .table-stats {
+            flex-wrap: wrap;
+        }
+
+        .table-footer {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .pagination {
+            align-self: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .table-stats .stat-badge { font-size: 10px; padding: 2px 10px; }
+        .pagination { flex-wrap: wrap; justify-content: center; }
+        .page-number { padding: 4px 10px; font-size: 12px; min-width: 30px; }
     }
 </style>
+
+<!-- ============================================
+SCRIPTS - ANIMACIONES
+============================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📊 Ver datos - Animaciones activas');
+
+    // ============================================
+    // OBSERVER PARA ANIMACIONES SCROLL
+    // ============================================
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                // Aplicar animación si tiene clase fade-in-up
+                if (el.classList.contains('fade-in-up')) {
+                    el.style.animationPlayState = 'running';
+                }
+                observer.unobserve(el);
+            }
+        });
+    }, observerOptions);
+
+    // Observar elementos con animaciones
+    document.querySelectorAll('.fade-in-up, .scale-in, .fade-in-left').forEach(function(el) {
+        el.style.animationPlayState = 'paused';
+        observer.observe(el);
+    });
+
+    // ============================================
+    // FILTROS - INTERACCIÓN MEJORADA
+    // ============================================
+    const filterSelects = document.querySelectorAll('.field select');
+    filterSelects.forEach(function(select) {
+        select.addEventListener('change', function() {
+            // Feedback visual al cambiar filtro
+            this.style.borderColor = 'var(--accent)';
+            setTimeout(() => {
+                this.style.borderColor = '';
+            }, 500);
+        });
+    });
+
+    // ============================================
+    // PAGINACIÓN - INTERACCIÓN
+    // ============================================
+    const pageNumbers = document.querySelectorAll('.page-number');
+    pageNumbers.forEach(function(page) {
+        page.addEventListener('click', function() {
+            pageNumbers.forEach(function(p) { p.classList.remove('active'); });
+            this.classList.add('active');
+
+            // Feedback visual
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+});
+</script>
 {% endblock %}
