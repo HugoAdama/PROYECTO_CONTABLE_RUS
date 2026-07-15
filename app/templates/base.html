@@ -223,6 +223,146 @@
     
     {% block extra_css %}{% endblock %}
 <link rel="stylesheet" href="/static/css/9-animations/liquid-glass.css">
+<style>
+    /* ============================================
+       FOOTER GLOBAL - PROFESIONAL
+       ============================================ */
+    .site-footer {
+        margin-top: 40px;
+        padding: 16px 24px;
+        border-radius: 16px;
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        width: 100%;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    [data-theme="dark"] .site-footer {
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        background: rgba(10, 10, 30, 0.8);
+    }
+
+    [data-theme="light"] .site-footer {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .footer-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+
+    .footer-logo {
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text-primary);
+    }
+
+    .footer-version {
+        padding: 2px 12px;
+        border-radius: 30px;
+        background: rgba(96, 165, 250, 0.08);
+        color: #60a5fa;
+        font-weight: 600;
+        font-size: 0.7rem;
+        border: 1px solid rgba(96, 165, 250, 0.06);
+    }
+
+    .footer-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4ade80;
+        animation: pulse-dot 2s ease-in-out infinite;
+        display: inline-block;
+    }
+
+    .footer-divider {
+        color: var(--text-muted);
+        opacity: 0.3;
+    }
+
+    .footer-copy {
+        font-weight: 400;
+        color: var(--text-muted);
+        opacity: 0.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .site-footer {
+            padding: 14px 18px;
+            margin-top: 30px;
+            border-radius: 12px;
+        }
+        .footer-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .footer-section {
+            font-size: 0.85rem;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .footer-logo {
+            font-size: 0.95rem;
+        }
+        .footer-copy {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .site-footer {
+            padding: 12px 14px;
+            margin-top: 24px;
+        }
+        .footer-section {
+            font-size: 0.8rem;
+        }
+        .footer-logo {
+            font-size: 0.85rem;
+        }
+        .footer-version {
+            font-size: 0.65rem;
+            padding: 1px 10px;
+        }
+        .footer-divider {
+            display: none;
+        }
+    }
+</style>
 </head>
 <body>
 <!-- LIQUID GLASS - FONDO CON ONDAS DE LUZ -->
@@ -603,8 +743,30 @@ body::before {
             </div>
         </div>
     </footer>
+    <!-- ============================================
+    FOOTER GLOBAL - PROFESIONAL
+    ============================================ -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-section footer-brand">
+                <span class="footer-logo">🏢 Maria Boutique</span>
+                <span class="footer-version">v4.0</span>
+            </div>
+            <div class="footer-section footer-status">
+                <span class="status-dot"></span>
+                <span>Sistema operativo</span>
+                <span class="footer-divider">|</span>
+                <span>📄 7 documentos</span>
+            </div>
+            <div class="footer-section footer-copy">
+                <span>© 2026 — Hecho con ❤️ para Doña María</span>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
+
+
 
 
 
