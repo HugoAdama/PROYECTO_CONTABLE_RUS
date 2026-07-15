@@ -2,185 +2,76 @@
 
 {% block title %}Reportes - Sistema RUS{% endblock %}
 
-{% block extra_css %}
-<style>
-    .reportes-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .filtros-reportes {
-        display: flex;
-        gap: var(--spacing-md);
-        flex-wrap: wrap;
-        align-items: flex-end;
-        margin-bottom: var(--spacing-lg);
-    }
-    .filtros-reportes .form-group {
-        margin-bottom: 0;
-        min-width: 150px;
-    }
-    .filtros-reportes .form-group label {
-        font-size: var(--font-small);
-        text-transform: uppercase;
-        letter-spacing: var(--letter-spacing-wide);
-        color: var(--text-secondary);
-        margin-bottom: var(--spacing-xs);
-    }
-    .filtros-reportes .form-control {
-        padding: 10px 14px;
-        font-size: var(--font-body);
-    }
-    .resumen-reportes {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: var(--spacing-md);
-        margin: var(--spacing-lg) 0;
-    }
-    .resumen-item {
-        background: var(--bg-card);
-        border-radius: var(--radius-md);
-        padding: var(--spacing-md) var(--spacing-lg);
-        border: 1px solid var(--border-color);
-        text-align: center;
-        transition: all var(--transition-base);
-    }
-    .resumen-item:hover {
-        border-color: var(--border-hover);
-        transform: translateY(-2px);
-    }
-    .resumen-item .resumen-valor {
-        font-size: var(--font-xl);
-        font-weight: var(--font-weight-bold);
-        color: var(--text-primary);
-    }
-    .resumen-item .resumen-label {
-        font-size: var(--font-small);
-        color: var(--text-secondary);
-        font-weight: var(--font-weight-medium);
-        margin-top: var(--spacing-xs);
-    }
-    .graficos-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: var(--spacing-lg);
-        margin-top: var(--spacing-lg);
-    }
-    .grafico-card { min-height: 300px; }
-    .grafico-card .grafico-container {
-        width: 100%;
-        height: 280px;
-    }
-    @media (max-width: 768px) {
-        .graficos-grid { grid-template-columns: 1fr; }
-        .filtros-reportes { flex-direction: column; align-items: stretch; }
-        .filtros-reportes .form-group { min-width: auto; }
-        .resumen-reportes { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 480px) {
-        .resumen-reportes { grid-template-columns: 1fr; }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="reportes-container">
-    
-    <div class="page-header fade-in-up">
-        <div class="header-left">
-            <h1>
-                <span class="icon-title">📊</span>
-                Reportes
-                <span class="subtitle">Análisis financiero con gráficos interactivos</span>
-            </h1>
-        </div>
-        <div class="header-actions">
-            <a href="{{ url_for('main.exportar_excel', mes=mes_actual, anio=anio_actual) }}" 
-               class="btn btn-success" id="btnExportarExcel">
-                <span class="icon">📤</span> Exportar a Excel
-            </a>
+<div class="page-header fade-in-up">
+    <h1>📊 Reportes</h1>
+    <p class="subtitle">Análisis financiero con gráficos interactivos</p>
+</div>
+
+<!-- Filtros -->
+<div class="glass-card fade-in-up stagger-1" style="padding:16px 20px; margin-bottom:24px; display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end;">
+    <div style="flex:1; min-width:120px;">
+        <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Año</label>
+        <select class="form-control" style="padding:8px 12px; font-size:1rem;">
+            <option>Todos</option>
+            <option>2026</option>
+        </select>
+    </div>
+    <div style="flex:1; min-width:120px;">
+        <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Mes</label>
+        <select class="form-control" style="padding:8px 12px; font-size:1rem;">
+            <option>Todos</option>
+            <option>Mayo</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" style="padding:8px 20px; min-height:40px; font-size:0.95rem;">📥 Exportar a Excel</button>
+</div>
+
+<!-- Métricas -->
+<div class="cards-grid fade-in-up stagger-2">
+    <div class="metric-card">
+        <div class="metric-value">S/ 200.00</div>
+        <div class="metric-label">Total Ventas</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">S/ 191.70</div>
+        <div class="metric-label">Total Compras</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value">S/ 441.54</div>
+        <div class="metric-label">Total Percepciones</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value" style="font-size:1.8rem; color:#4ade80;">S/ 20</div>
+        <div class="metric-label">Impuesto Mensual</div>
+    </div>
+</div>
+
+<!-- Gráficos -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px;">
+    <div class="glass-card" style="padding:20px; min-height:280px; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+        <div style="text-align:center;">
+            <div style="font-size:3rem; margin-bottom:8px;">📈</div>
+            <p style="font-size:1.1rem;">Evolución de Ventas</p>
         </div>
     </div>
-
-    <div class="glass-card fade-in-up stagger-1">
-        <form method="GET" action="{{ url_for('main.reportes') }}" class="filtros-reportes">
-            <div class="form-group">
-                <label for="filtro-anio">Año</label>
-                <select id="filtro-anio" name="anio" class="form-control">
-                    <option value="">Todos</option>
-                    {% for a in años_disponibles %}
-                    <option value="{{ a }}" {% if a == anio_actual %}selected{% endif %}>{{ a }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="filtro-mes">Mes</label>
-                <select id="filtro-mes" name="mes" class="form-control">
-                    <option value="">Todos</option>
-                    {% for m in meses_disponibles %}
-                    <option value="{{ m }}" {% if m == mes_actual %}selected{% endif %}>
-                        {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][m-1] }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary" style="align-self:flex-end;">
-                🔍 Aplicar Filtros
-            </button>
-            <a href="{{ url_for('main.reportes') }}" class="btn btn-secondary" style="align-self:flex-end;">
-                <span class="icon">🗑️</span> Limpiar
-            </a>
-        </form>
-    </div>
-
-    <div class="resumen-reportes">
-        <div class="resumen-item fade-in-up stagger-2">
-            <div class="resumen-valor" style="color:var(--color-primary);">S/ {{ "%.2f"|format(datos.total_ventas) }}</div>
-            <div class="resumen-label">Total Ventas</div>
-        </div>
-        <div class="resumen-item fade-in-up stagger-3">
-            <div class="resumen-valor" style="color:var(--color-success);">S/ {{ "%.2f"|format(datos.total_compras) }}</div>
-            <div class="resumen-label">Total Compras</div>
-        </div>
-        <div class="resumen-item fade-in-up stagger-4">
-            <div class="resumen-valor" style="color:var(--color-warning);">S/ {{ "%.2f"|format(datos.total_percepciones) }}</div>
-            <div class="resumen-label">Total Percepciones</div>
-        </div>
-        <div class="resumen-item fade-in-up stagger-5">
-            <div class="resumen-valor" style="color:var(--text-primary);">{{ datos.estado_rus }}</div>
-            <div class="resumen-label">Estado RUS</div>
-        </div>
-        <div class="resumen-item fade-in-up stagger-6">
-            <div class="resumen-valor" style="color:var(--color-secondary);">S/ {{ datos.impuesto_mensual }}</div>
-            <div class="resumen-label">Impuesto Mensual</div>
+    <div class="glass-card" style="padding:20px; min-height:280px; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+        <div style="text-align:center;">
+            <div style="font-size:3rem; margin-bottom:8px;">📉</div>
+            <p style="font-size:1.1rem;">Evolución de Compras</p>
         </div>
     </div>
-
-    <div class="graficos-grid">
-        <div class="glass-card grafico-card fade-in-up stagger-3">
-            <h4>📈 Evolución de Ventas</h4>
-            <div class="grafico-container" id="grafico-ventas"></div>
+    <div class="glass-card" style="padding:20px; min-height:280px; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+        <div style="text-align:center;">
+            <div style="font-size:3rem; margin-bottom:8px;">📊</div>
+            <p style="font-size:1.1rem;">Evolución de Impuestos</p>
         </div>
-        <div class="glass-card grafico-card fade-in-up stagger-4">
-            <h4>📉 Evolución de Compras</h4>
-            <div class="grafico-container" id="grafico-compras"></div>
-        </div>
-        <div class="glass-card grafico-card fade-in-up stagger-5">
-            <h4>📊 Evolución de Impuestos</h4>
-            <div class="grafico-container" id="grafico-impuestos"></div>
-        </div>
-        <div class="glass-card grafico-card fade-in-up stagger-6">
-            <h4>🥧 Distribución de Gastos</h4>
-            <div class="grafico-container" id="grafico-distribucion"></div>
+    </div>
+    <div class="glass-card" style="padding:20px; min-height:280px; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+        <div style="text-align:center;">
+            <div style="font-size:3rem; margin-bottom:8px;">🍩</div>
+            <p style="font-size:1.1rem;">Distribución de Gastos</p>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-{% if datos %}
-<script>
-    window.datosReportes = {{ datos|tojson|safe }};
-</script>
-{% endif %}
 {% endblock %}

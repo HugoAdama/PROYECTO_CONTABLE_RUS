@@ -2,181 +2,104 @@
 
 {% block title %}Ver Datos - Sistema RUS{% endblock %}
 
-{% block extra_css %}
-<style>
-    .verdatos-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .filtros-verdatos {
-        display: flex;
-        gap: var(--spacing-md);
-        flex-wrap: wrap;
-        align-items: flex-end;
-        margin-bottom: var(--spacing-lg);
-    }
-    .filtros-verdatos .form-group {
-        margin-bottom: 0;
-        min-width: 140px;
-    }
-    .filtros-verdatos .form-group label {
-        font-size: var(--font-small);
-        text-transform: uppercase;
-        letter-spacing: var(--letter-spacing-wide);
-        color: var(--text-secondary);
-        margin-bottom: var(--spacing-xs);
-    }
-    .filtros-verdatos .form-control {
-        padding: 10px 14px;
-        font-size: var(--font-body);
-    }
-    .resumen-verdatos {
-        display: flex;
-        gap: var(--spacing-lg);
-        flex-wrap: wrap;
-        padding: var(--spacing-sm) 0;
-        border-top: 1px solid var(--border-color);
-        margin-top: var(--spacing-md);
-    }
-    .resumen-verdatos .resumen-item {
-        font-size: var(--font-body);
-        color: var(--text-secondary);
-    }
-    .resumen-verdatos .resumen-item strong {
-        color: var(--text-primary);
-    }
-    .paginacion-verdatos {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: var(--spacing-sm);
-        padding: var(--spacing-md) 0;
-        border-top: 1px solid var(--border-color);
-        margin-top: var(--spacing-md);
-    }
-    @media (max-width: 768px) {
-        .filtros-verdatos { flex-direction: column; align-items: stretch; }
-        .filtros-verdatos .form-group { min-width: auto; }
-        .paginacion-verdatos { flex-direction: column; text-align: center; }
-        .resumen-verdatos { gap: var(--spacing-sm); }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="verdatos-container">
-    
-    <div class="page-header fade-in-up">
-        <div class="header-left">
-            <h1>
-                <span class="icon-title">📋</span>
-                Ver Datos
-                <span class="subtitle">Visualización y filtrado de transacciones</span>
-            </h1>
+<div class="page-header fade-in-up">
+    <h1>📋 Ver Datos</h1>
+    <p class="subtitle">Visualización y filtrado de transacciones</p>
+</div>
+
+<!-- Filtros -->
+<div class="glass-card fade-in-up stagger-1" style="padding:20px 24px; margin-bottom:24px;">
+    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end;">
+        <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
+            <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Tipo</label>
+            <select class="form-control" style="padding:10px 14px; font-size:1rem;">
+                <option>Todos</option>
+                <option>Factura</option>
+                <option>Boleta</option>
+                <option>Percepción</option>
+            </select>
+        </div>
+        <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
+            <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Año</label>
+            <select class="form-control" style="padding:10px 14px; font-size:1rem;">
+                <option>Todos</option>
+                <option>2026</option>
+                <option>2025</option>
+            </select>
+        </div>
+        <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
+            <label style="font-size:0.9rem; font-weight:600; color:var(--text-secondary);">Mes</label>
+            <select class="form-control" style="padding:10px 14px; font-size:1rem;">
+                <option>Todos</option>
+                <option>Enero</option>
+                <option>Febrero</option>
+                <option>Marzo</option>
+            </select>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-primary" style="padding:10px 24px; min-height:44px; font-size:1rem;">🔍 Aplicar Filtros</button>
+            <button class="btn btn-secondary" style="padding:10px 24px; min-height:44px; font-size:1rem;">🧹 Limpiar</button>
         </div>
     </div>
+</div>
 
-    <div class="glass-card fade-in-up stagger-1">
-        <form method="GET" action="{{ url_for('main.ver_datos') }}" class="filtros-verdatos">
-            <div class="form-group">
-                <label for="filtro-tipo">Tipo</label>
-                <select id="filtro-tipo" name="tipo" class="form-control">
-                    <option value="todos" {% if tipo_actual == 'todos' %}selected{% endif %}>Todos</option>
-                    <option value="facturas" {% if tipo_actual == 'facturas' %}selected{% endif %}>Facturas</option>
-                    <option value="boletas" {% if tipo_actual == 'boletas' %}selected{% endif %}>Boletas</option>
-                    <option value="percepciones" {% if tipo_actual == 'percepciones' %}selected{% endif %}>Percepciones</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="filtro-anio">Año</label>
-                <select id="filtro-anio" name="anio" class="form-control">
-                    <option value="">Todos</option>
-                    {% for a in años_disponibles %}
-                    <option value="{{ a }}" {% if a == anio_actual %}selected{% endif %}>{{ a }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="filtro-mes">Mes</label>
-                <select id="filtro-mes" name="mes" class="form-control">
-                    <option value="">Todos</option>
-                    {% for m in range(1, 13) %}
-                    <option value="{{ m }}" {% if m == mes_actual %}selected{% endif %}>
-                        {{ ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][m-1] }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary" style="align-self:flex-end;">
-                🔍 Aplicar Filtros
-            </button>
-            <a href="{{ url_for('main.ver_datos') }}" class="btn btn-secondary" style="align-self:flex-end;">
-                <span class="icon">🗑️</span> Limpiar
-            </a>
-        </form>
+<!-- Tabla -->
+<div class="table-container fade-in-up stagger-2">
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Número</th>
+                <th>Fecha</th>
+                <th>Monto</th>
+                <th>Proveedor/Cliente</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-percepcion">Percepción</span></td>
+                <td><strong>P003-00602821</strong></td>
+                <td>14/07/2026</td>
+                <td>S/ 441.54</td>
+                <td>NATURA</td>
+                <td>Percepción P003-00602821</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-boleta">Boleta</span></td>
+                <td><strong>EB01-302</strong></td>
+                <td>31/05/2026</td>
+                <td>S/ 200.00</td>
+                <td>KAROLAY</td>
+                <td>Boleta EB01-302</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-factura">Factura</span></td>
+                <td><strong>F033-00330623</strong></td>
+                <td>12/05/2026</td>
+                <td>S/ 191.70</td>
+                <td>NATURA</td>
+                <td>Factura F033-00330623</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Resumen y Paginación -->
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-top:20px; gap:12px;">
+    <div style="font-size:1rem; color:var(--text-secondary);">
+        <strong>3</strong> registros encontrados
+        <span style="margin-left:16px;">
+            <span class="badge badge-factura">Facturas: 1</span>
+            <span class="badge badge-boleta">Boletas: 1</span>
+            <span class="badge badge-percepcion">Percepciones: 1</span>
+        </span>
     </div>
-
-    <div class="glass-card fade-in-up stagger-2">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Número</th>
-                        <th>Fecha</th>
-                        <th>Monto</th>
-                        <th>Proveedor/Cliente</th>
-                        <th>Descripción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in items %}
-                    <tr>
-                        <td><span class="badge {% if item.tipo == 'Factura' %}badge-primary{% elif item.tipo == 'Boleta' %}badge-success{% else %}badge-warning{% endif %}">{{ item.tipo }}</span></td>
-                        <td>{{ item.numero }}</td>
-                        <td>{{ item.fecha.strftime('%d/%m/%Y') if item.fecha else '-' }}</td>
-                        <td><strong>S/ {{ "%.2f"|format(item.monto) }}</strong></td>
-                        <td>{{ item.proveedor_cliente }}</td>
-                        <td>{{ item.descripcion }}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="6" class="text-center" style="color:var(--text-muted); padding:var(--spacing-xl);">
-                            No hay registros disponibles
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="resumen-verdatos">
-            <span class="resumen-item">📄 <strong>{{ total_registros }}</strong> registros encontrados</span>
-            <span class="resumen-item">📊 Facturas: <strong>{{ items|selectattr('tipo', 'equalto', 'Factura')|list|length }}</strong></span>
-            <span class="resumen-item">🧾 Boletas: <strong>{{ items|selectattr('tipo', 'equalto', 'Boleta')|list|length }}</strong></span>
-            <span class="resumen-item">📋 Percepciones: <strong>{{ items|selectattr('tipo', 'equalto', 'Percepción')|list|length }}</strong></span>
-        </div>
-
-        <div class="paginacion-verdatos">
-            <span style="color:var(--text-secondary);">Mostrando {{ items|length }} de {{ total_registros }} registros</span>
-            <div style="display:flex; gap:var(--spacing-sm);">
-                {% if page > 1 %}
-                <a href="{{ url_for('main.ver_datos', page=page-1, mes=mes_actual, anio=anio_actual, tipo=tipo_actual) }}" class="btn btn-sm btn-secondary">Anterior</a>
-                {% else %}
-                <button class="btn btn-sm btn-secondary" disabled>Anterior</button>
-                {% endif %}
-                <span style="display:flex; align-items:center; padding:0 var(--spacing-sm); color:var(--text-secondary);">
-                    Página {{ page }} de {{ total_pages }}
-                </span>
-                {% if page < total_pages %}
-                <a href="{{ url_for('main.ver_datos', page=page+1, mes=mes_actual, anio=anio_actual, tipo=tipo_actual) }}" class="btn btn-sm btn-primary">Siguiente</a>
-                {% else %}
-                <button class="btn btn-sm btn-secondary" disabled>Siguiente</button>
-                {% endif %}
-            </div>
-        </div>
+    <div style="display:flex; align-items:center; gap:12px; font-size:1rem;">
+        <button class="btn btn-secondary" style="padding:8px 16px; min-height:36px; font-size:0.9rem;">◀ Anterior</button>
+        <span style="font-weight:600;">Página 1 de 1</span>
+        <button class="btn btn-secondary" style="padding:8px 16px; min-height:36px; font-size:0.9rem;">Siguiente ▶</button>
     </div>
 </div>
 {% endblock %}

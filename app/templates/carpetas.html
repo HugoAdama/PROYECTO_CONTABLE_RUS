@@ -2,162 +2,71 @@
 
 {% block title %}Gestión de Carpetas - Sistema RUS{% endblock %}
 
-{% block extra_css %}
-<style>
-    .carpetas-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .carpeta-item .tipo-tag {
-        font-size: var(--font-small);
-        padding: 4px 12px;
-        border-radius: var(--radius-full);
-        font-weight: var(--font-weight-medium);
-        flex-shrink: 0;
-    }
-    .tipo-facturas { background: var(--color-primary-100); color: var(--color-primary); }
-    .tipo-boletas { background: var(--color-success-bg); color: var(--color-success); }
-    .tipo-percepciones { background: var(--color-warning-bg); color: var(--color-warning); }
-    .badge-total {
-        background: var(--color-primary-100);
-        color: var(--color-primary);
-        padding: 4px 14px;
-        border-radius: var(--radius-full);
-        font-size: var(--font-small);
-        font-weight: var(--font-weight-semibold);
-        display: inline-block;
-    }
-    .empty-state .empty-icon { font-size: 4rem; display: block; margin-bottom: var(--spacing-md); opacity: 0.5; }
-    @media (max-width: 768px) {
-        .carpeta-item { font-size: var(--font-small); flex-wrap: wrap; gap: var(--spacing-sm); }
-        .carpeta-item .badge,
-        .carpeta-item .tipo-tag { font-size: var(--font-tiny); padding: 2px 10px; }
-    }
-    @media (max-width: 480px) {
-        .carpeta-item { font-size: var(--font-small); padding: 10px 12px; }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="carpetas-container">
-    
-    <div class="page-header fade-in-up">
-        <div class="header-left">
-            <h1>
-                <span class="icon-title">📁</span>
-                Gestión de Carpetas
-                <span class="subtitle">Organiza y administra tus documentos por mes y año</span>
-            </h1>
-        </div>
-        <div class="header-actions">
-            <button class="btn btn-primary" id="btnOrganizar">
-                <span class="icon">🔄</span> Organizar Automático
-            </button>
-            <button class="btn btn-secondary" id="btnEstadisticas">
-                <span class="icon">📊</span> Ver Estadísticas
-            </button>
-        </div>
+<div class="page-header fade-in-up">
+    <h1>📁 Gestión de Carpetas</h1>
+    <p class="subtitle">Organiza y administra tus documentos por mes y año</p>
+</div>
+
+<!-- Métricas -->
+<div class="cards-grid fade-in-up stagger-1">
+    <div class="metric-card">
+        <div class="metric-value" style="font-size:1.8rem;">3</div>
+        <div class="metric-label">Carpetas</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value" style="font-size:1.8rem;">7</div>
+        <div class="metric-label">Documentos Totales</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value" style="font-size:1.6rem;">524.3 KB</div>
+        <div class="metric-label">Espacio Usado</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-value" style="font-size:1.6rem;">3</div>
+        <div class="metric-label">Tipos de Documentos</div>
+    </div>
+</div>
+
+<!-- Acciones -->
+<div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;">
+    <button class="btn btn-primary">🔄 Organizar Automático</button>
+    <button class="btn btn-secondary">📊 Ver Estadísticas</button>
+</div>
+
+<!-- Estructura -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+    <div class="glass-card fade-in-up stagger-2" style="padding:20px 24px;">
+        <h3 style="font-size:1.2rem; margin-bottom:16px;">📂 Estructura de Carpetas</h3>
+        <ul style="list-style:none; padding:0;">
+            <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; align-items:center; gap:8px;">
+                <span>📁</span> 2026_05
+            </li>
+            <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; align-items:center; gap:8px;">
+                <span>📁</span> 2026_05
+            </li>
+            <li style="padding:6px 0; display:flex; align-items:center; gap:8px;">
+                <span>📁</span> 2026_05
+            </li>
+        </ul>
     </div>
 
-    <div class="metrics-grid">
-        <div class="metric-card fade-in-up stagger-1">
-            <span class="metric-icon">📂</span>
-            <div class="metric-info">
-                <span class="metric-value">{{ total_carpetas }}</span>
-                <span class="metric-label">Carpetas</span>
-            </div>
+    <div class="glass-card fade-in-up stagger-3" style="padding:20px 24px;">
+        <h3 style="font-size:1.2rem; margin-bottom:16px;">📊 Resumen por Mes</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:8px; font-weight:600; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--text-secondary);">
+            <span>Mes</span>
+            <span>Facturas</span>
+            <span>Boletas</span>
+            <span>Percepciones</span>
+            <span>Total</span>
         </div>
-        <div class="metric-card fade-in-up stagger-2">
-            <span class="metric-icon">📄</span>
-            <div class="metric-info">
-                <span class="metric-value">{{ total_documentos }}</span>
-                <span class="metric-label">Documentos Totales</span>
-            </div>
-        </div>
-        <div class="metric-card fade-in-up stagger-3">
-            <span class="metric-icon">💾</span>
-            <div class="metric-info">
-                <span class="metric-value">{{ total_mb }}</span>
-                <span class="metric-label">Espacio Usado</span>
-            </div>
-        </div>
-        <div class="metric-card fade-in-up stagger-4">
-            <span class="metric-icon">📊</span>
-            <div class="metric-info">
-                <span class="metric-value">{{ tipos }}</span>
-                <span class="metric-label">Tipos de Documentos</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="glass-card fade-in-up stagger-2" style="margin-bottom:var(--spacing-xl);">
-        <h3>📂 Estructura de Carpetas</h3>
-        {% if arbol and arbol|length > 0 %}
-            {% for item in arbol %}
-            <div class="carpeta-item slide-in-left" style="display:flex; align-items:center; gap:var(--spacing-sm); padding:var(--spacing-sm) var(--spacing-md); border-radius:var(--radius-sm); border-bottom:1px solid var(--border-color); transition:all var(--transition-fast); color:var(--text-primary); font-size:var(--font-body);">
-                <span class="icono" style="font-size:1.4rem; width:32px; text-align:center; flex-shrink:0;">
-                    {% if item.tipo == 'facturas' %}📄
-                    {% elif item.tipo == 'boletas' %}🧾
-                    {% else %}📋{% endif %}
-                </span>
-                <span class="nombre" style="flex:1; font-weight:var(--font-weight-medium);">{{ item.nombre }}</span>
-                <span class="tipo-tag tipo-{{ item.tipo }}">{{ item.tipo }}</span>
-                <span class="badge badge-primary">{{ item.cantidad }} docs</span>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="empty-state">
-                <span class="empty-icon">📭</span>
-                <p style="font-size:var(--font-body);">No hay carpetas con documentos</p>
-                <p class="text-muted" style="font-size:var(--font-small);">Sube tus primeros PDFs desde la sección "Subir Archivos"</p>
-            </div>
-        {% endif %}
-    </div>
-
-    <div class="glass-card fade-in-up stagger-3">
-        <h3>📈 Resumen por Mes</h3>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Mes</th>
-                        <th>📄 Facturas</th>
-                        <th>🧾 Boletas</th>
-                        <th>📋 Percepciones</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if resumen_meses and resumen_meses|length > 0 %}
-                        {% for mes in resumen_meses %}
-                        <tr>
-                            <td><strong>{{ mes.nombre }}</strong></td>
-                            <td>{{ mes.facturas }}</td>
-                            <td>{{ mes.boletas }}</td>
-                            <td>{{ mes.percepciones }}</td>
-                            <td><span class="badge-total">{{ mes.total }}</span></td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center" style="color:var(--text-muted); padding:var(--spacing-xl);">
-                                No hay documentos registrados
-                            </td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:8px; padding:12px 0;">
+            <span style="font-weight:600;">Mayo 2026</span>
+            <span>3</span>
+            <span>3</span>
+            <span>1</span>
+            <span style="font-weight:700; color:var(--color-primary);">7</span>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('📁 Página de carpetas lista');
-    });
-</script>
 {% endblock %}

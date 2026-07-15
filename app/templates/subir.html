@@ -2,135 +2,33 @@
 
 {% block title %}Subir Archivos - Sistema RUS{% endblock %}
 
-{% block extra_css %}
-<style>
-    .upload-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .upload-area {
-        border: 2px dashed var(--border-color);
-        border-radius: var(--radius-xl);
-        padding: 60px 40px;
-        text-align: center;
-        cursor: pointer;
-        transition: all var(--transition-base);
-        background: var(--bg-card);
-        margin-bottom: var(--spacing-lg);
-    }
-    .upload-area:hover,
-    .upload-area.dragover {
-        border-color: var(--color-primary);
-        background: var(--color-primary-50);
-        transform: scale(1.01);
-    }
-    .upload-area .upload-icon {
-        font-size: 4rem;
-        display: block;
-        margin-bottom: var(--spacing-md);
-        opacity: 0.6;
-    }
-    .upload-area .upload-text {
-        font-size: var(--font-h3);
-        font-weight: var(--font-weight-semibold);
-        color: var(--text-primary);
-    }
-    .upload-area .upload-subtext {
-        font-size: var(--font-body);
-        color: var(--text-secondary);
-        margin-top: var(--spacing-sm);
-    }
-    .upload-area input[type="file"] { display: none; }
-    .upload-actions {
-        display: flex;
-        gap: var(--spacing-sm);
-        flex-wrap: wrap;
-        margin-top: var(--spacing-md);
-    }
-    .upload-progress {
-        width: 100%;
-        height: 6px;
-        background: var(--bg-card);
-        border-radius: var(--radius-full);
-        overflow: hidden;
-        margin-top: var(--spacing-sm);
-        display: none;
-    }
-    .upload-progress.active { display: block; }
-    .upload-progress .progress-bar {
-        height: 100%;
-        background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-        border-radius: var(--radius-full);
-        transition: width 0.3s ease;
-        width: 0%;
-    }
-    .recent-files { margin-top: var(--spacing-xl); }
-    @media (max-width: 768px) {
-        .upload-area { padding: 40px 20px; }
-        .upload-area .upload-icon { font-size: 3rem; }
-        .upload-area .upload-text { font-size: var(--font-h4); }
-        .upload-actions { flex-direction: column; }
-        .upload-actions .btn { width: 100%; justify-content: center; }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="upload-container">
-    
-    <div class="page-header fade-in-up">
-        <div class="header-left">
-            <h1>
-                <span class="icon-title">📤</span>
-                Subir Archivos
-                <span class="subtitle">Procesa automáticamente tus facturas y boletas desde PDF</span>
-            </h1>
-        </div>
-    </div>
+<div class="page-header fade-in-up">
+    <h1>📤 Subir Archivos</h1>
+    <p class="subtitle">Procesa automáticamente tus facturas y boletas desde PDF</p>
+</div>
 
-    <div class="glass-card fade-in-up stagger-1">
-        <div class="upload-area" id="uploadArea">
-            <span class="upload-icon">📁</span>
-            <div class="upload-text">Arrastra tus archivos PDF aquí</div>
-            <div class="upload-subtext">o haz clic para seleccionar</div>
-            <input type="file" id="fileInput" multiple accept=".pdf">
-        </div>
-
-        <div class="file-list" id="fileList"></div>
-
-        <div class="upload-progress" id="uploadProgress">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <div class="upload-actions">
-            <button class="btn btn-primary" id="btnSubir" disabled>
-                <span class="icon">🚀</span> Subir y Procesar
-            </button>
-            <button class="btn btn-secondary" id="btnLimpiar" disabled>
-                <span class="icon">🗑️</span> Limpiar
-            </button>
-        </div>
-    </div>
-
-    <div class="recent-files glass-card fade-in-up stagger-2">
-        <h3>📋 Últimos Archivos Procesados</h3>
-        <div id="recentFiles">
-            <div class="empty-state">
-                <span class="empty-icon">📭</span>
-                <p>No hay archivos procesados recientemente</p>
-            </div>
-        </div>
+<!-- Drop Zone -->
+<div class="glass-card fade-in-up stagger-1" style="padding:40px 24px; text-align:center; border:2px dashed rgba(255,255,255,0.1); min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s ease;">
+    <div style="font-size:4rem; margin-bottom:12px;">📄</div>
+    <h3 style="font-size:1.4rem; font-weight:600; color:var(--text-primary);">Arrastra tus archivos PDF aquí</h3>
+    <p style="font-size:1.1rem; color:var(--text-muted);">o haz clic para seleccionar</p>
+    <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-primary">📎 Seleccionar Archivos</button>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-    // El módulo upload.js se encarga de toda la lógica
-    // Solo asegurar que los IDs existan
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('📤 Página de subida lista');
-    });
-</script>
+<!-- Acciones -->
+<div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
+    <button class="btn btn-primary">⬆️ Subir y Procesar</button>
+    <button class="btn btn-secondary">🧹 Limpiar</button>
+</div>
+
+<!-- Últimos Archivos -->
+<div class="page-header" style="margin-top:32px;">
+    <h2>📂 Últimos Archivos Procesados</h2>
+</div>
+<div class="glass-card fade-in-up stagger-2" style="padding:20px 24px; text-align:center; color:var(--text-muted);">
+    <p style="font-size:1.1rem;">No hay archivos procesados recientemente</p>
+</div>
 {% endblock %}

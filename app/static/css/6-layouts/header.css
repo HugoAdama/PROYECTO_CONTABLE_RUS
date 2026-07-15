@@ -51,6 +51,14 @@
 .sidebar-brand h2 {
     font-size: 1.8rem;
     font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+    font-size: 1.8rem;
+    font-weight: 900;
     background: linear-gradient(135deg, var(--color-primary), #a78bfa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -59,6 +67,19 @@
 }
 
 [data-theme="light"] .sidebar-brand h2 {
+    background: linear-gradient(135deg, #1a1a2e, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+    font-size: 1.8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
     background: linear-gradient(135deg, var(--color-primary-dark), #7c3aed);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -295,4 +316,5 @@
         transform: translateX(0);
     }
 }
+
 
