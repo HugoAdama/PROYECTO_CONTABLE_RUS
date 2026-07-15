@@ -34,22 +34,23 @@
         <button class="btn btn-primary" style="width:100%; justify-content:center;">Guardar perfil</button>
     </div>
 
-    <!-- APARIENCIA -->
+    <!-- APARIENCIA - TOGGLE SINCRONIZADO -->
     <div class="card" style="margin-top:20px;">
         <div class="card-title"><i class="fas fa-palette"></i> Apariencia</div>
         <div class="switch-row">
             <div>
-                <span style="font-size:13px; font-weight:500;">Modo oscuro</span>
+                <span style="font-size:13px; font-weight:500;">🌙 Modo oscuro</span>
                 <span class="hint">Alterna entre modo oscuro y claro</span>
             </div>
             <label class="toggle-switch">
+                <!-- ✅ El id "themeToggle" es usado por theme.js -->
                 <input type="checkbox" id="themeToggle" checked>
                 <span class="toggle-slider"></span>
             </label>
         </div>
         <div class="switch-row">
             <div>
-                <span style="font-size:13px; font-weight:500;">Color primario</span>
+                <span style="font-size:13px; font-weight:500;">🎨 Color primario</span>
                 <span class="hint">Botones y elementos destacados</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
@@ -230,21 +231,6 @@ ESTILOS DE CONFIGURACIÓN
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // ============================================
-        // TOGGLE DE TEMA
-        // ============================================
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            themeToggle.checked = currentTheme === 'dark';
-
-            themeToggle.addEventListener('change', function() {
-                const newTheme = this.checked ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('rus-theme', newTheme);
-            });
-        }
-
         // ============================================
         // SELECTOR DE COLOR
         // ============================================
