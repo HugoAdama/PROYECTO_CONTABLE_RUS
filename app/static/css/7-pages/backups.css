@@ -1,0 +1,36 @@
+﻿/* ============================================
+   BACKUPS - Senior-Friendly
+   ============================================ */
+
+.backup-card {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+    padding: 20px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.backup-card .backup-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.backup-card .backup-date {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.backup-card .backup-size {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.backup-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}

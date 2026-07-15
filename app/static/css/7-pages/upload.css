@@ -1,106 +1,82 @@
-/* ============================================
-   PAGES: UPLOAD
-   Sistema de Control Financiero RUS v3.9.1
+﻿/* ============================================
+   UPLOAD - Senior-Friendly
    ============================================ */
 
-.upload-area {
-    border: 2px dashed var(--border-color);
-    border-radius: var(--radius-xl);
-    padding: 60px 40px;
+.drop-zone {
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 48px 32px;
     text-align: center;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.03);
     cursor: pointer;
-    transition: all var(--transition-base);
-    background: var(--bg-card);
-    margin-bottom: var(--spacing-lg);
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.upload-area:hover,
-.upload-area.dragover {
-    border-color: var(--color-primary);
-    background: var(--color-primary-50);
-    transform: scale(1.01);
+.drop-zone:hover {
+    border-color: #60a5fa;
+    background: rgba(96, 165, 250, 0.05);
 }
 
-.upload-area .upload-icon {
+.drop-zone.drag-over {
+    border-color: #4ade80;
+    background: rgba(74, 222, 128, 0.08);
+    box-shadow: 0 0 40px rgba(74, 222, 128, 0.1);
+}
+
+.drop-zone .icon {
     font-size: 4rem;
-    display: block;
-    margin-bottom: var(--spacing-md);
-    opacity: 0.6;
+    margin-bottom: 16px;
 }
 
-.upload-area .upload-text {
-    font-size: var(--font-h3);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-}
-
-.upload-area .upload-subtext {
-    font-size: var(--font-body);
+.drop-zone .text {
+    font-size: 1.2rem;
+    font-weight: 600;
     color: var(--text-secondary);
-    margin-top: var(--spacing-sm);
 }
 
-.upload-area input[type="file"] {
-    display: none;
+.drop-zone .subtext {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+/* Lista de archivos */
+.file-list {
+    margin-top: 24px;
 }
 
 .file-item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-card);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    margin-bottom: var(--spacing-sm);
-    transition: all var(--transition-fast);
-}
-
-.file-item:hover {
-    border-color: var(--border-hover);
-}
-
-.file-item .file-icon {
-    font-size: 1.5rem;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .file-item .file-name {
-    flex: 1;
-    font-weight: var(--font-weight-medium);
+    font-size: 1.1rem;
+    font-weight: 600;
     color: var(--text-primary);
 }
 
 .file-item .file-size {
-    font-size: var(--font-small);
-    color: var(--text-secondary);
+    font-size: 0.95rem;
+    color: var(--text-muted);
 }
 
 .file-item .file-status {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
-.file-item .file-status.success { color: var(--color-success); }
-.file-item .file-status.error { color: var(--color-danger); }
-.file-item .file-status.pending { color: var(--color-warning); }
-
-.upload-progress {
-    width: 100%;
-    height: 6px;
-    background: var(--bg-card);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    margin-top: var(--spacing-sm);
-    display: none;
-}
-
-.upload-progress.active {
-    display: block;
-}
-
-.upload-progress .progress-bar {
-    height: 100%;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    border-radius: var(--radius-full);
-    transition: width 0.3s ease;
-    width: 0%;
-}
+.file-item .file-status.success { color: #4ade80; }
+.file-item .file-status.error { color: #f87171; }
+.file-item .file-status.pending { color: #fbbf24; }
