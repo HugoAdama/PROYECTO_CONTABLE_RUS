@@ -1,33 +1,20 @@
-/**
- * SERVICES: SISTEMA DE NOTIFICACIONES
- * Sistema de Control Financiero RUS v3.9.1
+﻿/**
+ * Sistema de Notificaciones - Alto contraste en ambos modos
  */
 
-import { APP_CONFIG } from '../1-core/config.js';
+(function() {
+    "use strict";
 
-class NotificationService {
-    constructor() {
-        this.container = null;
-        this.defaultDuration = APP_CONFIG.NOTIFICACIONES.DURACION;
-        this.init();
-    }
-    
-    /**
-     * Inicializar
-     */
-    init() {
-        this.createContainer();
-        this.setupGlobalHandler();
-    }
-    
-    /**
-     * Crear contenedor
-     */
-    createContainer() {
-        let container = document.getElementById('toast-container');
+    // ============================================
+    // MOSTRAR NOTIFICACIÓN
+    // ============================================
+
+    window.showNotification = function(message, type) {
+        // Crear contenedor si no existe
+        let container = document.getElementById("notification-container");
         if (!container) {
-            container = document.createElement('div');
-            container.id = 'toast-container';
+            container = document.createElement("div");
+            container.id = "notification-container";
             container.style.cssText = `
                 position: fixed;
                 top: 24px;
@@ -37,122 +24,100 @@ class NotificationService {
                 flex-direction: column;
                 gap: 12px;
                 max-width: 420px;
-                width: 100%;
                 pointer-events: none;
             `;
             document.body.appendChild(container);
         }
-        this.container = container;
-    }
-    
-    /**
-     * Configurar handler global
-     */
-    setupGlobalHandler() {
-        window.mostrarNotificacion = (mensaje, tipo = 'info', duracion = this.defaultDuration) => {
-            this.show(mensaje, tipo, duracion);
-        };
-    }
-    
-    /**
-     * Mostrar notificación
-     */
-    show(mensaje, tipo = 'info', duracion = 4000) {
-        const colores = {
-            success: '#4ade80',
-            error: '#f87171',
-            warning: '#fbbf24',
-            info: '#60a5fa'
-        };
+
+        // Detectar tema actual
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+
+        // Crear notificación
+        const notification = document.createElement("div");
         
-        const iconos = {
-            success: '✅',
-            error: '❌',
-            warning: '⚠️',
-            info: 'ℹ️'
-        };
-        
-        const toast = document.createElement('div');
-        toast.style.cssText = `
-            background: var(--bg-card, rgba(15, 23, 42, 0.95));
-            backdrop-filter: blur(24px);
-            border: 1px solid ${colores[tipo] || colores.info};
+        // Estilos - ALTO CONTRASTE
+        notification.style.cssText = `
+            background: ${isDark ? '#1a1a2e' : '#ffffff'};
+            backdrop-filter: blur(20px);
+            padding: 20px 28px;
             border-radius: 16px;
-            padding: 18px 22px;
-            color: var(--text-primary, white);
-            font-size: 1.1rem;
-            font-weight: 500;
-            box-shadow: var(--shadow-xl, 0 12px 50px rgba(0,0,0,0.4));
-            animation: slideIn 0.3s ease;
-            pointer-events: auto;
+            border: 1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'};
+            color: ${isDark ? '#f7fafc' : '#1a1a2e'};
+            font-size: 1.15rem;
+            font-weight: 600;
+            box-shadow: 0 8px 40px rgba(0,0,0,${isDark ? '0.5' : '0.12'});
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
+            min-height: 64px;
+            pointer-events: auto;
+            line-height: 1.5;
         `;
-        
-        toast.innerHTML = `
-            <span style="font-size:24px; flex-shrink:0;">${iconos[tipo] || 'ℹ️'}</span>
-            <span style="flex:1;">${mensaje}</span>
-            <button onclick="this.parentElement.remove()" style="
-                background:none;
-                border:none;
-                color:var(--text-tertiary, rgba(255,255,255,0.4));
-                font-size:20px;
-                cursor:pointer;
-                padding:0 6px;
-            ">✕</button>
-        `;
-        
-        this.container.appendChild(toast);
-        
-        // Auto-eliminar
+
+        // Borde lateral según tipo
+        const borderColors = {
+            info: isDark ? '#60a5fa' : '#3b82f6',
+            success: isDark ? '#4ade80' : '#22c55e',
+            warning: isDark ? '#fbbf24' : '#eab308',
+            error: isDark ? '#f87171' : '#ef4444'
+        };
+        const color = borderColors[type] || borderColors.info;
+        notification.style.borderLeft = `4px solid ${color}`;
+
+        // Icono según tipo
+        const icons = {
+            info: 'ℹ️',
+            success: '✅',
+            warning: '⚠️',
+            error: '❌'
+        };
+        const icon = icons[type] || 'ℹ️';
+
+        notification.innerHTML = `<span style="font-size:1.4rem;">${icon}</span> ${message}`;
+
+        // Agregar al contenedor
+        container.appendChild(notification);
+
+        // Animar entrada
+        requestAnimationFrame(() => {
+            notification.style.opacity = "1";
+            notification.style.transform = "translateX(0)";
+        });
+
+        // Auto-cerrar después de 3.5 segundos
         setTimeout(() => {
-            if (toast.parentElement) {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100px)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }
-        }, duracion);
-    }
-    
-    /**
-     * Notificación de éxito
-     */
-    success(mensaje, duracion) {
-        this.show(mensaje, 'success', duracion);
-    }
-    
-    /**
-     * Notificación de error
-     */
-    error(mensaje, duracion) {
-        this.show(mensaje, 'error', duracion);
-    }
-    
-    /**
-     * Notificación de advertencia
-     */
-    warning(mensaje, duracion) {
-        this.show(mensaje, 'warning', duracion);
-    }
-    
-    /**
-     * Notificación de información
-     */
-    info(mensaje, duracion) {
-        this.show(mensaje, 'info', duracion);
-    }
-}
+            notification.style.opacity = "0";
+            notification.style.transform = "translateX(20px)";
+            setTimeout(() => {
+                notification.remove();
+                if (container.children.length === 0) {
+                    container.remove();
+                }
+            }, 400);
+        }, 3500);
+    };
 
-// ============================================
-// INSTANCIA GLOBAL
-// ============================================
-const notifications = new NotificationService();
+    // ============================================
+    // FUNCIONES DE AYUDA
+    // ============================================
 
-// ============================================
-// EXPORTAR
-// ============================================
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = notifications;
-}
+    window.Notifications = {
+        show: window.showNotification,
+        info: function(message) {
+            window.showNotification(message, 'info');
+        },
+        success: function(message) {
+            window.showNotification(message, 'success');
+        },
+        warning: function(message) {
+            window.showNotification(message, 'warning');
+        },
+        error: function(message) {
+            window.showNotification(message, 'error');
+        }
+    };
+
+})();

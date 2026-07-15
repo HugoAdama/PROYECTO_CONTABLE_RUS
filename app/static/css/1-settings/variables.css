@@ -1,100 +1,48 @@
-/* ============================================
-   SETTINGS: VARIABLES GLOBALES
-   Sistema de Control Financiero RUS v3.9.1
+﻿/* ============================================
+   VARIABLES CSS - DESIGN SYSTEM
    ============================================ */
 
 :root {
-    /* ===== TAMAÑOS DE FUENTE ===== */
-    --font-size-base: 18px;
-    --font-size-sm: 0.95rem;
-    --font-size-md: 1.1rem;
-    --font-size-lg: 1.3rem;
-    --font-size-xl: 1.6rem;
-    --font-size-2xl: 2rem;
-    --font-size-3xl: 2.6rem;
+    /* --- COLORES --- */
+    --color-primary: var(--color-primary);
+    --color-primary-dark: var(--color-primary-dark);
+    --color-secondary: #a78bfa;
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-danger: #f87171;
     
-    /* ===== PESOS DE FUENTE ===== */
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    --font-weight-extrabold: 800;
+    /* --- TAMAÑOS --- */
+    --text-xs: 0.875rem;
+    --text-sm: 1rem;
+    --text-base: 1.125rem;
+    --text-lg: 1.25rem;
+    --text-xl: 1.5rem;
+    --text-2xl: 1.875rem;
+    --text-3xl: 2.25rem;
     
-    /* ===== ESPACIADOS ===== */
+    /* --- ESPACIADO --- */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 24px;
     --spacing-xl: 32px;
-    --spacing-2xl: 48px;
-    --spacing-3xl: 64px;
     
-    /* ===== BORDER RADIUS ===== */
+    /* --- BORDES --- */
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
-    --radius-2xl: 24px;
-    --radius-full: 9999px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
     
-    /* ===== SOMBRAS ===== */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 25px rgba(0, 0, 0, 0.12);
-    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.18);
-    --shadow-xl: 0 16px 60px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 0 40px rgba(96, 165, 250, 0.1);
-    
-    /* ===== TRANSICIONES ===== */
-    --transition-fast: 0.15s ease;
-    --transition-base: 0.3s ease;
-    --transition-slow: 0.5s ease;
-}
-
-/* ============================================
-   TEMA OSCURO (DEFAULT)
-   ============================================ */
-:root {
-    /* Colores base */
-    --bg-body: #0a0a1e;
-    --bg-card: rgba(255, 255, 255, 0.05);
-    --bg-card-hover: rgba(255, 255, 255, 0.08);
-    --bg-input: rgba(255, 255, 255, 0.04);
-    --bg-sidebar: rgba(8, 8, 30, 0.97);
-    --bg-overlay: rgba(0, 0, 0, 0.5);
-    
-    /* Texto */
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.7);
-    --text-tertiary: rgba(255, 255, 255, 0.4);
-    --text-body: rgba(255, 255, 255, 0.85);
-    --text-inverse: #0a0a1e;
-    
-    /* Bordes */
-    --border-color: rgba(255, 255, 255, 0.06);
-    --border-hover: rgba(255, 255, 255, 0.12);
-    --border-focus: rgba(96, 165, 250, 0.3);
-    --border-light: rgba(255, 255, 255, 0.03);
-}
-
-/* ============================================
-   TEMA CLARO (SENIOR-FRIENDLY)
-   ============================================ */
-:root.light-mode {
-    --bg-body: #f5f0eb;
+    /* --- FONDOS --- */
+    --bg-primary: #f0f4ff;
     --bg-card: rgba(255, 255, 255, 0.7);
-    --bg-card-hover: rgba(255, 255, 255, 0.85);
-    --bg-input: rgba(255, 255, 255, 0.5);
-    --bg-sidebar: rgba(255, 248, 242, 0.97);
-    --bg-overlay: rgba(0, 0, 0, 0.3);
-    
-    --text-primary: #2d2d2d;
-    --text-secondary: #5a5a5a;
-    --text-tertiary: #9a9a9a;
-    --text-body: #3d3d3d;
-    --text-inverse: #ffffff;
-    
-    --border-color: rgba(0, 0, 0, 0.06);
-    --border-hover: rgba(0, 0, 0, 0.12);
-    --border-focus: rgba(59, 130, 246, 0.3);
-    --border-light: rgba(0, 0, 0, 0.03);
+    --bg-dark: #0a0a1e;
 }
+
+/* Modo Oscuro */
+[data-theme="dark"] {
+    --bg-primary: #0a0a1e;
+    --bg-card: rgba(255, 255, 255, 0.04);
+}
+
+/* El color primario se sincroniza con theme.js */
+

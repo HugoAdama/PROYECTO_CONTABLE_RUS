@@ -1,16 +1,17 @@
-/* ============================================
-   GENERIC: RESET
-   Sistema de Control Financiero RUS v3.9.1
+﻿/* ============================================
+   RESET CSS - Base consistente
    ============================================ */
 
+/* Box sizing */
 *,
 *::before,
 *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
+/* Eliminar estilos por defecto */
 html {
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
@@ -19,46 +20,47 @@ html {
 
 body {
     min-height: 100vh;
-    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
 }
 
+/* Listas */
+ul, ol {
+    list-style: none;
+}
+
+/* Imágenes */
 img,
-picture,
-video,
-canvas,
-svg {
+svg,
+video {
     display: block;
     max-width: 100%;
+    height: auto;
 }
 
+/* Formularios */
 input,
 button,
 textarea,
 select {
     font: inherit;
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    overflow-wrap: break-word;
-}
-
-a {
-    text-decoration: none;
     color: inherit;
 }
 
-ul,
-ol {
-    list-style: none;
+/* Botones */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
+/* Tablas */
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+
+/* Enlaces */
+a {
+    text-decoration: none;
+    color: inherit;
 }

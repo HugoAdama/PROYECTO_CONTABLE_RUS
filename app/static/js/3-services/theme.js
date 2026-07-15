@@ -1,134 +1,131 @@
-/**
- * SERVICES: SISTEMA DE TEMAS
- * Sistema de Control Financiero RUS v3.9.1
+﻿/**
+ * Sistema de Temas - Automático con notificaciones claras
  */
 
-import { APP_CONFIG } from '../1-core/config.js';
-import { storage } from '../2-utils/storage.js';
-import { eventBus } from '../1-core/events.js';
+(function() {
+    "use strict";
 
-class ThemeService {
-    constructor() {
-        this.currentTheme = this.loadTheme();
-        this.init();
+    const THEME_KEY = "rus-theme";
+    const COLOR_KEY = "rus-primary-color";
+    const DEFAULT_THEME = "dark";
+    const DEFAULT_COLOR = "#60a5fa";
+
+    function getTheme() {
+        return localStorage.getItem(THEME_KEY) || DEFAULT_THEME;
     }
-    
-    /**
-     * Inicializar
-     */
-    init() {
-        this.applyTheme(this.currentTheme);
-        this.setupToggle();
-        this.setupColorPicker();
-    }
-    
-    /**
-     * Cargar tema desde storage
-     */
-    loadTheme() {
-        const saved = storage.get(APP_CONFIG.STORAGE.TEMA);
-        if (saved === 'light' || saved === 'dark') {
-            return saved;
-        }
-        // Detectar preferencia del sistema
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            return 'light';
-        }
-        return 'dark';
-    }
-    
-    /**
-     * Aplicar tema
-     */
-    applyTheme(theme) {
-        this.currentTheme = theme;
-        const body = document.body;
+
+    function setTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem(THEME_KEY, theme);
         
-        if (theme === 'light') {
-            body.classList.add('light-mode');
+        // Sincronizar toggles
+        document.querySelectorAll('[data-theme-toggle], #themeToggle, #modoOscuro').forEach(function(toggle) {
+            if (toggle) toggle.checked = theme === "dark";
+        });
+
+        // Notificación clara
+        const icon = theme === "dark" ? "🌙" : "☀️";
+        const message = theme === "dark" ? "Modo oscuro activado" : "Modo claro activado";
+        
+        if (window.Notifications) {
+            window.Notifications.info(`${icon} ${message}`);
         } else {
-            body.classList.remove('light-mode');
-        }
-        
-        storage.set(APP_CONFIG.STORAGE.TEMA, theme);
-        eventBus.emit('themeChanged', { theme });
-        this.updateToggle();
-    }
-    
-    /**
-     * Alternar tema
-     */
-    toggle() {
-        const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-        this.applyTheme(newTheme);
-    }
-    
-    /**
-     * Configurar toggle
-     */
-    setupToggle() {
-        const toggle = document.getElementById('modoOscuro');
-        if (toggle) {
-            toggle.addEventListener('change', () => {
-                this.toggle();
-                this.showNotification();
-            });
+            console.log(`${icon} ${message}`);
         }
     }
-    
-    /**
-     * Configurar color picker
-     */
-    setupColorPicker() {
-        const colorInput = document.getElementById('colorPrimario');
-        const colorHex = document.getElementById('colorHex');
+
+    function toggleTheme() {
+        const current = getTheme();
+        setTheme(current === "dark" ? "light" : "dark");
+    }
+
+    // ============================================
+    // COLOR PRIMARIO - AUTOMÁTICO CON NOTIFICACIÓN
+    // ============================================
+
+    function setPrimaryColor(color) {
+        document.documentElement.style.setProperty("--color-primary", color);
+        localStorage.setItem(COLOR_KEY, color);
         
-        if (colorInput) {
-            const savedColor = storage.get(APP_CONFIG.STORAGE.COLOR_PRIMARIO, '#60a5fa');
-            colorInput.value = savedColor;
-            if (colorHex) colorHex.textContent = savedColor;
+        // Actualizar hex
+        const hex = document.getElementById("colorHex");
+        if (hex) hex.textContent = color;
+        
+        // Notificación clara
+        if (window.Notifications) {
+            window.Notifications.info(`🎨 Color actualizado: ${color}`);
+        } else {
+            console.log(`🎨 Color actualizado: ${color}`);
+        }
+    }
+
+    function getPrimaryColor() {
+        return localStorage.getItem(COLOR_KEY) || DEFAULT_COLOR;
+    }
+
+    function setupColorPicker() {
+        const picker = document.getElementById("colorPrimario");
+        if (picker) {
+            const savedColor = getPrimaryColor();
+            picker.value = savedColor;
+            setPrimaryColor(savedColor);
             
-            colorInput.addEventListener('input', () => {
-                const color = colorInput.value;
-                if (colorHex) colorHex.textContent = color;
-                document.documentElement.style.setProperty('--color-primary', color);
-                storage.set(APP_CONFIG.STORAGE.COLOR_PRIMARIO, color);
-            });
+            picker.removeEventListener("input", handleColorChange);
+            picker.addEventListener("input", handleColorChange);
         }
     }
-    
-    /**
-     * Actualizar toggle
-     */
-    updateToggle() {
-        const toggle = document.getElementById('modoOscuro');
-        if (toggle) {
-            toggle.checked = this.currentTheme === 'light';
-        }
-    }
-    
-    /**
-     * Mostrar notificación
-     */
-    showNotification() {
-        const mensaje = this.currentTheme === 'light' 
-            ? '☀️ Modo claro activado' 
-            : '🌙 Modo oscuro activado';
-        
-        if (window.mostrarNotificacion) {
-            window.mostrarNotificacion(mensaje, 'info');
-        }
-    }
-}
 
-// ============================================
-// INSTANCIA GLOBAL
-// ============================================
-const themeService = new ThemeService();
+    function handleColorChange(event) {
+        const color = event.target.value;
+        setPrimaryColor(color);
+    }
 
-// ============================================
-// EXPORTAR
-// ============================================
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = themeService;
-}
+    // ============================================
+    // TOGGLES
+    // ============================================
+
+    function setupToggles() {
+        document.querySelectorAll('[data-theme-toggle], #themeToggle, #modoOscuro').forEach(function(toggle) {
+            const theme = getTheme();
+            toggle.checked = theme === "dark";
+            toggle.removeEventListener("change", handleToggleChange);
+            toggle.addEventListener("change", handleToggleChange);
+        });
+    }
+
+    function handleToggleChange(event) {
+        setTheme(event.target.checked ? "dark" : "light");
+    }
+
+    // ============================================
+    // INICIALIZAR
+    // ============================================
+
+    function init() {
+        setTheme(getTheme());
+        setupToggles();
+        setupColorPicker();
+        console.log(`🌓 Tema: ${getTheme()}`);
+        console.log(`🎨 Color: ${getPrimaryColor()}`);
+    }
+
+    // ============================================
+    // EXPORTAR
+    // ============================================
+
+    window.Theme = {
+        get: getTheme,
+        set: setTheme,
+        toggle: toggleTheme,
+        setPrimaryColor: setPrimaryColor,
+        getPrimaryColor: getPrimaryColor,
+        init: init
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+
+})();
