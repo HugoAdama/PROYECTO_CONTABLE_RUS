@@ -131,7 +131,7 @@ class ExportService:
             ws_facturas.cell(row=row_idx, column=3).border = border
             ws_facturas.cell(row=row_idx, column=4, value=f.impuesto).number_format = '"S/" #,##0.00'
             ws_facturas.cell(row=row_idx, column=4).border = border
-            ws_facturas.cell(row=row_idx, column=5, value=f.proveedor or 'Natura Cosméticos S.A.').border = border
+            ws_facturas.cell(row=row_idx, column=5, value=f.proveedor or 'Proveedor no identificado').border = border
             ws_facturas.cell(row=row_idx, column=6, value=f.descripcion or '').border = border
         
         for col in range(1, 7):
@@ -173,7 +173,7 @@ class ExportService:
             ws_percepciones.cell(row=row_idx, column=2, value=p.fecha_emision.strftime('%d/%m/%Y')).border = border
             ws_percepciones.cell(row=row_idx, column=3, value=p.monto).number_format = '"S/" #,##0.00'
             ws_percepciones.cell(row=row_idx, column=3).border = border
-            ws_percepciones.cell(row=row_idx, column=4, value=p.proveedor or 'Natura Cosméticos S.A.').border = border
+            ws_percepciones.cell(row=row_idx, column=4, value=p.proveedor or 'Proveedor no identificado').border = border
             ws_percepciones.cell(row=row_idx, column=5, value=p.descripcion or '').border = border
         
         for col in range(1, 6):
