@@ -46,12 +46,30 @@ def create_app(config_name: str = 'development') -> Flask:
         'connect_args': {'check_same_thread': False}
     }
     
-    # Otras configuraciones
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clave_segura_para_doña_maria')
-    app.config['DEBUG'] = os.getenv('DEBUG', 'True').lower() == 'true'
-    app.config['UPLOAD_FOLDER'] = data_dir / 'uploads'
-    app.config['UPLOAD_FOLDER'].mkdir(parents=True, exist_ok=True)
-    
+       # ==========================================
+    # OTRAS CONFIGURACIONES
+    # ==========================================
+
+    secret_key = os.getenv("SECRET_KEY")
+    app_env = os.getenv("APP_ENV", "development").lower()
+
+    if app_env == "production" and not secret_key:
+        raise RuntimeError(
+            "SECRET_KEY no está configurada. Defínela en las variables de entorno."
+        )
+
+    if not secret_key:
+        app.logger.warning(
+            "SECRET_KEY no encontrada. Usando clave temporal para desarrollo."
+        )
+        secret_key = os.urandom(32).hex()
+
+    app.config["SECRET_KEY"] = secret_key
+
+    app.config["DEBUG"] = os.getenv("FLASK_DEBUG", "False").lower() == "true"
+
+    app.config["UPLOAD_FOLDER"] = data_dir / "uploads"
+    app.config["UPLOAD_FOLDER"].mkdir(parents=True, exist_ok=True)
     # Límites RUS
     app.config['LIMITE_RUS'] = int(os.getenv('LIMITE_RUS', 8000))
     app.config['IMPUESTO_NORMAL'] = float(os.getenv('IMPUESTO_NORMAL', 20.00))
