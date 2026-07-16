@@ -12,7 +12,7 @@ class PercepcionExtractor(BaseExtractor):
         """Extrae datos de una percepción desde un PDF"""
         # Leer el PDF y extraer texto
         self.extraer_texto(ruta_pdf)
-        
+
         if not self.texto:
             return None
 
@@ -22,8 +22,8 @@ class PercepcionExtractor(BaseExtractor):
         }
 
         # Número de comprobante
-        numero = self.buscar_patron(r'(?:PERCEPCION|P[0-9]{3}|N°|NUMERO|COMPROBANTE)\s*[.:]?\s*([A-Z0-9\-]{5,20})')
-        datos['numero_comprobante'] = numero or 'DESCONOCIDO'
+        numero = self.buscar_patron(r'(P[0-9]{3}\s*-\s*[0-9]{5,12})')
+        datos['numero_comprobante'] = numero.replace(' ', '') if numero else 'DESCONOCIDO'
 
         # Proveedor
         proveedor = self.buscar_patron(r'(?:PROVEEDOR|RAZON SOCIAL|EMPRESA)\s*[.:]?\s*([^\n]{5,50})')
@@ -38,7 +38,7 @@ class PercepcionExtractor(BaseExtractor):
         datos['fecha_emision'] = fecha or datetime.now().strftime('%Y-%m-%d')
 
         # Monto
-        monto = self.buscar_patron(r'(?:MONTO|TOTAL|PERCEPCION)\s*[.:]?\s*S\/?\s*([\d,]+\.?\d{0,2})')
+        monto = self.buscar_patron(r'(?:IMPORTE\s+TOTAL\s+PERCIBIDO|MONTO|TOTAL|PERCEPCION)\s*[.:]?\s*(?:S\/?\s*)?([\d,]+\.?\d{0,2})')
         if monto:
             monto_val = float(monto.replace(',', ''))
             datos['monto'] = monto_val

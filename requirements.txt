@@ -1,4 +1,4 @@
-﻿# ============================================
+# ============================================
 # REQUIREMENTS.TXT - PROYECTO RUS v4.0 (SCALABLE)
 # ============================================
 
@@ -10,7 +10,7 @@ python-dotenv==1.0.0
 click==8.1.7
 
 # --- DATABASE ---
-SQLAlchemy==2.0.23
+SQLAlchemy>=2.0.36,<2.1
 alembic==1.12.1
 
 # --- DATA ANALYSIS (SCALABLE) ---

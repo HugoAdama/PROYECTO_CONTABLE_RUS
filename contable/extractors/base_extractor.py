@@ -134,6 +134,16 @@ class BaseExtractor(ABC):
             if re.search(patron, texto_lower):
                 return 'boleta'
 
+        # Detectar Percepción
+        patrones_percepcion = [
+            r'comprobante\s*de\s*percepci[oó]n',
+            r'p\d{3}\s*-\s*006\d{4,8}',
+        ]
+        for patron in patrones_percepcion:
+            if re.search(patron, texto_lower):
+                return 'percepcion'
+
+
         # Detectar Factura
         patrones_factura = [
             r'factura\s*de\s*venta\s*electronica',
@@ -144,16 +154,6 @@ class BaseExtractor(ABC):
         for patron in patrones_factura:
             if re.search(patron, texto_lower):
                 return 'factura'
-
-        # Detectar Percepción
-        patrones_percepcion = [
-            r'percepci[oó]n',
-            r'p\d{3}-006\d{4,8}',
-            r'percepcion\s*de\s*venta',
-        ]
-        for patron in patrones_percepcion:
-            if re.search(patron, texto_lower):
-                return 'percepcion'
 
         # Detectar por contenido específico
         if re.search(r'r\.u\.c', texto_lower) and re.search(r'factura', texto_lower):

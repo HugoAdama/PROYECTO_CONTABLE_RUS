@@ -1,4 +1,4 @@
-﻿# app/__init__.py
+# app/__init__.py
 # ===============
 
 import os
@@ -112,13 +112,14 @@ def create_app(config_name: str = 'development') -> Flask:
     _setup_logging(app)
     _register_cli_commands(app)
     _register_template_filters(app)
+    _register_template_context(app)
     
     return app
 
 
 def _register_blueprints(app: Flask) -> None:
     """Registra los blueprints."""
-    from app.routes import main_bp
+    from contable.api import main_bp
     app.register_blueprint(main_bp)
 
 
@@ -166,3 +167,24 @@ def _register_template_filters(app: Flask) -> None:
             return '0%'
         sign = '+' if value >= 0 else ''
         return f'{sign}{float(value):.1f}%'
+
+
+def _register_template_context(app: Flask) -> None:
+    """Expone configuración y conteos reales a todas las vistas."""
+    @app.context_processor
+    def inject_global_context():
+        color = Configuracion.get('color_primario', '#8b7bff')
+        color = color if isinstance(color, str) and color.startswith('#') and len(color) == 7 else '#8b7bff'
+        try:
+            rgb = ','.join(str(int(color[i:i+2], 16)) for i in (1, 3, 5))
+        except ValueError:
+            rgb = '139,123,255'
+        return {
+            'app_config': {
+                'nombre_negocio': Configuracion.get('nombre_negocio', 'Maria Boutique'),
+                'color_primario': color,
+                'color_rgb': rgb,
+            },
+            'total_global': Documento.query.count(),
+            'app_version': '5.0.0',
+        }

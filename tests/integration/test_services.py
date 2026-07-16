@@ -1,10 +1,11 @@
-﻿"""
+"""
 Pruebas de integración para los servicios del Sistema RUS.
 """
 
 import pytest
 import os
 from datetime import date
+from pathlib import Path
 
 from contable.services.documento_service import DocumentoService
 from contable.services.reporte_service import ReporteService
@@ -32,6 +33,37 @@ class TestDocumentoService:
             # Verificar que tiene métodos (cualquiera)
             metodos = [m for m in dir(service) if not m.startswith('_') and callable(getattr(service, m))]
             assert len(metodos) > 0
+
+    def test_normaliza_factura_extraida(self, app):
+        """El orquestador adapta la salida del extractor al modelo unificado."""
+        with app.app_context():
+            service = DocumentoService()
+            datos = service._normalizar(
+                "factura",
+                {
+                    "numero_factura": "F001-123",
+                    "fecha_emision": "2026-05-08",
+                    "total_pagar": 100.50,
+                    "sub_total": 85.17,
+                    "igv": 15.33,
+                    "proveedor": "Proveedor Demo",
+                    "ruc_proveedor": "20123456789",
+                },
+                Path("factura.pdf"),
+            )
+            assert datos["tipo"] == "factura"
+            assert datos["numero"] == "F001-123"
+            assert datos["monto_total"] == 100.50
+            assert datos["archivo_original"] == "factura.pdf"
+
+    def test_rechaza_tipo_desconocido(self, app, tmp_path):
+        """El flujo no persiste documentos cuyo tipo no puede determinarse."""
+        with app.app_context():
+            service = DocumentoService()
+            service.detector.extraer = lambda _: {"tipo_detectado": "desconocido"}
+            resultado = service.procesar_archivo(tmp_path / "desconocido.pdf")
+            assert resultado["success"] is False
+            assert "tipo" in resultado["message"].lower()
 
 
 class TestReporteService:

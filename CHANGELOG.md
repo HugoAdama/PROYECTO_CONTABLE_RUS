@@ -62,3 +62,27 @@ Fecha
 ## Pruebas
 
 - Suite completa en verde después de la migración.
+## [4.4.0] - 2026-07-15
+
+### Arquitectura
+- Se dividió `app/routes.py` en módulos bajo `contable/api` conservando los endpoints `main.*`.
+- Se añadió la ruta de exportación Excel y se conectó con la pantalla de reportes.
+
+### Procesamiento de documentos
+- Se implementó `DocumentoService` como orquestador de detección, extracción, normalización y persistencia.
+- Se conectó `/api/upload` al nuevo flujo.
+- Se incorporaron validaciones de tipo, número, fecha, monto y duplicados.
+- Se corrigió la detección de comprobantes de percepción frente a facturas que contienen líneas de percepción.
+
+### Pruebas
+- 56 pruebas automatizadas aprobadas.
+- Flujo validado con 7 PDFs reales: 3 facturas, 3 boletas y 1 percepción.
+
+## [5.0.0] - 2026-07-16
+### Added
+- Interfaz Liquid Glass responsive, clara y oscura.
+- Animaciones ambientales de luz y gotas con accesibilidad de movimiento reducido.
+- Gráficos offline, carga múltiple con feedback y backups descargables.
+### Changed
+- Todas las páginas consumen datos reales y comparten un contexto global consistente.
+- Dashboard usa el último período con información disponible.
