@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 
 from src.database.models import Documento, Historial, Configuracion
 from src.database.conexion import db
-from src.services.ventas_service import VentasService
+from contable.services.ventas_service import VentasService
 
 logger = logging.getLogger(__name__)
 main_bp = Blueprint('main', __name__)

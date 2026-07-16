@@ -1,9 +1,9 @@
 # app/services/reporte_service.py
-from app import db
-from src.models.factura_compra import FacturaCompra
-from src.models.boleta_venta import BoletaVenta
-from src.models.percepcion import Percepcion
-from src.calculators.calculadora_rus import CalculadoraRUS
+from contable.extensions import db
+from contable.models.factura_compra import FacturaCompra
+from contable.models.boleta_venta import BoletaVenta
+from contable.models.percepcion import Percepcion
+from contable.calculators.calculadora_rus import CalculadoraRUS
 from sqlalchemy import func
 from datetime import datetime
 

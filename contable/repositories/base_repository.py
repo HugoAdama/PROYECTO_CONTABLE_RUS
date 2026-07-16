@@ -1,5 +1,5 @@
 # src/repositories/base_repository.py
-from app import db
+from contable.extensions import db
 
 class BaseRepository:
     """Repositorio base con operaciones CRUD genéricas"""

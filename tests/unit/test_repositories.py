@@ -5,12 +5,12 @@ Pruebas unitarias para los repositorios del Sistema RUS.
 import pytest
 from datetime import date
 
-from src.repositories.factura_repository import FacturaRepository
-from src.repositories.boleta_repository import BoletaRepository
-from src.repositories.percepcion_repository import PercepcionRepository
-from src.models.factura_compra import FacturaCompra
-from src.models.boleta_venta import BoletaVenta
-from src.models.percepcion import Percepcion
+from contable.repositories.factura_repository import FacturaRepository
+from contable.repositories.boleta_repository import BoletaRepository
+from contable.repositories.percepcion_repository import PercepcionRepository
+from contable.models.factura_compra import FacturaCompra
+from contable.models.boleta_venta import BoletaVenta
+from contable.models.percepcion import Percepcion
 
 
 # ============================================

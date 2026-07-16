@@ -54,7 +54,7 @@ class TestEstadoRUS:
     def test_calculo_impuesto_base(self):
         ventas = 560.00
         esperado = 560.00 * 0.05
-        from src.calculators.calculadora_rus import CalculadoraRUS
+        from contable.calculators.calculadora_rus import CalculadoraRUS
         resultado = CalculadoraRUS.calcular_impuesto_final(ventas, 0)
         assert resultado == pytest.approx(esperado, 0.01)
 
@@ -63,7 +63,7 @@ class TestEstadoRUS:
         percepciones = 8.83
         impuesto_base = 560.00 * 0.05
         esperado = impuesto_base - percepciones
-        from src.calculators.calculadora_rus import CalculadoraRUS
+        from contable.calculators.calculadora_rus import CalculadoraRUS
         resultado = CalculadoraRUS.calcular_impuesto_final(ventas, percepciones)
         assert resultado == pytest.approx(esperado, 0.01)
 

@@ -1,8 +1,8 @@
 ﻿# src/repositories/boleta_repository.py
-from app import db
+from contable.extensions import db
 from sqlalchemy import func
 from .base_repository import BaseRepository
-from src.models.boleta_venta import BoletaVenta
+from contable.models.boleta_venta import BoletaVenta
 
 class BoletaRepository(BaseRepository):
     """Repositorio para BoletaVenta"""

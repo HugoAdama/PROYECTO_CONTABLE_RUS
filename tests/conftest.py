@@ -12,9 +12,9 @@ from sqlalchemy.orm import declarative_base
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app import create_app
-from src.models.factura_compra import FacturaCompra
-from src.models.boleta_venta import BoletaVenta
-from src.models.percepcion import Percepcion
+from contable.models.factura_compra import FacturaCompra
+from contable.models.boleta_venta import BoletaVenta
+from contable.models.percepcion import Percepcion
 
 Base = declarative_base()
 
@@ -165,11 +165,11 @@ def ruta_percepcion_real():
 # FIXTURES PARA EXTRACTORES
 # ============================================
 
-from src.extractors.base_extractor import BaseExtractor
-from src.extractors.factura_extractor import FacturaExtractor
-from src.extractors.boleta_extractor import BoletaExtractor
-from src.extractors.percepcion_extractor import PercepcionExtractor
-from src.extractors.detector_extractor import DetectorExtractor
+from contable.extractors.base_extractor import BaseExtractor
+from contable.extractors.factura_extractor import FacturaExtractor
+from contable.extractors.boleta_extractor import BoletaExtractor
+from contable.extractors.percepcion_extractor import PercepcionExtractor
+from contable.extractors.detector_extractor import DetectorExtractor
 
 @pytest.fixture
 def base_extractor():

@@ -6,12 +6,12 @@ from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
 
-from src.repositories.factura_repository import FacturaRepository
-from src.repositories.boleta_repository import BoletaRepository
-from src.repositories.percepcion_repository import PercepcionRepository
-from src.extractors import DetectorExtractor, FacturaExtractor, BoletaExtractor, PercepcionExtractor
+from contable.repositories.factura_repository import FacturaRepository
+from contable.repositories.boleta_repository import BoletaRepository
+from contable.repositories.percepcion_repository import PercepcionRepository
+from contable.extractors import DetectorExtractor, FacturaExtractor, BoletaExtractor, PercepcionExtractor
 from src.database.conexion import get_db
-from src.utils.notificador import Notificador
+from contable.utils.notificador import Notificador
 
 
 class DocumentoService:

@@ -1,7 +1,5 @@
-﻿# src/services/__init__.py
-# ========================
-# Módulo de servicios
+﻿"""
+Compatibilidad temporal con la antigua ubicación de servicios.
 
-from .ventas_service import VentasService
-
-__all__ = ['VentasService']
+VentasService vive ahora en contable.services.ventas_service.
+"""

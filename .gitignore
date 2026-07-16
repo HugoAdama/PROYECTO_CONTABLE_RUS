@@ -65,3 +65,7 @@ logs/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Python cache
+__pycache__/
+*.py[cod]

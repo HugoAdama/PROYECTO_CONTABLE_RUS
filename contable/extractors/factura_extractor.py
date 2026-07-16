@@ -1,7 +1,7 @@
 """
 EXTRACTOR FACTURA - VERSIÓN PARA NATURA
 """
-from src.extractors.base_extractor import BaseExtractor
+from contable.extractors.base_extractor import BaseExtractor
 from typing import Dict, Any
 from datetime import datetime
 import re

@@ -5,7 +5,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app import create_app
 from src.database.models import Documento
-from src.services.ventas_service import VentasService
+from contable.services.ventas_service import VentasService
 from datetime import datetime
 
 app = create_app()

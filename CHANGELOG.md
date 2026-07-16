@@ -37,6 +37,28 @@ Fecha
 
 # Próxima versión
 
-v5.0
+# v5.0 — Migración de Capas
 
-Migración de módulos.
+## Agregado
+
+- Nueva ubicación definitiva para modelos.
+- Nueva ubicación definitiva para repositorios.
+- Nueva ubicación definitiva para extractores.
+- Nueva ubicación definitiva para calculadoras.
+- Nueva ubicación definitiva para utilidades.
+- Nueva ubicación definitiva para servicios.
+
+## Cambiado
+
+- Imports actualizados al paquete `contable`.
+- SQLAlchemy compartido temporalmente entre arquitectura legacy y nueva.
+- Servicios vivos migrados sin modificar comportamiento.
+
+## Mantenimiento
+
+- Eliminados archivos `.pyc` del control de versiones.
+- Añadidas reglas de caché Python a `.gitignore`.
+
+## Pruebas
+
+- Suite completa en verde después de la migración.

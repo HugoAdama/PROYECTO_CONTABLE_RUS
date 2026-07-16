@@ -6,10 +6,10 @@ Usa datos reales de Doña María.
 import pytest
 import os
 
-from src.extractors.factura_extractor import FacturaExtractor
-from src.extractors.boleta_extractor import BoletaExtractor
-from src.extractors.percepcion_extractor import PercepcionExtractor
-from src.extractors.detector_extractor import DetectorExtractor
+from contable.extractors.factura_extractor import FacturaExtractor
+from contable.extractors.boleta_extractor import BoletaExtractor
+from contable.extractors.percepcion_extractor import PercepcionExtractor
+from contable.extractors.detector_extractor import DetectorExtractor
 
 
 # ============================================

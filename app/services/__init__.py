@@ -1,4 +1,5 @@
-# app/services/__init__.py
-from app.services.reporte_service import ReporteService
+﻿"""
+Compatibilidad temporal con la antigua ubicación de servicios.
 
-__all__ = ['ReporteService']
+Los consumidores nuevos deben utilizar contable.services.
+"""

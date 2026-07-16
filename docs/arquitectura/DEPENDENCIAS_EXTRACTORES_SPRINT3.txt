@@ -1,0 +1,25 @@
+
+Path                                                                           LineNumber Line                                                                                                
+----                                                                           ---------- ----                                                                                                
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\documento_service.py              12 from src.extractors import DetectorExtractor, FacturaExtractor, BoletaExtractor, PercepcionExtractor
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\boleta_extractor.py              4 from src.extractors.base_extractor import BaseExtractor                                             
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\detector_extractor.py            4 from src.extractors.base_extractor import BaseExtractor                                             
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\factura_extractor.py             4 from src.extractors.base_extractor import BaseExtractor                                             
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\percepcion_extractor.py          4 from src.extractors.base_extractor import BaseExtractor                                             
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\__init__.py                      3 from src.extractors.base_extractor import BaseExtractor                                             
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\__init__.py                      4 from src.extractors.boleta_extractor import BoletaExtractor                                         
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\__init__.py                      5 from src.extractors.detector_extractor import DetectorExtractor                                     
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\__init__.py                      6 from src.extractors.factura_extractor import FacturaExtractor                                       
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\extractors\__init__.py                      7 from src.extractors.percepcion_extractor import PercepcionExtractor                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\unit\test_extractors.py                   9 from src.extractors.factura_extractor import FacturaExtractor                                       
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\unit\test_extractors.py                  10 from src.extractors.boleta_extractor import BoletaExtractor                                         
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\unit\test_extractors.py                  11 from src.extractors.percepcion_extractor import PercepcionExtractor                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\unit\test_extractors.py                  12 from src.extractors.detector_extractor import DetectorExtractor                                     
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\conftest.py                             168 from src.extractors.base_extractor import BaseExtractor                                             
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\conftest.py                             169 from src.extractors.factura_extractor import FacturaExtractor                                       
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\conftest.py                             170 from src.extractors.boleta_extractor import BoletaExtractor                                         
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\conftest.py                             171 from src.extractors.percepcion_extractor import PercepcionExtractor                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\conftest.py                             172 from src.extractors.detector_extractor import DetectorExtractor                                     
+
+
+

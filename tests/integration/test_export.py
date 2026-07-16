@@ -4,7 +4,7 @@ Pruebas de exportación a Excel del Sistema RUS.
 
 import pytest
 
-from app.services.export_service import ExportService
+from contable.services.export_service import ExportService
 
 
 class TestExportacionExcel:

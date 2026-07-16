@@ -6,9 +6,9 @@ import pytest
 import os
 from datetime import date
 
-from app.services.documento_service import DocumentoService
-from app.services.reporte_service import ReporteService
-from app.services.export_service import ExportService
+from contable.services.documento_service import DocumentoService
+from contable.services.reporte_service import ReporteService
+from contable.services.export_service import ExportService
 
 
 class TestDocumentoService:

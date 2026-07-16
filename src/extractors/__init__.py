@@ -1,15 +1,18 @@
-﻿# src/extractors/__init__.py
-# ===========================
-# Módulo de extractores para diferentes tipos de documentos
+﻿"""Compatibilidad temporal con imports antiguos de extractores."""
 
-from .base import BaseExtractor
-from .factura_natura import FacturaNaturaExtractor
-from .boleta import BoletaExtractor
-from .percepcion import PercepcionExtractor
+from contable.extractors import (
+    BaseExtractor,
+    BoletaExtractor,
+    DetectorExtractor,
+    FacturaExtractor,
+    PercepcionExtractor,
+)
+
 
 __all__ = [
-    'BaseExtractor',
-    'FacturaNaturaExtractor',
-    'BoletaExtractor',
-    'PercepcionExtractor'
+    "BaseExtractor",
+    "BoletaExtractor",
+    "DetectorExtractor",
+    "FacturaExtractor",
+    "PercepcionExtractor",
 ]

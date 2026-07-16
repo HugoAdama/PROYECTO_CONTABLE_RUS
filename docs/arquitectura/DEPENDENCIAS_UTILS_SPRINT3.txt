@@ -1,0 +1,8 @@
+
+Path                                                                            LineNumber Line                                                                        
+----                                                                            ---------- ----                                                                        
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\documento_service.py               14 from src.utils.notificador import Notificador                               
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\contable\calculators\sistema_alertas.py          6 from src.utils.notificador import NotificadorEmail  # ? Importación correcta
+
+
+

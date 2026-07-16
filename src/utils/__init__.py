@@ -1,3 +1,5 @@
-# src/utils/__init__.py
-from .limpiar_datos import *
-from .validadores import *
+﻿"""
+Compatibilidad temporal con la ubicación anterior de las utilidades.
+
+Los consumidores deben usar contable.utils.
+"""

@@ -1,0 +1,45 @@
+
+Path                                                                       LineNumber Line                                                                     
+----                                                                       ---------- ----                                                                     
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\documento_service.py          17 class DocumentoService:                                                  
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\export_service.py             17 class ExportService:                                                     
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\reporte_service.py            10 class ReporteService:                                                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\__init__.py                    2 from app.services.reporte_service import ReporteService                  
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\__init__.py                    4 __all__ = ['ReporteService']                                             
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\routes.py                              11 from src.services.ventas_service import VentasService                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\routes.py                              15 ventas_service = VentasService()                                         
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\services\ventas_service.py             18 class VentasService:                                                     
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\services\__init__.py                    5 from .ventas_service import VentasService                                
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\src\services\__init__.py                    7 __all__ = ['VentasService']                                              
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_export.py            7 from app.services.export_service import ExportService                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_export.py           14         """Test 1: Verificar que ExportService está disponible."""       
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_export.py           15         assert ExportService is not None                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_export.py           18         """Test 2: Verificar que ExportService se puede instanciar."""   
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_export.py           20             service = ExportService()                                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_export.py           24         """Test 3: Verificar que ExportService tiene métodos."""         
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_export.py           26             service = ExportService()                                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py          9 from app.services.documento_service import DocumentoService              
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         10 from app.services.reporte_service import ReporteService                  
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         11 from app.services.export_service import ExportService                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         14 class TestDocumentoService:                                              
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         18         """Test 1: Verificar que DocumentoService está disponible."""    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         19         assert DocumentoService is not None                              
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         22         """Test 2: Verificar que DocumentoService se puede instanciar."""
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         25             service = DocumentoService()                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         29         """Test 3: Verificar que DocumentoService tiene métodos."""      
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         31             service = DocumentoService()                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         37 class TestReporteService:                                                
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         41         """Test 1: Verificar que ReporteService está disponible."""      
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         42         assert ReporteService is not None                                
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         45         """Test 2: Verificar que ReporteService se puede instanciar."""  
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         47             service = ReporteService()                                   
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         51 class TestExportService:                                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         55         """Test 1: Verificar que ExportService está disponible."""       
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         56         assert ExportService is not None                                 
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         59         """Test 2: Verificar que ExportService se puede instanciar."""   
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\integration\test_services.py         61             service = ExportService()                                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\scripts\verificar_datos.py                  8 from src.services.ventas_service import VentasService                    
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\scripts\verificar_datos.py                 22         r = VentasService().get_resumen_mensual(now.year, now.month)     
+
+
+

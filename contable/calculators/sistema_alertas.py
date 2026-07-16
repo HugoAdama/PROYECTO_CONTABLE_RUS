@@ -3,7 +3,7 @@ Sistema de alertas para el RUS
 """
 from datetime import datetime
 from typing import Dict, Any, Optional
-from src.utils.notificador import NotificadorEmail  # ✅ Importación correcta
+from contable.utils.notificador import NotificadorEmail  # ✅ Importación correcta
 
 class SistemaAlertas:
     """Sistema de alertas para el RUS"""

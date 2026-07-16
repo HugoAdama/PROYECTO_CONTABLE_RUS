@@ -1,0 +1,9 @@
+
+Path                                                                    LineNumber Line                                                              
+----                                                                    ---------- ----                                                              
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\app\services\reporte_service.py          6 from src.calculators.calculadora_rus import CalculadoraRUS        
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\unit\test_models.py               57         from src.calculators.calculadora_rus import CalculadoraRUS
+E:\APRENDIZAJE\PYTHON\PROYECTO_CONTABLE\tests\unit\test_models.py               66         from src.calculators.calculadora_rus import CalculadoraRUS
+
+
+

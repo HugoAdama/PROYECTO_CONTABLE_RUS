@@ -3,9 +3,9 @@
 Operaciones CRUD para la base de datos
 """
 from sqlalchemy.orm import Session
-from src.models.factura_compra import FacturaCompra
-from src.models.boleta_venta import BoletaVenta
-from src.models.percepcion import Percepcion
+from contable.models.factura_compra import FacturaCompra
+from contable.models.boleta_venta import BoletaVenta
+from contable.models.percepcion import Percepcion
 from datetime import datetime
 
 # =================================================

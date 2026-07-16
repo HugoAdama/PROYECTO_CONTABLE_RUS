@@ -1,14 +1,14 @@
-# src/repositories/percepcion_repository.py
-from app import db
+# src/repositories/factura_repository.py
+from contable.extensions import db
 from sqlalchemy import func
 from .base_repository import BaseRepository
-from src.models.percepcion import Percepcion
+from contable.models.factura_compra import FacturaCompra
 
-class PercepcionRepository(BaseRepository):
-    """Repositorio para Percepcion"""
+class FacturaRepository(BaseRepository):
+    """Repositorio para FacturaCompra"""
     
     def __init__(self):
-        super().__init__(Percepcion)
+        super().__init__(FacturaCompra)
     
     def get_by_mes_anio(self, mes, anio):
         return self.model.query.filter_by(mes=mes, anio=anio).all()

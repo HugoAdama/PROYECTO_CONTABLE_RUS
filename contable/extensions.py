@@ -1,11 +1,11 @@
+﻿"""
+Extensiones Flask compartidas por Contable RUS.
+
+Durante la migración, la nueva arquitectura reutiliza la instancia legacy
+de SQLAlchemy para mantener una única instancia activa.
 """
-Inicialización de extensiones Flask.
 
-Este módulo solamente crea las instancias.
+from src.database.conexion import db
 
-Nunca debe importar modelos ni blueprints.
-"""
 
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+__all__ = ["db"]

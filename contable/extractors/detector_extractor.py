@@ -1,7 +1,7 @@
 """
 EXTRACTOR DETECTOR - Para análisis rápido de PDFs sin procesar datos completos
 """
-from src.extractors.base_extractor import BaseExtractor
+from contable.extractors.base_extractor import BaseExtractor
 from typing import Dict, Any
 
 class DetectorExtractor(BaseExtractor):
